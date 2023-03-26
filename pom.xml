@@ -12,6 +12,7 @@
   <artifactId>demo</artifactId>
   <version>0.0.1</version>
   <name>taxi</name>
+  <packaging>jar</packaging>
   <description>Taxi project for Spring Boot</description>
   <properties>
     <java.version>17</java.version>
@@ -55,6 +56,11 @@
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+      <version>2.6.0</version>
     </dependency>
   </dependencies>
 
