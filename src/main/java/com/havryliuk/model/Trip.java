@@ -7,9 +7,9 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -21,16 +21,21 @@ public class Trip {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
 
+    @NotNull(message="Choose the trip date please")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime date;
 
+    @NotNull
+    @Valid
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "departure_address")
-    private Address departureAddress;
+    private Address originAddress;
 
+    @NotNull
+    @Valid
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "arrival_address")
-    private Address arrivalAddress;
+    private Address destinationAddress;
 
     @ManyToOne
     @JoinColumn(name = "driver_id")

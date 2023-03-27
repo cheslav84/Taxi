@@ -2920,7 +2920,8 @@ form .form-group {
 }
 form textarea,
 form input[type="text"],
-form input[type="datetime-local"] {
+/* #origin-input[type="datetime-local"] { */
+  form input[type="datetime-local"] {
   width: 100%;
   font-size: 16px;
   display: block;
@@ -2939,6 +2940,7 @@ form input[type="datetime-local"] {
 
 form input[type="datetime-local"] {
   padding-right: 10px;
+  height: 45px;
 }
 
 
@@ -4179,3 +4181,9 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   z-index: 10;
   padding-right: 30px;
 }
+
+.validationError {
+  color: #9F340A;
+  margin-left: 20px;
+}
+

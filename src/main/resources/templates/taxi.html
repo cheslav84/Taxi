@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http:/ /www.w3.org/1999/xhtml" xmlns:th="http:/ /www.thymeleaf.org" 
+<html xmlns="http:/ /www.w3.org/1999/xhtml" xmlns:th="http:/ /www.thymeleaf.org"
 	class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths">
 
 <head>
@@ -26,10 +26,13 @@
 
 	<link href="./TaxiPark_files/css" rel="stylesheet">
 
-    <!-- <script type="text/javascript" th:src="@{/js/analytics.js}"></script> -->
+	<!-- <script type="text/javascript" th:src="@{/js/analytics.js}"></script> -->
 	<script type="text/javascript" th:src="@{/js/modernizr-2.6.2.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/common.js}"></script>
-    <script type="text/javascript" th:src="@{/js/util.js}"></script>
+	<script type="text/javascript" th:src="@{/js/common.js}"></script>
+	<script type="text/javascript" th:src="@{/js/util.js}"></script>
+	<script type="text/javascript" th:src="@{https://polyfill.io/v3/polyfill.min.js?features=default}"></script>
+
+	<!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script> -->
 
 </head>
 
@@ -137,20 +140,31 @@
 			<h4 class="yellow aligncenter">Our operators are waiting for your call:</h4>
 			<h3 class="aligncenter">800-5-800</h3>
 			<p class="form-label">Also you can order a taxi online</p>
-			<!-- <form method="POST" th:object="${departureAddress}" class="form-validate" novalidate="novalidate"></form> -->
 			<form method="POST" th:object="${trip}">
 				<div class="menu-types">
-					<a href="#" data-value="1" class="type-1 active">Standart</a>
-					<a href="#" data-value="2" class="type-2">Business</a>
-					<a href="#" data-value="3" class="type-3 red">Vip</a>
-					<a href="#" data-value="4" class="type-4">Bus-Minivan</a>
-					<input type="hidden" name="type-value" class="type-value ajaxField" value="1">
+					<a href="#" data-value="STANDART" class="type-1 active">Standart</a>
+					<a href="#" data-value="BUSINESS" class="type-2">Business</a>
+					<a href="#" data-value="VIP" class="type-3 red">Vip</a>
+					<a href="#" data-value="BUS_MINIVAN" class="type-4">Bus-Minivan</a>
+					<input type="hidden" name="carClass" class="type-value ajaxField" th:value="STANDART">
 				</div>
-				<div class="tags-short">
+				<!-- <div class="tags-short">
 					Departure address:
-				</div>
+				</div> -->
 				<address class="row form-with-labels">
-					<div class="col-md-4">
+					<div class="col-md-12">
+						<div class="form-group">
+							<input id="origin-input" type="text" th:field="*{originAddress.address}"
+								placeholder="Enter an origin location" class="ajaxField required" aria-required="true">
+							<div class="validationError" th:if="${#fields.hasErrors('originAddress.address')}"
+								th:errors="*{originAddress.address}">Origin address error</div>
+						</div>
+						<span class="fa fa-map-marker"></span>
+					</div>
+
+
+
+					<!-- <div class="col-md-4">
 						<div class="form-group">
 							<input type="text" th:field="*{departureAddress.city}" placeholder="City"
 								class="ajaxField required" aria-required="true">
@@ -169,14 +183,26 @@
 							<input type="text" th:field="*{departureAddress.street}" placeholder="Building" class="ajaxField">
 							<span class="fa fa-map-marker"></span>
 						</div>
-					</div>
+					</div> -->
 				</address>
 
-				<div class="tags-short">
+				<!-- <div class="tags-short">
 					Arrival address:
-				</div>
+				</div> -->
 				<div class="row form-with-labels">
-					<div class="col-md-4">
+					<div class="col-md-12">
+						<div class="form-group">
+							<input id="destination-input" type="text" th:field="*{destinationAddress.address}"
+								placeholder="Enter a destination location" class="ajaxField controls required"
+								aria-required="true">
+							<div class="validationError" th:if="${#fields.hasErrors('destinationAddress.address')}"
+								th:errors="*{destinationAddress.address}">Destinatation address error</div>
+						</div>
+						<span class="fa fa-map-marker"></span>
+					</div>
+
+
+					<!-- <div class="col-md-4">
 						<div class="form-group">
 							<input type="text" th:field="*{arrivalAddress.city}" placeholder="City"
 								class="ajaxField required" aria-required="true">
@@ -195,61 +221,95 @@
 							<input type="text" th:field="*{arrivalAddress.street}" placeholder="Building" class="ajaxField">
 							<span class="fa fa-map-marker"></span>
 						</div>
-					</div>
+					</div> -->
 				</div>
 
-
-
 				<div class="row form-with-labels">
-
-
-					<div class="col-md-6">
+					<!-- <div class="col-md-4">
 						<div class="form-group">
-							<input type="datetime-local" 
-							min="2022-06-01T08:30"
-							max="2050-06-30T16:30"
-							th:field="*{date}" placeholder="Date and Time" class="ajaxField">
+							<input type="text" th:field="*{arrivalAddress.country}" placeholder="Country" class="ajaxField">
+							<span class="fa fa-map-marker"></span>
+						</div>
+					</div> -->
+					<div class="col-md-12">
+						<div class="form-group">
+							<input type="datetime-local" min="2023-03-01T08:30" max="2050-06-30T16:30"
+								th:field="*{date}" placeholder="Date and Time" class="ajaxField">
+							<div class="validationError" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Date
+								error</div>
 							<span class="fa fa-calendar"></span>
 						</div>
 					</div>
-
-
-					<!-- <div class="col-md-6">
-						<div class="form-group">
-							<input type="datetime" name="text" value="" placeholder="Date and Time" class="ajaxField">
-							<span class="fa fa-calendar"></span>
-						</div>
-					</div> -->
-
-
-
-				<!-- 	<div class="col-md-6">
-						<div class="form-group">
-							<input type="text" name="phone" value="" placeholder="Phone Number"
-								class="ajaxField required" aria-required="true">
-								<span class="fa fa-phone"></span>
-						</div>
-					</div></div> -->
-					<!-- <div class="col-md-6">
-						<div class="form-group">
-							<input type="date" name="text" value="" placeholder="Date and Time" class="ajaxField">
-							<span class="fa fa-calendar"></span>
-						</div>
-					</div> -->
-
-				<button class="btn btn-lg btn-black btn-white aligncenter">Get Taxi</button>
-				<!-- <input type="submit" value="Get Taxi" class="btn btn-lg btn-black btn-white aligncenter"> -->
-				<!-- <input type="hidden" id="type" th:field="*{carClass}" value="2" class="ajaxField"> -->
+					<button class="btn btn-lg btn-black btn-white aligncenter">Get Taxi</button>
 			</form>
+
+
+
+
 		</div>
 	</section>
 
-									<!-- <form method="POST" th:object="${departureAddress}"  class="form-validate" >
-										<input type="text" th:field="*{city}" value="" placeholder="City"
-										class="ajaxField required" aria-required="true">
-										<span class="fa fa-map-marker"></span>
-										<button class="btn btn-lg btn-black btn-white aligncenter">Get Taxi</button>
-									</form> -->
+	<section id="maps">
+		<div class="container">
+			<h2>Map</h2>
+			<div style="display: none">
+				<!-- <input
+			  id="origin-input"
+			  class="controls"
+			  type="text"
+			  placeholder="Enter an origin location"
+			/> -->
+
+				<!-- <input
+			  id="destination-input"
+			  class="controls"
+			  type="text"
+			  placeholder="Enter a destination location"
+			/> -->
+
+				<!-- <div id="mode-selector" class="controls">
+			  <input
+				type="radio"
+				name="type"
+				id="changemode-walking"
+				checked="checked"
+			  />
+			  <label for="changemode-walking">Walking</label>
+	  
+			  <input type="radio" name="type" id="changemode-transit" />
+			  <label for="changemode-transit">Transit</label>
+	  
+			  <input type="radio" name="type" id="changemode-driving" />
+			  <label for="changemode-driving">Driving</label>
+			</div> -->
+			</div>
+
+			<div id="map"></div>
+
+			<div id="sidebar">
+				<p>Total Distance: <span id="total"></span></p>
+				<div id="panel"></div>
+			</div>
+		</div>
+		<!-- 
+		  The `defer` attribute causes the callback to execute after the full HTML
+		  document has been parsed. For non-blocking uses, avoiding race conditions,
+		  and consistent behavior across browsers, consider loading using Promises
+		  with https://www.npmjs.com/package/@googlemaps/js-api-loader.
+		  -->
+		<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly" defer ></script> -->
+
+		<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnlKYEnivV8h0EAoyqydzBci4O4UYaNZw&&callback=initMap&libraries=places&v=weekly" defer ></script> -->
+
+		<script
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnlKYEnivV8h0EAoyqydzBci4O4UYaNZw&&callback=initMap&libraries=places"
+			defer></script>
+
+
+
+		<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnlKYEnivV8h0EAoyqydzBci4O4UYaNZw&callback=initMap&v=weekly"></script> -->
+	</section>
+
 
 	<section id="tariffs">
 		<div class="container">
@@ -259,7 +319,7 @@
 				<div class="col-md-3 col-sm-6">
 					<div class="item matchHeight" style="height: 372px;">
 						<div class="image">
-                            <img th:src="@{/images/common/_tariff-1.png}" class="full-width" alt="Tariff">
+							<img th:src="@{/images/common/_tariff-1.png}" class="full-width" alt="Tariff">
 						</div>
 						<h4>Standart</h4>
 						<p>Standard sedan for a drive around the city at your service</p>
@@ -269,7 +329,7 @@
 				<div class="col-md-3 col-sm-6">
 					<div class="item matchHeight" style="height: 372px;">
 						<div class="image">
-                            <img th:src="@{/images/common/_tariff-2.png}" class="full-width" alt="Tariff">
+							<img th:src="@{/images/common/_tariff-2.png}" class="full-width" alt="Tariff">
 						</div>
 						<h4>Business</h4>
 						<p>Standard sedan for a drive around the city at your service</p>
@@ -279,7 +339,7 @@
 				<div class="col-md-3 col-sm-6">
 					<div class="item matchHeight vip" style="height: 372px;">
 						<div class="image">
-                            <img th:src="@{/images/common/_tariff-3.png}" class="full-width" alt="Tariff">
+							<img th:src="@{/images/common/_tariff-3.png}" class="full-width" alt="Tariff">
 						</div>
 						<h4 class="red">Vip</h4>
 						<p>Standard sedan for a drive around the city at your service</p>
@@ -289,7 +349,7 @@
 				<div class="col-md-3 col-sm-6">
 					<div class="item matchHeight" style="height: 372px;">
 						<div class="image">
-                            <img th:src="@{/images/common/_tariff-4.png}" class="full-width" alt="Tariff">
+							<img th:src="@{/images/common/_tariff-4.png}" class="full-width" alt="Tariff">
 						</div>
 						<h4>Bus-minivan</h4>
 						<p>Standard sedan for a drive around the city at your service</p>
@@ -299,84 +359,6 @@
 			</div>
 		</div>
 	</section>
-	<!-- <section id="download" class="parallax" style="background-image: url(assets/images/_download-bg.jpg);">
-		<div class="container">
-			<h4 class="yellow">Get More Benefits</h4>
-			<h2 class="h1">Download The App</h2>
-			<div class="row">
-				<div class="col-md-4 col-sm-12">
-					<div class="items row">
-						<div class="col-md-2 visible-md visible-lg"><span class="num">01.</span></div>
-						<div class="col-md-10">
-							<h5 class="yellow">Fast booking</h5>
-							<p>Nam ac ligula congue, interdum enim sit amet, fermentum nisi.</p>
-						</div>
-						<div class="col-md-2 visible-md visible-lg"><span class="num">02.</span></div>
-						<div class="col-md-10">
-							<h5 class="yellow">Easy to use</h5>
-							<p>Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-							</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4 col-md-push-4 col-sm-12">
-					<div class="items items-right row">
-						<div class="col-md-10">
-							<h5 class="yellow">GPS searching</h5>
-							<p>Ut elementum tincidunt erat vel ornare. Suspendisse ac felis non diam pretium.</p>
-						</div>
-						<div class="col-md-2 visible-md visible-lg"><span class="num">03.</span></div>
-						<div class="col-md-10">
-							<h5 class="yellow">Bonuses for ride</h5>
-							<p>Phasellus l et porta tortor dignissim at. Pellentesque gravida tortor at euismod mollis.
-							</p>
-						</div>
-						<div class="col-md-2 visible-md visible-lg"><span class="num">04.</span></div>
-					</div>
-				</div>
-				<div class="col-md-4 col-md-pull-4 col-sm-12">
-					<div class="mob">
-						<a href="http://like-themes.com/taxipark/get_taxi.html#"><img
-								src="./TaxiPark_files/_app-google.png" alt="App"></a>
-						<a href="http://like-themes.com/taxipark/get_taxi.html#"><img
-								src="./TaxiPark_files/_app-apple.png" alt="App"></a>
-					</div>
-				</div>
-
-			</div>
-		</div>
-	</section>
-
-
-	<section id="partners">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-3 col-sm-12">
-					<h4 class="black margin-0">Our partners</h4>
-					<h2 class="white margin-0">and clients</h2>
-				</div>
-				<div class="col-md-9 col-sm-12">
-					<div class="row items">
-						<div class="col-md-5ths col-sm-3 col-ms-4 col-xs-6"><a
-								href="http://like-themes.com/taxipark/get_taxi.html#"><img
-									src="./TaxiPark_files/_partner-1.png" alt="Partner"></a></div>
-						<div class="col-md-5ths col-sm-3 col-ms-4 col-xs-6"><a
-								href="http://like-themes.com/taxipark/get_taxi.html#"><img
-									src="./TaxiPark_files/_partner-2.png" alt="Partner"></a></div>
-						<div class="col-md-5ths col-sm-3 col-ms-4 col-xs-6"><a
-								href="http://like-themes.com/taxipark/get_taxi.html#"><img
-									src="./TaxiPark_files/_partner-3.png" alt="Partner"></a></div>
-						<div class="col-md-5ths col-sm-3 col-ms-4 col-xs-6"><a
-								href="http://like-themes.com/taxipark/get_taxi.html#"><img
-									src="./TaxiPark_files/_partner-4.png" alt="Partner"></a></div>
-						<div class="col-md-5ths col-sm-3 col-ms-4 col-xs-6"><a
-								href="http://like-themes.com/taxipark/get_taxi.html#"><img
-									src="./TaxiPark_files/_partner-5.png" alt="Partner"></a></div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section> -->
 
 	<section id="block-footer">
 		<div class="container">
@@ -442,12 +424,14 @@
 	</footer>
 
 	<script>var base_href = '/';</script>
-    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery-ui.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/plugins.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/map-style.js}"></script>
-    <script type="text/javascript" th:src="@{/js/js}"></script>
-    <script type="text/javascript" th:src="@{/js/scripts.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery-ui.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/plugins.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/map-style.js}"></script>
+	<script type="text/javascript" th:src="@{/js/js}"></script>
+	<script type="text/javascript" th:src="@{/js/scripts.js}"></script>
+	<script type="text/javascript" th:src="@{/js/map.js}"></script>
+
 
 	<script>
 		(function (i, s, o, g, r, a, m) {
