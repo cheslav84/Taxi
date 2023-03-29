@@ -1,4 +1,4 @@
-package com.havryliuk.model;
+package com.havryliuk.persistence.model;
 
 import com.google.maps.model.LatLng;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public class Address {
     private String id;
 
     @NotNull
-    @Size(min=15, message="Address must be at least 15 characters long")
+    @Size(min=10, message="Address must be at least 10 characters long")
     private String address;
 
     private LatLng location;

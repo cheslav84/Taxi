@@ -1,4 +1,4 @@
-package com.havryliuk.model;
+package com.havryliuk.persistence.model;
 
 public enum TripStatus {
     NEW,

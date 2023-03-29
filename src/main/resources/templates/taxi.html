@@ -4,16 +4,13 @@
 
 <head>
 	<meta lang="en">
-
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
 	<meta name="description" content="">
 	<meta name="author" content="">
-	<link rel="icon" type="image/png" href="http://like-themes.com/taxipark/assets/images/favicon.png">
 
+	<link rel="icon" type="image/png" href="http://like-themes.com/taxipark/assets/images/favicon.png">
 	<title>TaxiPark</title>
 
 	<link rel="stylesheet" th:href="@{/styles/bootstrap-grid.css}" />
@@ -44,7 +41,6 @@
 				<div class="col-lg-6 col-md-9">
 					<div class="contacts">
 						<div><span class="fa fa-phone"></span> 800-5-800</div>
-						<div class="hidden-xs hidden-ms"><span class="fa fa-skype"></span> GETTAXIPARK</div>
 						<div class="hidden-xs hidden-ms"><span class="fa fa-phone"></span> 43 2-nd Avenue, New York,
 							29004-7153</div>
 					</div>
@@ -57,8 +53,7 @@
 						<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-google-plus"></a>
 						<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-pinterest"></a>
 					</div>
-					<a href="http://like-themes.com/taxipark/get_taxi.html"
-						class="btn btn-xs btn-black-bordered pull-right">Get taxi online</a>
+					<a href="/taxi" class="btn btn-xs btn-black-bordered pull-right">Get taxi online</a>
 				</div>
 			</div>
 		</div>
@@ -73,8 +68,10 @@
 						<span class="icon-bar middle-bar"></span>
 						<span class="icon-bar bottom-bar"></span>
 					</button>
+
 					<a class="logo" href="/index">
 						<img th:src="@{/images/common/logo-inner.png}" alt="TaxiPark">
+					</a>
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<button type="button" class="navbar-toggle collapsed">
@@ -85,8 +82,7 @@
 					</button>
 					<ul class="nav navbar-nav">
 						<li><a href="/index">Home</a></li>
-						<li class="current_page_item"><a href="/taxi">Get Taxi</a></li>
-
+						<li class="current_page_item"><a href="#">Get Taxi</a></li>
 
 						<li><a href="http://like-themes.com/taxipark/services.html">Services</a></li>
 						<li class="hasSub">
@@ -106,7 +102,7 @@
 							</ul>
 						</li>
 						<li><a href="http://like-themes.com/taxipark/testimonials.html">Testimonials</a></li>
-						<li><a href="http://like-themes.com/taxipark/contacts.html">Contacts</a></li>
+						<li><a href="/registration">Registration</a></li>
 						<li class="hasSub">
 							<a href="http://like-themes.com/taxipark/get_taxi.html#">Pages</a>
 							<ul class="sub-menu">
@@ -148,9 +144,7 @@
 					<a href="#" data-value="BUS_MINIVAN" class="type-4">Bus-Minivan</a>
 					<input type="hidden" name="carClass" class="type-value ajaxField" th:value="STANDART">
 				</div>
-				<!-- <div class="tags-short">
-					Departure address:
-				</div> -->
+
 				<address class="row form-with-labels">
 					<div class="col-md-12">
 						<div class="form-group">
@@ -161,34 +155,8 @@
 						</div>
 						<span class="fa fa-map-marker"></span>
 					</div>
-
-
-
-					<!-- <div class="col-md-4">
-						<div class="form-group">
-							<input type="text" th:field="*{departureAddress.city}" placeholder="City"
-								class="ajaxField required" aria-required="true">
-								<span class="fa fa-map-marker"></span>
-						</div>
-					</div>
-					<div class="col-md-5">
-						<div class="form-group">
-							<input type="text" th:field="*{departureAddress.street}" placeholder="Street"
-								class="ajaxField required" aria-required="true">
-								<span class="fa fa-map-marker"></span>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="form-group">
-							<input type="text" th:field="*{departureAddress.street}" placeholder="Building" class="ajaxField">
-							<span class="fa fa-map-marker"></span>
-						</div>
-					</div> -->
 				</address>
 
-				<!-- <div class="tags-short">
-					Arrival address:
-				</div> -->
 				<div class="row form-with-labels">
 					<div class="col-md-12">
 						<div class="form-group">
@@ -200,50 +168,21 @@
 						</div>
 						<span class="fa fa-map-marker"></span>
 					</div>
-
-
-					<!-- <div class="col-md-4">
-						<div class="form-group">
-							<input type="text" th:field="*{arrivalAddress.city}" placeholder="City"
-								class="ajaxField required" aria-required="true">
-								<span class="fa fa-map-marker"></span>
-						</div>
-					</div>
-					<div class="col-md-5">
-						<div class="form-group">
-							<input type="text" th:field="*{arrivalAddress.street}" placeholder="Street"
-								class="ajaxField required" aria-required="true">
-								<span class="fa fa-map-marker"></span>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="form-group">
-							<input type="text" th:field="*{arrivalAddress.street}" placeholder="Building" class="ajaxField">
-							<span class="fa fa-map-marker"></span>
-						</div>
-					</div> -->
 				</div>
 
 				<div class="row form-with-labels">
-					<!-- <div class="col-md-4">
-						<div class="form-group">
-							<input type="text" th:field="*{arrivalAddress.country}" placeholder="Country" class="ajaxField">
-							<span class="fa fa-map-marker"></span>
-						</div>
-					</div> -->
 					<div class="col-md-12">
 						<div class="form-group">
 							<input type="datetime-local" min="2023-03-01T08:30" max="2050-06-30T16:30"
-								th:field="*{date}" placeholder="Date and Time" class="ajaxField">
-							<div class="validationError" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Date
+								th:field="*{departureDateTime}" placeholder="Date and Time" class="ajaxField">
+							<div class="validationError" th:if="${#fields.hasErrors('departureDateTime')}" th:errors="*{departureDateTime}">Departure Date and Time
 								error</div>
 							<span class="fa fa-calendar"></span>
 						</div>
 					</div>
-					<button class="btn btn-lg btn-black btn-white aligncenter">Get Taxi</button>
+					<input type="submit" value="Get Taxi" class="btn btn-lg btn-black btn-white aligncenter">
+					<!-- <button class="btn btn-lg btn-black btn-white aligncenter">Get Taxi</button> -->
 			</form>
-
-
 
 
 		</div>
@@ -253,35 +192,6 @@
 		<div class="container">
 			<h2>Map</h2>
 			<div style="display: none">
-				<!-- <input
-			  id="origin-input"
-			  class="controls"
-			  type="text"
-			  placeholder="Enter an origin location"
-			/> -->
-
-				<!-- <input
-			  id="destination-input"
-			  class="controls"
-			  type="text"
-			  placeholder="Enter a destination location"
-			/> -->
-
-				<!-- <div id="mode-selector" class="controls">
-			  <input
-				type="radio"
-				name="type"
-				id="changemode-walking"
-				checked="checked"
-			  />
-			  <label for="changemode-walking">Walking</label>
-	  
-			  <input type="radio" name="type" id="changemode-transit" />
-			  <label for="changemode-transit">Transit</label>
-	  
-			  <input type="radio" name="type" id="changemode-driving" />
-			  <label for="changemode-driving">Driving</label>
-			</div> -->
 			</div>
 
 			<div id="map"></div>
@@ -297,18 +207,8 @@
 		  and consistent behavior across browsers, consider loading using Promises
 		  with https://www.npmjs.com/package/@googlemaps/js-api-loader.
 		  -->
-		<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly" defer ></script> -->
-
-		<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnlKYEnivV8h0EAoyqydzBci4O4UYaNZw&&callback=initMap&libraries=places&v=weekly" defer ></script> -->
-
-		<script
-			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnlKYEnivV8h0EAoyqydzBci4O4UYaNZw&&callback=initMap&libraries=places"
-			defer></script>
 
 
-
-		<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnlKYEnivV8h0EAoyqydzBci4O4UYaNZw&callback=initMap&v=weekly"></script> -->
-	</section>
 
 
 	<section id="tariffs">
@@ -419,7 +319,7 @@
 		<div class="container">
 			<a href="http://like-themes.com/">Like-themes</a> 2017 © All Rights Reserved <a
 				href="http://like-themes.com/taxipark/get_taxi.html#">Terms of use</a>
-			<a href="http://like-themes.com/taxipark/get_taxi.html#" class="go-top hidden-xs hidden-ms"></a>
+			<a href="#" class="go-top hidden-xs hidden-ms"></a>
 		</div>
 	</footer>
 
@@ -431,9 +331,15 @@
 	<script type="text/javascript" th:src="@{/js/js}"></script>
 	<script type="text/javascript" th:src="@{/js/scripts.js}"></script>
 	<script type="text/javascript" th:src="@{/js/map.js}"></script>
+	<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnlKYEnivV8h0EAoyqydzBci4O4UYaNZw&&callback=initMap&libraries=places"
+	defer></script> -->
 
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5gfkKVMI4OYiiSBtfBx35Jc9GffAfALo&&callback=initMap&libraries=places"
+	defer></script>
 
-	<script>
+</section>
+
+	<!-- <script>
 		(function (i, s, o, g, r, a, m) {
 			i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
 				(i[r].q = i[r].q || []).push(arguments)
@@ -443,7 +349,7 @@
 
 		ga('create', 'UA-91006724-1', 'auto');
 		ga('send', 'pageview');
-	</script>
+	</script> -->
 
 </body>
 

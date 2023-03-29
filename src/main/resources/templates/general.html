@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" style="" class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+	<link rel="icon" type="image/png" href="http://like-themes.com/taxipark/assets/images/favicon.png">
+	<title>TaxiPark</title>
+
+	<link rel="stylesheet" th:href="@{/styles/bootstrap-grid.css}" />
+	<link rel="stylesheet" th:href="@{/styles/font-awesome.css}" />
+	<link rel="stylesheet" th:href="@{/styles/swiper.css}" />
+	<link rel="stylesheet" th:href="@{/styles/swipebox.css}" />
+	<link rel="stylesheet" th:href="@{/styles/zoomslider.css}" />
+	<link rel="stylesheet" th:href="@{/styles/style.css}" />
+	<link rel="stylesheet" th:href="@{/styles/jquery-ui.css}" />
+
+	<link href="./TaxiPark_files/css" rel="stylesheet">
+
+	<script type="text/javascript" th:src="@{/js/modernizr-2.6.2.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/common.js}"></script>
+	<script type="text/javascript" th:src="@{/js/util.js}"></script>
+	<script type="text/javascript" th:src="@{https://polyfill.io/v3/polyfill.min.js?features=default}"></script>
+
+
+</script>
+
+
+
+</head>
+<body>
+
+	<div th:fragment="registration-form">
+
+						<div class="form-group">
+							<label>Your name <span class="red">*</span></label>
+							<input type="text" id="name"  th:field="*{name}" placeholder="Your name" class="ajaxField required" aria-required="true">
+						</div>
+						
+						<div class="form-group">
+							<label>Your surname <span class="red">*</span></label>
+							<input type="text" id="name"  th:field="*{surname}" placeholder="Your surname" class="ajaxField required" aria-required="true">
+						</div>
+
+						<div class="form-group">
+							<label>Your age <span class="red">*</span></label>
+							<input type="text" id="name"  th:field="*{age}" placeholder="Your age" class="ajaxField required" aria-required="true">
+						</div>
+
+						<div class="form-group">
+							<label>E-mail <span class="red">*</span></label>
+							<input type="text" id="email" th:field="*{email}" placeholder="E-mail" class="ajaxField required" aria-required="true">
+						</div>
+						
+
+							
+	</div>
+
+
+
+	<script>var base_href = '/';</script>
+	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery-ui.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/plugins.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/scripts.js}"></script>
+	<script type="text/javascript" th:src="@{/js/js}"></script>
+
+	
+
+</body>
+</html>

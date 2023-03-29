@@ -1,4 +1,4 @@
-package com.havryliuk.model;
+package com.havryliuk.persistence.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import com.google.maps.model.Duration;
 import java.time.LocalDateTime;
 
 @Getter
@@ -23,7 +24,7 @@ public class Trip {
 
     @NotNull(message="Choose the trip date please")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime date;
+    private LocalDateTime departureDateTime;
 
     @NotNull
     @Valid
@@ -39,16 +40,18 @@ public class Trip {
 
     @ManyToOne
     @JoinColumn(name = "driver_id")
-    private Person driver;
+    private User driver;
 
     @ManyToOne
     @JoinColumn(name = "passenger_id")
-    private Person passenger;
+    private User passenger;
 
     private TripStatus tripStatus;
 
     private PaymentStatus paymentStatus;
 
     private CarClass carClass;
+
+    private Duration approximateTravelDuration;
 
 }

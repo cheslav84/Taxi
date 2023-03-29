@@ -5,9 +5,10 @@ $(document).on('ready', function() {
 	initParallax();
 	initEvents();
 	initMasonry();
-	initMap();
+	// initMap();
 	initCollapseMenu();
 	initContactForm();
+	toggleAccordeon();
 	
 	/* You can disable srollanimation by removing next function */
 	checkScrollAnimation();
@@ -257,24 +258,83 @@ function initContactForm() {
 	});
 }
 
-/* Google maps init */
-function initMap() {
+// /* Google maps init */
+// function initMap() {
 
-	var mapEl = $('#map');
-	if (mapEl.length) {
+// 	var mapEl = $('#map');
+// 	if (mapEl.length) {
 
-		var uluru = {lat: mapEl.data('lat'), lng: mapEl.data('lng')};
-		var map = new google.maps.Map(document.getElementById('map'), {
-		  zoom: mapEl.data('zoom'),
-		  center: uluru,
-		  scrollwheel: false,
-		  styles: mapStyles
-		});
+// 		var uluru = {lat: mapEl.data('lat'), lng: mapEl.data('lng')};
+// 		var map = new google.maps.Map(document.getElementById('map'), {
+// 		  zoom: mapEl.data('zoom'),
+// 		  center: uluru,
+// 		  scrollwheel: false,
+// 		  styles: mapStyles
+// 		});
 
-		var marker = new google.maps.Marker({
-		  position: uluru,
-		  icon: base_href + 'assets/images/location-black.png',
-		  map: map
-		});
+// 		var marker = new google.maps.Marker({
+// 		  position: uluru,
+// 		  icon: base_href + 'assets/images/location-black.png',
+// 		  map: map
+// 		});
+// 	}
+// }
+
+
+function toggleAccordeon() { 
+
+	var acc = document.getElementsByClassName("toggled-accordion");
+	var i;
+	for (i = 0; i < acc.length; i++) {
+	  acc[i].addEventListener("click", function() {
+		this.classList.toggle("active");
+		var panel = this.nextElementSibling;
+		if (panel.style.maxHeight) {
+		  panel.style.maxHeight = null;
+		} else {
+		  panel.style.maxHeight = panel.scrollHeight + "px";
+		} 
+	  });
 	}
 }
+
+const show_reg_pw_btn = document.querySelector('#show-reg-passwd')
+const show_reg_pw_icon = show_reg_pw_btn.querySelector('img')
+const pw_reg_input = document.querySelector('#reg-password')
+
+show_reg_pw_btn.addEventListener('click', () => {
+	pw_reg_input.type = pw_reg_input.type === 'password'
+		? 'text'
+		: 'password'
+
+	$("#show-reg-passwd").toggleClass('fa-eye');
+	$("#show-reg-passwd").toggleClass('fa-eye-slash');
+})
+
+const show_conf_pw_btn = document.querySelector('#show-conf-passwd')
+const pw_conf_input = document.querySelector('#conf-password')
+
+show_conf_pw_btn.addEventListener('click', () => {
+	pw_conf_input.type = pw_conf_input.type === 'password'
+		? 'text'
+		: 'password'
+
+	$("#show-conf-passwd").toggleClass('fa-eye');
+	$("#show-conf-passwd").toggleClass('fa-eye-slash');
+})
+
+
+
+// const show_log_pw_btn = document.querySelector('#show-log-passwd')
+// const show_log_pw_icon = show_log_pw_btn.querySelector('img')
+// const pw_log_input = document.querySelector('#log-password')
+
+// show_log_pw_btn.addEventListener('click', () => {
+// 	pw_log_input.type = pw_log_input.type === 'password' 
+// 		? 'text' 
+// 		: 'password'
+
+//         show_log_pw_icon.src = show_log_pw_icon.src.includes('off') 
+// 		? 'view/pictures/icons/visibility.png' 
+// 		: 'view/pictures/icons/visibility_off.png'
+// })

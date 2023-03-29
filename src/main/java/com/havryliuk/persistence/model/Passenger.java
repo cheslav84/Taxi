@@ -1,4 +1,4 @@
-package com.havryliuk.model;
+package com.havryliuk.persistence.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,16 +11,12 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 @Entity
-public class Driver extends Person {
+public class Passenger extends User {
 
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<Trip> trips;
-
-    @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "car_id")
-    Car car;
 
 }

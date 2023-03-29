@@ -1,4 +1,4 @@
-package com.havryliuk.model;
+package com.havryliuk.persistence.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,9 +15,9 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-@Entity
+@Entity(name = "person")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Person {
+public class User {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -34,7 +34,17 @@ public class Person {
     private int age;
 
     @NotNull
+    private String email;
+
+    @NotNull
+    private String password;
+
+    @NotNull
+    private String phone;
+
     private Role role;
+
+    private UserStatus userStatus;
 
     private Date registrationDate;
 

@@ -1,4 +1,4 @@
-package com.havryliuk.util.google;
+package com.havryliuk.util.google.map;
 
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
