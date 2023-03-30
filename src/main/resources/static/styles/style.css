@@ -1878,7 +1878,7 @@ nav.navbar.affix {
 }
 
 .menu-types a.type-5 {
-  margin: 2px 0;
+  margin: 2px 1px;
   padding-top: 10px;
   background-color: #FFD555;
   text-align: center;
@@ -2016,7 +2016,9 @@ nav.navbar.affix {
 /*
 	6. Tariffs Block
 */
-#tariffs {
+#tariffs,
+#maps
+ {
   padding: 16px 0 100px;
   background-color: #F5F5F5;
   background-position: 50% 50%;
@@ -2024,21 +2026,31 @@ nav.navbar.affix {
 }
 
 #tariffs h2,
-#tariffs h4 {
+#tariffs h4,
+#maps h2, 
+#maps h4,
+#maps h5 {
   text-align: center;
 }
 
+#maps h5 {
+  margin: 17px;
+}
+
+#tariffs h2,
 #tariffs h2 {
   margin-bottom: 30px !important;
 }
 
 @media (max-width: 991px) {
-  #tariffs {
+  #tariffs, 
+  #maps {
     padding: 16px 0 50px;
     background-image: none !important;
   }
 
-  #tariffs h2 {
+  #tariffs h2,
+  #maps h2 {
     color: #1F1F1F;
   }
 }
@@ -3322,7 +3334,7 @@ a.video:hover span {
 hr.lg {
   background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTMyIDc5LjE1OTI4NCwgMjAxNi8wNC8xOS0xMzoxMzo0MCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUuNSAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MEY1ODZBODExOUFBMTFFNzgzN0M5ODA5QzVDNEY0MUIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MEY1ODZBODIxOUFBMTFFNzgzN0M5ODA5QzVDNEY0MUIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDowRjU4NkE3RjE5QUExMUU3ODM3Qzk4MDlDNUM0RjQxQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDowRjU4NkE4MDE5QUExMUU3ODM3Qzk4MDlDNUM0RjQxQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PpfBKyQAAAAuSURBVHjaYvz//38DAx7Az8+PT5qBiYFCMGrAYDCAhVA8f/z4cTQQh78BAAEGANaYBsy1QBT+AAAAAElFTkSuQmCC") 0% 0% repeat-x;
   height: 16px !important;
-  margin: 25px 0 75px 0;
+  margin: 0;
   display: block;
   width: 100%;
   border: none;
@@ -3757,7 +3769,7 @@ form .btn {
 }
 
 .alert p {
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.6em;
 }
 
@@ -4949,7 +4961,9 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   border-bottom: 1px solid #d3d3d3;
 }
 
-
+.warning-text {
+  font-size: 14px;
+}
 /* #show-reg-passwd, #show-log-passwd, #show-conf-passwd {
   background: transparent;
   position: absolute;

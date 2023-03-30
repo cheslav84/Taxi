@@ -10,7 +10,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -34,6 +34,7 @@ public class User {
     private int age;
 
     @NotNull
+    @Column(unique=true)
     private String email;
 
     @NotNull
@@ -46,8 +47,6 @@ public class User {
 
     private UserStatus userStatus;
 
-    private Date registrationDate;
-
-
+    private LocalDateTime registrationDate;
 
 }

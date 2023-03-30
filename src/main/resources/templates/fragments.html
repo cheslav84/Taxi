@@ -1,0 +1,274 @@
+<head th:fragment="head">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <link rel="icon" type="image/png" th:href="@{/images/common/meta-logo.png}">
+    <title>Drive IN</title>
+
+	<link rel="stylesheet" th:href="@{/styles/bootstrap-grid.css}" />
+    <link rel="stylesheet" th:href="@{/styles/font-awesome.css}" />
+    <link rel="stylesheet" th:href="@{/styles/swiper.css}" />
+    <link rel="stylesheet" th:href="@{/styles/swipebox.css}" />
+    <link rel="stylesheet" th:href="@{/styles/zoomslider.css}" />
+    <link rel="stylesheet" th:href="@{/styles/style.css}" />
+    <!-- <div th:include="/fragments :: styles"></div> -->
+    <div th:include="/fragments :: scripts-top"></div>
+</head>
+
+
+<!-- <div th:fragment="styles">
+	<link rel="stylesheet" th:href="@{/styles/bootstrap-grid.css}" />
+    <link rel="stylesheet" th:href="@{/styles/font-awesome.css}" />
+    <link rel="stylesheet" th:href="@{/styles/swiper.css}" />
+    <link rel="stylesheet" th:href="@{/styles/swipebox.css}" />
+    <link rel="stylesheet" th:href="@{/styles/zoomslider.css}" />
+    <link rel="stylesheet" th:href="@{/styles/style.css}" />
+    <link rel="stylesheet" th:href="@{/styles/jquery-ui.css}" />
+</div> -->
+
+
+<div th:fragment="scripts-top">
+	<!-- <script type="text/javascript" th:src="@{/js/analytics.js}"></script> -->
+	<!-- <script type="text/javascript" th:src="@{/js/modernizr-2.6.2.min.js}"></script> -->
+	<!-- <script type="text/javascript" th:src="@{/js/common.js}"></script> -->
+	<!-- <script type="text/javascript" th:src="@{/js/util.js}"></script> -->
+	<!-- <script type="text/javascript" th:src="@{https://polyfill.io/v3/polyfill.min.js?features=default}"></script> -->
+	<script src="http://localhost:35729/livereload.js"></script>
+</div>
+
+
+
+<div th:fragment="top-bar" id="top-bar">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6 col-md-9">
+				<div class="contacts">
+					<div><span class="fa fa-phone"></span> 800-5-800</div>
+					<div class="hidden-xs hidden-ms"><span class="fa fa-phone"></span> 43 2-nd Avenue, New York,
+						29004-7153</div>
+				</div>
+			</div>
+			<div class="col-lg-6 col-md-3">
+				<div class="social social-small visible-lg">
+					<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-twitter"></a>
+					<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-facebook"></a>
+					<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-instagram"></a>
+					<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-google-plus"></a>
+					<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-pinterest"></a>
+				</div>
+				<a href="/taxi" class="btn btn-xs btn-black-bordered pull-right">Get taxi online</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div th:fragment="nav" class="nav-wrapper" id="nav-wrapper">
+	<nav class="navbar navbar-static navbar-affix affix-top" data-spy="affix">
+		<a class="logo" href="#">
+			<img th:fragment="logo" th:src="@{/images/common/logo-inner.png}" alt="Drive IN">
+		</a>
+		<div th:include="/fragments :: nav-inner"></div>
+	</nav>
+</div>
+
+<div th:fragment="nav-inner">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle collapsed">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar top-bar"></span>
+			<span class="icon-bar middle-bar"></span>
+			<span class="icon-bar bottom-bar"></span>
+		</button>
+	</div>
+	<div id="navbar" class="navbar-collapse collapse">
+		<button type="button" class="navbar-toggle collapsed">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar top-bar"></span>
+			<span class="icon-bar middle-bar"></span>
+			<span class="icon-bar bottom-bar"></span>
+		</button>
+		<ul class="nav navbar-nav">
+			<!-- <li class="hasSub current_page_item"> -->
+			<!-- <a href="/index.html">Home</a> -->
+			<!-- <ul class="sub-menu">
+						<li class="current_page_item"><a href="http://like-themes.com/taxipark/index.html">Homepage 1</a></li>
+						<li><a href="http://like-themes.com/taxipark/homepage-2.html">Homepage 2</a></li>
+						<li><a href="http://like-themes.com/taxipark/homepage-3.html">Homepage 3</a></li>
+					</ul> -->
+			<!-- </li> -->
+			<li><a id="index-nav" href="/index" onClick="setActive(this.id)">Home</a></li>
+			<li><a id="taxi-nav" href="/taxi" onClick="setActive(this.id)">Get Taxi</a></li>
+
+			<!-- <li><a href="http://like-themes.com/taxipark/services.html">Services</a></li> -->
+			<!-- <li class="hasSub">
+					<a href="http://like-themes.com/taxipark/index.html#">Our blog</a>
+					<ul class="sub-menu">
+						<li><a href="http://like-themes.com/taxipark/blog.html">Classic Blog</a></li>
+						<li><a href="http://like-themes.com/taxipark/blog-3.html">Blog without Sidebar</a>
+						</li>
+						<li><a href="http://like-themes.com/taxipark/post.html">Blog Post</a></li>
+					</ul>
+				</li> -->
+			<!-- <li class="hasSub">
+					<a href="http://like-themes.com/taxipark/index.html#">Gallery</a>
+					<ul class="sub-menu">
+						<li><a href="http://like-themes.com/taxipark/gallery-2.html">Gallery 2-columns</a>
+						</li>
+						<li><a href="http://like-themes.com/taxipark/gallery-3.html">Gallery 3-columns</a>
+						</li>
+						<li><a href="http://like-themes.com/taxipark/gallery-4.html">Gallery 4-columns</a>
+						</li>
+					</ul>
+				</li> -->
+			<!-- <li><a href="http://like-themes.com/taxipark/testimonials.html">Testimonials</a></li> -->
+			<li><a id="registration-nav" href="/registration" onClick="setActive(this.id)">Registration</a></li>
+			<!-- <li class="hasSub">
+					<a href="http://like-themes.com/taxipark/index.html#">Pages</a>
+					<ul class="sub-menu">
+						<li><a href="http://like-themes.com/taxipark/typo.html">Typography</a></li>
+						<li><a href="http://like-themes.com/taxipark/shortcodes.html">Shortcodes</a></li>
+					</ul>
+				</li> -->
+		</ul>
+	</div>
+
+</div>
+
+<section th:fragment="tariffs" id="tariffs">
+	<div class="container">
+		<h4 class="yellow">See Our</h4>
+		<h2 class="h1">Tariffs</h2>
+		<div class="row">
+			<div class="col-md-3 col-sm-6">
+				<div class="item matchHeight" style="height: 371px;">
+					<div class="image">
+						<img th:src="@{/images/common/_tariff-1.png}" class="full-width" alt="Tariff">
+					</div>
+					<h4>Standart</h4>
+					<p>Standard sedan for a drive around the city at your service</p>
+					<div class="price">$2<span>/km</span></div>
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-6">
+				<div class="item matchHeight" style="height: 371px;">
+					<div class="image">
+						<img th:src="@{/images/common/_tariff-2.png}" class="full-width" alt="Tariff">
+					</div>
+					<h4>Business</h4>
+					<p>Standard sedan for a drive around the city at your service</p>
+					<div class="price">$2,7<span>/km</span></div>
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-6">
+				<div class="item matchHeight vip" style="height: 371px;">
+					<div class="image">
+						<img th:src="@{/images/common/_tariff-3.png}" class="full-width" alt="Tariff">
+					</div>
+					<h4 class="red">Vip</h4>
+					<p>Standard sedan for a drive around the city at your service</p>
+					<div class="price">$5<span>/km</span></div>
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-6">
+				<div class="item matchHeight" style="height: 371px;">
+					<div class="image">
+						<img th:src="@{/images/common/_tariff-4.png}" class="full-width" alt="Tariff">
+					</div>
+					<h4>Bus-minivan</h4>
+					<p>Standard sedan for a drive around the city at your service</p>
+					<div class="price">$4,5<span>/km</span></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<section th:fragment="block-footer" id="block-footer">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 col-ms-6">
+				<h4>About us</h4>
+				<p>Nullam orci dui, dictum et magna sollicitudin, tempor blandit erat. Maecenas suscipit tellus sit
+					amet augue placerat fringilla a id lacus. Fusce tincidunt in leo lacinia condimentum. </p>
+				<div class="social-small social-yellow">
+					<a href="http://like-themes.com/taxipark/index.html#" class="fa fa-twitter"></a>
+					<a href="http://like-themes.com/taxipark/index.html#" class="fa fa-facebook"></a>
+					<a href="http://like-themes.com/taxipark/index.html#" class="fa fa-instagram"></a>
+					<a href="http://like-themes.com/taxipark/index.html#" class="fa fa-google-plus"></a>
+					<a href="http://like-themes.com/taxipark/index.html#" class="fa fa-pinterest"></a>
+				</div>
+			</div>
+			<div class="col-lg-5 col-md-5 hidden-md hidden-sm hidden-xs hidden-ms">
+				<h4>Explore</h4>
+				<div class="row">
+					<div class="col-md-5">
+						<ul class="nav navbar-nav">
+							<li class="active"><a href="http://like-themes.com/taxipark/index.html#">Get Taxi</a></li>
+							<li><a href="http://like-themes.com/taxipark/index.html#">Services</a></li>
+							<li><a href="http://like-themes.com/taxipark/index.html#">Tariffs</a></li>
+							<li><a href="http://like-themes.com/taxipark/index.html#">Application</a></li>
+
+						</ul>
+					</div>
+					<div class="col-md-5">
+						<ul class="nav navbar-nav">
+							<li><a href="http://like-themes.com/taxipark/index.html#">Become a driver</a></li>
+							<li><a href="http://like-themes.com/taxipark/index.html#">Testimonials</a></li>
+							<li><a href="http://like-themes.com/taxipark/index.html#">Contacts</a></li>
+							<li><a href="http://like-themes.com/taxipark/index.html#">Pages</a></li>
+						</ul>
+					</div>
+				</div>
+
+			</div>
+			<div class="col-lg-3 col-md-6 col-sm-6 col-ms-6">
+				<h4>Contact us</h4>
+				<p><span class="yellow">Address:</span> 43 2-nd Avenue, New York, NY 29004-7153</p>
+
+				<ul class="address">
+					<li><span class="fa fa-phone"></span>800-5-800</li>
+					<li><span class="fa fa-envelope"></span>
+						<a href="http://like-themes.com/taxipark/index.html#">gettaxi@taxipark.co.uk</a>
+					</li>
+					<li><span class="fa fa-skype"></span>gettaxipark</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</section>
+
+<footer th:fragment="footer">
+	<div class="container">
+		<a href="http://like-themes.com/">Like-themes</a> 2017 © All Rights Reserved <a
+			href="http://like-themes.com/taxipark/index.html#">Terms of use</a>
+		<a href="#" class="go-top hidden-xs hidden-ms"></a>
+	</div>
+</footer>
+
+
+
+
+<div th:fragment="scripts-bottom">
+	<script>var base_href = '/';</script>
+	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery-ui.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/custom.js}"></script>
+	<script type="text/javascript" th:src="@{/js/plugins.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/js}"></script>
+	<script type="text/javascript" th:src="@{/js/scripts.js}"></script>
+
+	<script>
+		(function (i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date(); a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+		ga('create', 'UA-91006724-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+
+</div>

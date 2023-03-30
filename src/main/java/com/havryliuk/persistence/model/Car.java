@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,6 +22,8 @@ public class Car {
 
     private String brand;
     private String model;
+
+    @Column(unique=true)
     private String number;
     private CarClass carClass;
 

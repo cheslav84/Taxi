@@ -11,8 +11,7 @@ public class PasswordValidator implements ConstraintValidator<ValidPassword, Str
 
  //Minimum eight characters, at least one letter, one number and one special character:
     private static final String PASSWORD_PATTERN
-            = "^(?=.*[A-Za-z])(?=.*\\\\d)(?=.*[@$!%*#?&])[A-Za-z\\\\d@$!%*#?&]{8,32}$";
-
+            = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,32}$";
     @Override
     public void initialize(ValidPassword constraintAnnotation) {
     }

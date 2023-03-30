@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
 @Setter
 @Getter
 @ToString
-@PasswordMatches
+@PasswordMatches (field = "matchingPassword")
 public class UserDTO {
 
     @NotNull

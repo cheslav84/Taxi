@@ -2,119 +2,11 @@
 <html xmlns="http:/ /www.w3.org/1999/xhtml" xmlns:th="http:/ /www.thymeleaf.org"
 	class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths">
 
-<head>
-	<meta lang="en">
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="">
-	<meta name="author" content="">
-
-	<link rel="icon" type="image/png" href="http://like-themes.com/taxipark/assets/images/favicon.png">
-	<title>TaxiPark</title>
-
-	<link rel="stylesheet" th:href="@{/styles/bootstrap-grid.css}" />
-	<link rel="stylesheet" th:href="@{/styles/font-awesome.css}" />
-	<link rel="stylesheet" th:href="@{/styles/swiper.css}" />
-	<link rel="stylesheet" th:href="@{/styles/swipebox.css}" />
-	<link rel="stylesheet" th:href="@{/styles/zoomslider.css}" />
-	<link rel="stylesheet" th:href="@{/styles/style.css}" />
-	<link rel="stylesheet" th:href="@{/styles/jquery-ui.css}" />
-
-	<link href="./TaxiPark_files/css" rel="stylesheet">
-
-	<!-- <script type="text/javascript" th:src="@{/js/analytics.js}"></script> -->
-	<script type="text/javascript" th:src="@{/js/modernizr-2.6.2.min.js}"></script>
-	<script type="text/javascript" th:src="@{/js/common.js}"></script>
-	<script type="text/javascript" th:src="@{/js/util.js}"></script>
-	<script type="text/javascript" th:src="@{https://polyfill.io/v3/polyfill.min.js?features=default}"></script>
-
-	<!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script> -->
-
-</head>
+<head th:replace="/fragments :: head"></head>
 
 <body>
-
-	<div id="top-bar">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-6 col-md-9">
-					<div class="contacts">
-						<div><span class="fa fa-phone"></span> 800-5-800</div>
-						<div class="hidden-xs hidden-ms"><span class="fa fa-phone"></span> 43 2-nd Avenue, New York,
-							29004-7153</div>
-					</div>
-				</div>
-				<div class="col-lg-6 col-md-3">
-					<div class="social social-small visible-lg">
-						<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-twitter"></a>
-						<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-facebook"></a>
-						<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-instagram"></a>
-						<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-google-plus"></a>
-						<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-pinterest"></a>
-					</div>
-					<a href="/taxi" class="btn btn-xs btn-black-bordered pull-right">Get taxi online</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="nav-wrapper" id="nav-wrapper">
-		<nav class="navbar navbar-static navbar-affix affix-top" data-spy="affix">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar top-bar"></span>
-						<span class="icon-bar middle-bar"></span>
-						<span class="icon-bar bottom-bar"></span>
-					</button>
-
-					<a class="logo" href="/index">
-						<img th:src="@{/images/common/logo-inner.png}" alt="TaxiPark">
-					</a>
-				</div>
-				<div id="navbar" class="navbar-collapse collapse">
-					<button type="button" class="navbar-toggle collapsed">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar top-bar"></span>
-						<span class="icon-bar middle-bar"></span>
-						<span class="icon-bar bottom-bar"></span>
-					</button>
-					<ul class="nav navbar-nav">
-						<li><a href="/index">Home</a></li>
-						<li class="current_page_item"><a href="#">Get Taxi</a></li>
-
-						<li><a href="http://like-themes.com/taxipark/services.html">Services</a></li>
-						<li class="hasSub">
-							<a href="http://like-themes.com/taxipark/get_taxi.html#">Our blog</a>
-							<ul class="sub-menu">
-								<li><a href="http://like-themes.com/taxipark/blog.html">Classic Blog</a></li>
-								<li><a href="http://like-themes.com/taxipark/blog-3.html">Blog without Sidebar</a></li>
-								<li><a href="http://like-themes.com/taxipark/post.html">Blog Post</a></li>
-							</ul>
-						</li>
-						<li class="hasSub">
-							<a href="http://like-themes.com/taxipark/get_taxi.html#">Gallery</a>
-							<ul class="sub-menu">
-								<li><a href="http://like-themes.com/taxipark/gallery-2.html">Gallery 2-columns</a></li>
-								<li><a href="http://like-themes.com/taxipark/gallery-3.html">Gallery 3-columns</a></li>
-								<li><a href="http://like-themes.com/taxipark/gallery-4.html">Gallery 4-columns</a></li>
-							</ul>
-						</li>
-						<li><a href="http://like-themes.com/taxipark/testimonials.html">Testimonials</a></li>
-						<li><a href="/registration">Registration</a></li>
-						<li class="hasSub">
-							<a href="http://like-themes.com/taxipark/get_taxi.html#">Pages</a>
-							<ul class="sub-menu">
-								<li><a href="http://like-themes.com/taxipark/typo.html">Typography</a></li>
-								<li><a href="http://like-themes.com/taxipark/shortcodes.html">Shortcodes</a></li>
-							</ul>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</nav>
-	</div>
+	<div th:replace="/fragments :: top-bar"></div>
+	<div th:replace="/fragments :: nav"></div>
 
 	<header class="page-header" style="background-image: url(assets/images/_inner-bg.jpg);">
 		<div class="container">
@@ -136,14 +28,18 @@
 			<h4 class="yellow aligncenter">Our operators are waiting for your call:</h4>
 			<h3 class="aligncenter">800-5-800</h3>
 			<p class="form-label">Also you can order a taxi online</p>
-			<form method="POST" th:object="${trip}">
+			<form th:action="@{/taxi}" method="post" th:object="${trip}">
 				<div class="menu-types">
-					<a href="#" data-value="STANDART" class="type-1 active">Standart</a>
-					<a href="#" data-value="BUSINESS" class="type-2">Business</a>
-					<a href="#" data-value="VIP" class="type-3 red">Vip</a>
-					<a href="#" data-value="BUS_MINIVAN" class="type-4">Bus-Minivan</a>
-					<input type="hidden" name="carClass" class="type-value ajaxField" th:value="STANDART">
+					<a href="#" 
+						th:each="carClass, state : ${carClasses}"
+						th:class="type- + ${state.count}"
+						th:classappend="${ __${state.index}__ == 0 ? 'active' : ''}"
+						th:data-value="${carClass}"
+						th:text="${carClass}" >
+					</a>
+					<input type="hidden" name="role" class="type-value ajaxField" th:value="${carClasses.get(0)}">
 				</div>
+						<!-- th:classappend="${ __${state.current}__ == 'VIP' ? 'active' : ''}"			 -->
 
 				<address class="row form-with-labels">
 					<div class="col-md-12">
@@ -190,166 +86,32 @@
 
 	<section id="maps">
 		<div class="container">
-			<h2>Map</h2>
+			<h4 class="yellow">See you way on</h4>
+			<h2 class="h1">Map</h2>
 			<div style="display: none">
 			</div>
 
 			<div id="map"></div>
-
+			<hr class="lg">
 			<div id="sidebar">
-				<p>Total Distance: <span id="total"></span></p>
+				<h5 class="yellow">Total Distance: <span id="total"></span></h5>
 				<div id="panel"></div>
 			</div>
 		</div>
-		<!-- 
-		  The `defer` attribute causes the callback to execute after the full HTML
-		  document has been parsed. For non-blocking uses, avoiding race conditions,
-		  and consistent behavior across browsers, consider loading using Promises
-		  with https://www.npmjs.com/package/@googlemaps/js-api-loader.
-		  -->
-
-
-
-
-	<section id="tariffs">
-		<div class="container">
-			<h4 class="yellow">See Our</h4>
-			<h2 class="h1">Tariffs</h2>
-			<div class="row">
-				<div class="col-md-3 col-sm-6">
-					<div class="item matchHeight" style="height: 372px;">
-						<div class="image">
-							<img th:src="@{/images/common/_tariff-1.png}" class="full-width" alt="Tariff">
-						</div>
-						<h4>Standart</h4>
-						<p>Standard sedan for a drive around the city at your service</p>
-						<div class="price">$2<span>/km</span></div>
-					</div>
-				</div>
-				<div class="col-md-3 col-sm-6">
-					<div class="item matchHeight" style="height: 372px;">
-						<div class="image">
-							<img th:src="@{/images/common/_tariff-2.png}" class="full-width" alt="Tariff">
-						</div>
-						<h4>Business</h4>
-						<p>Standard sedan for a drive around the city at your service</p>
-						<div class="price">$2,7<span>/km</span></div>
-					</div>
-				</div>
-				<div class="col-md-3 col-sm-6">
-					<div class="item matchHeight vip" style="height: 372px;">
-						<div class="image">
-							<img th:src="@{/images/common/_tariff-3.png}" class="full-width" alt="Tariff">
-						</div>
-						<h4 class="red">Vip</h4>
-						<p>Standard sedan for a drive around the city at your service</p>
-						<div class="price">$5<span>/km</span></div>
-					</div>
-				</div>
-				<div class="col-md-3 col-sm-6">
-					<div class="item matchHeight" style="height: 372px;">
-						<div class="image">
-							<img th:src="@{/images/common/_tariff-4.png}" class="full-width" alt="Tariff">
-						</div>
-						<h4>Bus-minivan</h4>
-						<p>Standard sedan for a drive around the city at your service</p>
-						<div class="price">$4,5<span>/km</span></div>
-					</div>
-				</div>
-			</div>
-		</div>
 	</section>
+	
+	<section th:replace="/fragments :: tariffs"></section>
 
-	<section id="block-footer">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 col-ms-6">
-					<h4>About us</h4>
-					<p>Nullam orci dui, dictum et magna sollicitudin, tempor blandit erat. Maecenas suscipit tellus sit
-						amet augue placerat fringilla a id lacus. Fusce tincidunt in leo lacinia condimentum. </p>
+	<section th:replace="/fragments :: block-footer"></section>
 
-					<div class="social-small social-yellow">
-						<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-twitter"></a>
-						<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-facebook"></a>
-						<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-instagram"></a>
-						<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-google-plus"></a>
-						<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-pinterest"></a>
-					</div>
-				</div>
-				<div class="col-lg-5 col-md-5 hidden-md hidden-sm hidden-xs hidden-ms">
-					<h4>Explore</h4>
-					<div class="row">
-						<div class="col-md-5">
-							<ul class="nav navbar-nav">
-								<li class="active"><a href="http://like-themes.com/taxipark/get_taxi.html#">Get Taxi</a>
-								</li>
-								<li><a href="http://like-themes.com/taxipark/get_taxi.html#">Services</a></li>
-								<li><a href="http://like-themes.com/taxipark/get_taxi.html#">Tariffs</a></li>
-								<li><a href="http://like-themes.com/taxipark/get_taxi.html#">Application</a></li>
+    <footer th:replace="/fragments :: footer"></footer>
 
-							</ul>
-						</div>
-						<div class="col-md-5">
-							<ul class="nav navbar-nav">
-								<li><a href="http://like-themes.com/taxipark/get_taxi.html#">Become a driver</a></li>
-								<li><a href="http://like-themes.com/taxipark/get_taxi.html#">Testimonials</a></li>
-								<li><a href="http://like-themes.com/taxipark/get_taxi.html#">Contacts</a></li>
-								<li><a href="http://like-themes.com/taxipark/get_taxi.html#">Pages</a></li>
-							</ul>
-						</div>
-					</div>
+	<div th:include="/fragments :: scripts-bottom"></div>
 
-				</div>
-				<div class="col-lg-3 col-md-6 col-sm-6 col-ms-6">
-					<h4>Contact us</h4>
-					<p><span class="yellow">Address:</span> 43 2-nd Avenue, New York, NY 29004-7153</p>
-
-					<ul class="address">
-						<li><span class="fa fa-phone"></span>800-5-800</li>
-						<li><span class="fa fa-envelope"></span><a
-								href="http://like-themes.com/taxipark/get_taxi.html#">gettaxi@taxipark.co.uk</a></li>
-						<li><span class="fa fa-skype"></span>gettaxipark</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<footer>
-		<div class="container">
-			<a href="http://like-themes.com/">Like-themes</a> 2017 © All Rights Reserved <a
-				href="http://like-themes.com/taxipark/get_taxi.html#">Terms of use</a>
-			<a href="#" class="go-top hidden-xs hidden-ms"></a>
-		</div>
-	</footer>
-
-	<script>var base_href = '/';</script>
-	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
-	<script type="text/javascript" th:src="@{/js/jquery-ui.min.js}"></script>
-	<script type="text/javascript" th:src="@{/js/plugins.min.js}"></script>
-	<script type="text/javascript" th:src="@{/js/map-style.js}"></script>
-	<script type="text/javascript" th:src="@{/js/js}"></script>
-	<script type="text/javascript" th:src="@{/js/scripts.js}"></script>
+	<!-- <script type="text/javascript" th:src="@{/js/map-style.js}"></script> -->
 	<script type="text/javascript" th:src="@{/js/map.js}"></script>
-	<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnlKYEnivV8h0EAoyqydzBci4O4UYaNZw&&callback=initMap&libraries=places"
-	defer></script> -->
-
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5gfkKVMI4OYiiSBtfBx35Jc9GffAfALo&&callback=initMap&libraries=places"
 	defer></script>
-
-</section>
-
-	<!-- <script>
-		(function (i, s, o, g, r, a, m) {
-			i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-				(i[r].q = i[r].q || []).push(arguments)
-			}, i[r].l = 1 * new Date(); a = s.createElement(o),
-				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
-		ga('create', 'UA-91006724-1', 'auto');
-		ga('send', 'pageview');
-	</script> -->
 
 </body>
 

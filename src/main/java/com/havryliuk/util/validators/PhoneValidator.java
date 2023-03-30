@@ -9,7 +9,8 @@ import java.util.regex.Pattern;
 
 public class PhoneValidator implements ConstraintValidator<ValidPhone, String> {
 
-    private static final String PHONE_PATTERN = "^(\\\\+[1-9]{1}[0-9]{11})|([0]{1}[0-9]{9})";
+    private static final String PHONE_PATTERN = "^(\\+[1-9]{1}[0-9]{11})|([0]{1}[0-9]{9})$";
+//    private static final String PHONE_PATTERN = "^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$";
 
     @Override
     public void initialize(ValidPhone constraintAnnotation) {

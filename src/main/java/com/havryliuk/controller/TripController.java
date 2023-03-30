@@ -1,9 +1,7 @@
 package com.havryliuk.controller;
 
-import com.havryliuk.persistence.model.PaymentStatus;
-import com.havryliuk.persistence.model.Trip;
+import com.havryliuk.persistence.model.*;
 
-import com.havryliuk.persistence.model.TripStatus;
 import com.havryliuk.service.TripService;
 import com.havryliuk.util.google.map.GoogleAPI;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @Slf4j
@@ -32,12 +31,16 @@ public class TripController {
     @GetMapping
     public ModelAndView taxiPage(ModelAndView modelAndView) {
         log.trace("taxiPage");
+        modelAndView.addObject("trip", new Trip());
         modelAndView.setViewName("taxi");
         return modelAndView;
     }
 
     @PostMapping
     public String create(@Valid Trip trip, Errors errors) {
+        if (errors.hasErrors()) {
+            return "/taxi";
+        }
         googleAPI.setAddressLocation(trip.getOriginAddress());
         googleAPI.setAddressLocation(trip.getDestinationAddress());
         googleAPI.setDuration(trip);
@@ -48,9 +51,6 @@ public class TripController {
 
         tripService.save(trip);
         System.err.println(trip);
-        if (errors.hasErrors()) {
-            return "/taxi";
-        }
         return "redirect:/taxi";//todo
     }
 
@@ -60,6 +60,10 @@ public class TripController {
     }
 
 
+    @ModelAttribute(name = "carClasses")
+    public List<CarClass> getCarClasses() {
+        return List.of(CarClass.values());
+    }
 
 
 
