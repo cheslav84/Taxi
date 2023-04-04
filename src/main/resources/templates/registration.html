@@ -10,11 +10,11 @@
 	<div th:replace="/fragments :: nav"></div>
 	
 
-	<header class="page-header" style="background-image: url(assets/images/_inner-bg.jpg);">
+	<header class="page-header" style="background-image: url(../images/_homepage-1-bg.jpg);">
 		<div class="container">
 			<ol class="bread">
 				<li>
-					<a href="/index"><span>Home</span></a>
+					<a th:href="@{/index}"><span>Home</span></a>
 				</li>
 				<li class="divider"><span>//</span></li>
 				<li>
@@ -29,7 +29,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8 col-md-6 contact-form">
-					<form th:action="@{/registration}" method="post" th:object="${userDTO}" class="form form-sm">
+					<form th:action="@{/auth/registration}" method="post" th:object="${userDTO}" class="form form-sm">
 						<h3 class="aligncenter">Registration</h3>
 						<div class="form-group">
 							<label>Your name <span class="red">*</span></label>
@@ -59,12 +59,17 @@
 							<div class="validationError" th:if="${#fields.hasErrors('phone')}"
 								th:errors="*{phone}">Phone error</div>								
 						</div>
-						<div class="form-group">
-							<label>Your age <span class="red">*</span></label>
-							<input type="number" th:field="*{age}" placeholder="Your age" class="ajaxField required"
-								aria-required="true">
-							<div class="validationError" th:if="${#fields.hasErrors('age')}"
-								th:errors="*{age}">Age error</div>
+						<div class="form-with-labels">
+							<label>Your birth date <span class="red">*</span></label>
+							<div class="form-group">
+								<!-- <input type="number" th:field="*{age}" placeholder="Your age" class="ajaxField required"
+									aria-required="true"> -->
+								<input type="date" th:field="*{birthDate}" placeholder="Your birth date" class="ajaxField required"
+									aria-required="true">
+								<div class="validationError" th:if="${#fields.hasErrors('birthDate')}"
+									th:errors="*{birthDate}">Age error</div>
+								<span class="fa fa-calendar"></span>
+							</div>
 						</div>
 						<div class="form-with-labels">
 							<label for="reg-password">Password <span class="red">*</span></label>
@@ -88,6 +93,8 @@
 								</div>
 							</div>
 						</div>
+
+
 						<div class="menu-types">
 							<a href="#" class="type-5 role-button"
 								th:each="role, state : ${roles}"
@@ -97,6 +104,10 @@
 							</a>
 							<input type="hidden" name="role" class="type-value ajaxField" th:value="${roles.get(0)}">
 						</div>
+
+
+
+						
 						<!-- <h4 class="toggled-accordion">Driver account?</h4>
 						<div class="panel"></div> -->
 						<!-- <div class="g-recaptcha" data-sitekey="your_site_key"></div> -->
@@ -104,53 +115,21 @@
 					    <span id="captchaError" class="alert alert-danger col-sm-4" style="display:none"></span>
 						<input type="hidden" id="response" name="response" value="" /> -->
 						<div th:if="${warningMessage}" class="alert alert-black" >
-							<a href="#" class="fa fa-times"></a>
+							<!-- <a href="#" class="fa fa-times"></a> -->
 							<div class="header"><span class="fa fa-info-circle"></span>Warning</div>
 							<p class="" th:text="${warningMessage}"></p>
 						</div>
 						<input type="submit" name="send" value="Register" class="btn btn-yellow aligncenter btn-lg">
 					</form>
 				</div>
-				<div class="col-lg-4 col-md-6">
-					<div class="row">
-						<div class="col-lg-12 col-md-12 col-sm-6">
 
-							<h2 class="spanned"><span>Opening Hours:</span> 24/7</h2>
-							<p>Nam eu mi eget velit vulputate tempor gravida quis massa. In malesuada condimentum
-								ultrices. Sed et mauris a purus fermentum elementum. Sed tristique semper enim, et
-								gravida orci iaculis et. Nulla facilisi. </p>
-						</div>
-						<div class="col-lg-12 col-md-12 col-sm-6">
-							<ul class="address">
-								<li class="large"><span class="fa fa-phone"></span>800-5-800</li>
-								<li><span class="fa fa-skype"></span>gettaxipark</li>
-								<li><span class="fa fa-map-marker"></span>43 2-nd Avenue, New York, 29004-7153</li>
-							</ul>
-						</div>
-						<div class="col-lg-12 col-sm-12">
-							<strong>Social:</strong>
-							<ul class="social social-big">
-								<li><a href="http://like-themes.com/taxipark/contacts.html#"
-										class="social-fb fa fa-facebook"></a></li>
-								<li><a href="http://like-themes.com/taxipark/contacts.html#"
-										class="social-twitter fa fa-twitter"></a></li>
-								<li><a href="http://like-themes.com/taxipark/contacts.html#"
-										class="social-youtube fa fa-youtube"></a></li>
-								<li><a href="http://like-themes.com/taxipark/contacts.html#"
-										class="social-inst fa fa-instagram"></a></li>
-							</ul>
-							<!-- <a href="http://like-themes.com/taxipark/contacts.html#" class="btn btn-black-bordered btn-lg">Get Taxi Online</a> -->
-						</div>
-					</div>
-				</div>
+				<div th:replace="/fragments :: contacts-block"></div>
 			</div>
 		</div>
 	</section>
 
 	<section th:replace="/fragments :: block-footer"></section>
-
     <footer th:replace="/fragments :: footer"></footer>
-
     <div th:include="/fragments :: scripts-bottom"></div>
 
 </body>

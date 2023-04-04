@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)http://like-themes.com/taxipark/contacts.html -->
+<html lang="en" class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths">
+
+<head th:replace="/fragments :: head"></head>
+
+<body>
+
+	<div th:replace="/fragments :: top-bar"></div>
+	<div th:replace="/fragments :: nav"></div>
+	
+
+	<header class="page-header" style="background-image: url(../images/_homepage-1-bg.jpg);">
+		<div class="container">
+			<ol class="bread">
+				<li>
+					<a th:href="@{/index}"><span>Home</span></a>
+				</li>
+				<li class="divider"><span>//</span></li>
+				<li>
+					<span>Log in</span>
+				</li>
+			</ol>
+			<h1>Log in</h1>
+		</div>
+	</header>
+
+	<section id="page-contacts">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-md-6 contact-form">
+
+					<form th:action="@{/auth/login}" method="post" class="form form-sm">
+						<h3 class="aligncenter">Log in</h3>
+						<div class="form-group">
+							<label>E-mail <span class="red">*</span></label>
+							<input type="email" name="username" placeholder="E-mail" class="ajaxField required"
+								aria-required="true">	
+							<!-- <div class="validationError" th:if="${#fields.hasErrors('username')}"
+								th:errors="*{username}">Email error</div>	 -->
+						</div>
+						<div class="form-with-labels">
+							<label for="reg-password">Password <span class="red">*</span></label>
+							<div class="form-group">
+								<input type="password" name="password" placeholder="Password" id="reg-password"
+									class="ajaxField required" aria-required="true">
+								<!-- <div class="validationError" th:if="${#fields.hasErrors('password')}"
+									th:errors="*{password}">Password error</div> -->
+								<span id="show-reg-passwd" class="fa fa-eye-slash"> </span>
+							</div>
+							<div th:if="${param.error}" class="alert alert-black" >
+								<div class="header"><span class="fa fa-info-circle"></span>Warning</div>
+								<p>Login or password is incorrect</p>
+							</div>
+						</div>
+						<input type="submit" name="send" value="Log in" class="btn btn-yellow aligncenter btn-lg">
+					</form>
+				</div>
+
+				<div th:replace="/fragments :: contacts-block"></div>
+
+			</div>
+		</div>
+	</section>
+
+	<section th:replace="/fragments :: block-footer"></section>
+
+    <footer th:replace="/fragments :: footer"></footer>
+
+    <div th:include="/fragments :: scripts-bottom"></div>
+
+</body>
+
+</html>

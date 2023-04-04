@@ -18,6 +18,7 @@ public class IndexController {
     @GetMapping({"/", "/index"})
     public ModelAndView index(ModelAndView modelAndView) {
         log.trace("indexPage");
+        modelAndView.addObject("activePage", "index");
         modelAndView.setViewName("index");
         return modelAndView;
     }

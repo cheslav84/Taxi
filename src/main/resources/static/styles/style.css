@@ -206,6 +206,10 @@ small {
   font-size: 80%;
 }
 
+/* big {
+  font-size: 200%;
+} */
+
 /**
  * Prevent `sub` and `sup` affecting `line-height` in all browsers.
  */
@@ -806,38 +810,79 @@ nav.navbar #navbar {
     z-index: 10000;
   }
 
+
+
+  #logout-form {
+    background: transparent;
+    padding: 0;
+    margin: 0;
+  }
+
+  #logout-form input {
+    padding: 26px 14px 4px;
+    background: none;
+    cursor: pointer;
+    color: #CCCCCC;
+    border: 1px solid transparent;
+    font-weight: 700;
+    font-size: 14px;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  #logout-form input:hover {
+    padding: 26px 14px 4px;
+    background: none;
+    cursor: pointer;
+    color: #CCCCCC;
+    border: 1px solid transparent;
+    font-weight: 700;
+    font-size: 14px;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
   nav.navbar #navbar ul.navbar-nav li,
-  nav.navbar #navbar ul.navbar-nav a {
+  nav.navbar #navbar ul.navbar-nav a
+  /* , nav.navbar #navbar ul.navbar-nav #logout-form  */
+  {
     color: #fff;
     padding: 6px 0 26px;
   }
 
-  nav.navbar #navbar ul.navbar-nav a {
+  nav.navbar #navbar ul.navbar-nav a
+  /* , nav.navbar #navbar ul.navbar-nav #logout-form */
+   {
     padding: 24px 14px 4px;
     color: #CCCCCC;
     text-transform: uppercase;
     border: 1px solid transparent;
     font-weight: 700;
     font-size: 14px;
+    margin: 0;
   }
 
-  nav.navbar #navbar ul.navbar-nav a:hover {
+  nav.navbar #navbar ul.navbar-nav a:hover,
+  #logout-form input:hover  {
     background: transparent;
     color: #FFC61A;
   }
 
-  nav.navbar #navbar ul.navbar-nav a:hover:before {
+  nav.navbar #navbar ul.navbar-nav a:hover:before, 
+  nav.navbar #navbar ul.navbar-nav #logout-form:hover:before {
     visibility: visible;
     opacity: 1;
     transition-delay: .1s;
     left: 50%;
   }
 
-  nav.navbar #navbar ul.navbar-nav a:focus {
+  nav.navbar #navbar ul.navbar-nav a:focus
+  nav.navbar #navbar ul.navbar-nav #logout-form:focus {
     background: transparent;
   }
 
-  nav.navbar #navbar ul.navbar-nav>li>a:before {
+  nav.navbar #navbar ul.navbar-nav>li>a:before, 
+  nav.navbar #navbar ul.navbar-nav>li>#logout-form:before {
     zoom: 1;
     filter: alpha(opacity=0);
     -webkit-opacity: 0;
@@ -852,7 +897,7 @@ nav.navbar #navbar {
     margin-left: -13px;
     bottom: -4px;
     height: 4px;
-    /* background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAECAYAAACQli8lAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTMyIDc5LjE1OTI4NCwgMjAxNi8wNC8xOS0xMzoxMzo0MCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUuNSAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6Mzc3QjA0RUQxOEM4MTFFNzg2RTFGMzg0NEI2MUUyOTkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6Mzc3QjA0RUUxOEM4MTFFNzg2RTFGMzg0NEI2MUUyOTkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDozNzdCMDRFQjE4QzgxMUU3ODZFMUYzODQ0QjYxRTI5OSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDozNzdCMDRFQzE4QzgxMUU3ODZFMUYzODQ0QjYxRTI5OSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pg9L7YEAAAAsSURBVHjaYvx/TOo/AwhYPmUE08elacJnYqATYPz/H+IAWvkExqebjwACDAC02iniw9Ls8gAAAABJRU5ErkJggg==") no-repeat; */
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAECAYAAACQli8lAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTMyIDc5LjE1OTI4NCwgMjAxNi8wNC8xOS0xMzoxMzo0MCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUuNSAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6Mzc3QjA0RUQxOEM4MTFFNzg2RTFGMzg0NEI2MUUyOTkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6Mzc3QjA0RUUxOEM4MTFFNzg2RTFGMzg0NEI2MUUyOTkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDozNzdCMDRFQjE4QzgxMUU3ODZFMUYzODQ0QjYxRTI5OSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDozNzdCMDRFQzE4QzgxMUU3ODZFMUYzODQ0QjYxRTI5OSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pg9L7YEAAAAsSURBVHjaYvx/TOo/AwhYPmUE08elacJnYqATYPz/H+IAWvkExqebjwACDAC02iniw9Ls8gAAAABJRU5ErkJggg==") no-repeat;
   }
 
   nav.navbar #navbar ul.navbar-nav li.current_page_item>a {
@@ -1214,9 +1259,39 @@ nav.navbar .navbar-toggle.collapsed .bottom-bar {
     color: #1F1F1F;
   }
 
-  nav.navbar ul.navbar-nav a:focus {
+ nav.navbar ul.navbar-nav a:focus {
     background: transparent;
   }
+
+  #logout-form {
+    background: #FFC61A;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+
+  #logout-form input {
+    background: none;
+    cursor: pointer;
+    /* color: #CCCCCC; */
+    border: 1px solid transparent;
+    font-size: 20pt;
+    font-weight: 900;
+    padding: 10px 40px;
+    color: #1F1F1F;
+    width: 100%;
+    text-align: left;
+  }
+
+  #logout-form:focus {
+    background: transparent;
+  }
+
+  #logout-form input:hover {
+    background:  #fff;
+  }
+ 
 
   nav.navbar ul.navbar-nav li.current_page_item>a {
     color: #fff;
@@ -1827,6 +1902,8 @@ nav.navbar.affix {
   font-size: 18px;
   top: 16px;
 }
+
+
 
 .menu-types {
   text-align: center;
@@ -2934,6 +3011,7 @@ footer .go-top:hover:before {
 }
 
 .widget-area aside .wp-searchform input[type="text"],
+.widget-area aside .wp-searchform input[type="date"],
 .widget-area aside .wp-searchform input[type="datetime-local"] {
   width: 100%;
   display: block;
@@ -3164,6 +3242,10 @@ a.video:hover span {
   }
 }
 
+.personal-data-container {
+  margin: 30px 0;
+}
+
 .text-page strong,
 .text-page a,
 .text-page p {
@@ -3174,6 +3256,13 @@ a.video:hover span {
 .text-page .small {
   font-size: 14px;
   line-height: 1.5em;
+}
+
+
+
+.text-page .large {
+  font-size: 18px;
+  line-height: 1.9em;
 }
 
 .text-page .small p {
@@ -3409,6 +3498,19 @@ form.form {
   background-clip: padding-box;
 }
 
+/* #logout-form {
+  margin:  0;
+  padding: 0;
+  background: #F5F5F5;
+  -webkit-border-radius: 4px;
+  -webkit-background-clip: padding-box;
+  -moz-border-radius: 4px;
+  -moz-background-clip: padding;
+  border-radius: 4px;
+  background-clip: padding-box;
+} */
+
+
 @media (max-width: 991px) {
   form.form {
     padding: 20px 20px 10px;
@@ -3441,6 +3543,7 @@ form input[type="email"],
 form input[type="tel"],
 form input[type="number"],
 form input[type="password"],
+form input[type="date"],
 /* #origin-input[type="datetime-local"] { */
 form input[type="datetime-local"] {
   width: 100%;
@@ -3459,6 +3562,7 @@ form input[type="datetime-local"] {
   background-clip: padding-box;
 }
 
+form input[type="date"],
 form input[type="datetime-local"] {
   padding-right: 10px;
   height: 45px;
@@ -3471,6 +3575,7 @@ form input[type="email"]:focus,
 form input[type="tel"]:focus,
 form input[type="number"]:focus,
 form input[type="password"]:focus,
+form input[type="date"]:focus,
 form input[type="datetime-local"]:focus {
   border-color: #FFC61A;
 }
@@ -3483,6 +3588,7 @@ form input[type="datetime-local"]:focus {
   form input[type="tel"],
   form input[type="number"],
   form input[type="password"],
+  form input[type="date"],
   form input[type="datetime-local"] {
     width: 100%;
   }
@@ -4647,6 +4753,7 @@ img.rounded {
 }
 
 .comment-form input[type="text"],
+.comment-form input[type="date"],
 .comment-form input[type="datetime-local"],
 .comment-form textarea {
   width: 100%;
@@ -4876,14 +4983,15 @@ img.aligncenter {
   right: 0;
   bottom: 0;
   z-index: 1;
+
 }
 
+input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   opacity: 0;
   z-index: 10;
   padding-right: 30px;
   cursor: pointer;
-
 }
 
 .validationError {

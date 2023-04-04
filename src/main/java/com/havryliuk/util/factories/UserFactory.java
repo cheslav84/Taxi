@@ -1,10 +1,10 @@
 package com.havryliuk.util.factories;
 
 import com.havryliuk.dto.UserDTO;
-import com.havryliuk.persistence.model.Driver;
-import com.havryliuk.persistence.model.Manager;
-import com.havryliuk.persistence.model.Passenger;
-import com.havryliuk.persistence.model.User;
+import com.havryliuk.model.Driver;
+import com.havryliuk.model.Manager;
+import com.havryliuk.model.Passenger;
+import com.havryliuk.model.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

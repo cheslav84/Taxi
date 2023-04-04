@@ -1,7 +1,7 @@
 package com.havryliuk.service;
 
-import com.havryliuk.persistence.model.Trip;
-import com.havryliuk.persistence.repository.TripRepository;
+import com.havryliuk.model.Trip;
+import com.havryliuk.repository.TripRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

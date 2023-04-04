@@ -11,21 +11,13 @@
     <link rel="stylesheet" th:href="@{/styles/swiper.css}" />
     <link rel="stylesheet" th:href="@{/styles/swipebox.css}" />
     <link rel="stylesheet" th:href="@{/styles/zoomslider.css}" />
+	<link rel="stylesheet" th:href="@{/styles/jquery-ui.css}" />
+
     <link rel="stylesheet" th:href="@{/styles/style.css}" />
+
     <!-- <div th:include="/fragments :: styles"></div> -->
     <div th:include="/fragments :: scripts-top"></div>
 </head>
-
-
-<!-- <div th:fragment="styles">
-	<link rel="stylesheet" th:href="@{/styles/bootstrap-grid.css}" />
-    <link rel="stylesheet" th:href="@{/styles/font-awesome.css}" />
-    <link rel="stylesheet" th:href="@{/styles/swiper.css}" />
-    <link rel="stylesheet" th:href="@{/styles/swipebox.css}" />
-    <link rel="stylesheet" th:href="@{/styles/zoomslider.css}" />
-    <link rel="stylesheet" th:href="@{/styles/style.css}" />
-    <link rel="stylesheet" th:href="@{/styles/jquery-ui.css}" />
-</div> -->
 
 
 <div th:fragment="scripts-top">
@@ -36,8 +28,6 @@
 	<!-- <script type="text/javascript" th:src="@{https://polyfill.io/v3/polyfill.min.js?features=default}"></script> -->
 	<script src="http://localhost:35729/livereload.js"></script>
 </div>
-
-
 
 <div th:fragment="top-bar" id="top-bar">
 	<div class="container">
@@ -51,13 +41,12 @@
 			</div>
 			<div class="col-lg-6 col-md-3">
 				<div class="social social-small visible-lg">
-					<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-twitter"></a>
-					<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-facebook"></a>
-					<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-instagram"></a>
-					<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-google-plus"></a>
-					<a href="http://like-themes.com/taxipark/get_taxi.html#" class="fa fa-pinterest"></a>
+					<a th:href="@{https://twitter.com}" class="fa fa-twitter"></a>
+					<a th:href="@{/https://www.facebook.com}" class="fa fa-facebook"></a>
+					<a th:href="@{/https://www.instagram.com}" class="fa fa-instagram"></a>
+					<a th:href="@{/https://www.youtube.com}" class="fa fa-youtube"></a>
 				</div>
-				<a href="/taxi" class="btn btn-xs btn-black-bordered pull-right">Get taxi online</a>
+				<a th:href="@{/taxi}" class="btn btn-xs btn-black-bordered pull-right">Get taxi online</a>
 			</div>
 		</div>
 	</div>
@@ -89,16 +78,20 @@
 			<span class="icon-bar bottom-bar"></span>
 		</button>
 		<ul class="nav navbar-nav">
-			<!-- <li class="hasSub current_page_item"> -->
-			<!-- <a href="/index.html">Home</a> -->
-			<!-- <ul class="sub-menu">
-						<li class="current_page_item"><a href="http://like-themes.com/taxipark/index.html">Homepage 1</a></li>
-						<li><a href="http://like-themes.com/taxipark/homepage-2.html">Homepage 2</a></li>
-						<li><a href="http://like-themes.com/taxipark/homepage-3.html">Homepage 3</a></li>
-					</ul> -->
-			<!-- </li> -->
-			<li><a id="index-nav" href="/index" onClick="setActive(this.id)">Home</a></li>
-			<li><a id="taxi-nav" href="/taxi" onClick="setActive(this.id)">Get Taxi</a></li>
+			<!-- <li class="hasSub current_page_item">
+				<a href="/index.html">Home</a>
+				<ul class="sub-menu">
+							<li class="current_page_item"><a href="http://like-themes.com/taxipark/index.html">Homepage 1</a></li>
+							<li><a href="http://like-themes.com/taxipark/homepage-2.html">Homepage 2</a></li>
+							<li><a href="http://like-themes.com/taxipark/homepage-3.html">Homepage 3</a></li>
+				</ul>
+			</li> -->
+			<li th:class="${activePage == 'index'} ? 'menu-item current_page_item' : 'menu-item'">
+				<a th:href="@{/index}">Home</a>
+			</li>
+			<li th:class="${activePage == 'newTrip'} ? 'menu-item current_page_item' : 'menu-item'">
+				<a th:href="@{/trips/new}">Get Taxi</a>
+			</li>
 
 			<!-- <li><a href="http://like-themes.com/taxipark/services.html">Services</a></li> -->
 			<!-- <li class="hasSub">
@@ -110,19 +103,50 @@
 						<li><a href="http://like-themes.com/taxipark/post.html">Blog Post</a></li>
 					</ul>
 				</li> -->
-			<!-- <li class="hasSub">
-					<a href="http://like-themes.com/taxipark/index.html#">Gallery</a>
+			<li th:class="${activePage == 'myAccount'} ? 'hasSub menu-item current_page_item' : 'hasSub menu-item'">
+				<a th:href="@{/users/info}">My account</a>
 					<ul class="sub-menu">
-						<li><a href="http://like-themes.com/taxipark/gallery-2.html">Gallery 2-columns</a>
+						<li th:class="${subPage == 'info'} ? 'menu-item current_page_item' : 'menu-item'">
+							<a th:href="@{/users/info}">My page</a>
 						</li>
-						<li><a href="http://like-themes.com/taxipark/gallery-3.html">Gallery 3-columns</a>
+						<li th:class="${subPage == 'balance'} ? 'menu-item current_page_item' : 'menu-item'">
+							<a th:href="@{/users/balance}">My balance</a>
 						</li>
-						<li><a href="http://like-themes.com/taxipark/gallery-4.html">Gallery 4-columns</a>
+						<li th:class="${subPage == 'allTrips'} ? 'menu-item current_page_item' : 'menu-item'">
+							<a th:href="@{/users/trips/all}">My trips</a>
+						</li>
+						<li th:class="${subPage == 'activeTrips'} ? 'menu-item current_page_item' : 'menu-item'">
+							<a th:href="@{users/trips/active}">My active trips</a>
+						</li>
+						<li th:class="${subPage == 'pastTrips'} ? 'menu-item current_page_item' : 'menu-item'">
+							<a th:href="@{users/trips/past}">My past trips</a>
 						</li>
 					</ul>
-				</li> -->
+			</li>
 			<!-- <li><a href="http://like-themes.com/taxipark/testimonials.html">Testimonials</a></li> -->
-			<li><a id="registration-nav" href="/registration" onClick="setActive(this.id)">Registration</a></li>
+
+			<li sec:authorize="!isAuthenticated()" th:class="${activePage == 'auth'} ? 'hasSub menu-item current_page_item' : 'hasSub menu-item'">
+				<a th:href="@{/auth/login}">Authentication</a>
+					<ul class="sub-menu">
+						<li th:class="${subPage == 'login'} ? 'menu-item current_page_item' : 'menu-item'">
+							<a th:href="@{/auth/login}">Log in</a>
+						</li>
+						<li th:class="${subPage == 'registration'} ? 'menu-item current_page_item' : 'menu-item'">
+							<a th:href="@{/auth/registration}">Registration</a>
+						</li>
+					</ul>
+			</li>
+			<li sec:authorize="isAuthenticated()" class="menu-item">
+				<form id="logout-form" th:action="@{/auth/logout}" method="post" class="form form-sm">
+					<input type="submit" value="Log out" class="logout-input">
+				</form>
+			</li>
+
+		
+
+
+
+
 			<!-- <li class="hasSub">
 					<a href="http://like-themes.com/taxipark/index.html#">Pages</a>
 					<ul class="sub-menu">
@@ -132,8 +156,97 @@
 				</li> -->
 		</ul>
 	</div>
-
 </div>
+
+
+
+<aside th:fragment="aside-nav" class="widget">	
+	<h4>My account</h4>
+	<ul>
+		<li><a id="my-page-nav" href="/users/info">My page</a></li>
+	</ul>
+	<h4>My balance</h4>
+	<ul>
+		<li><a id="my-page-nav" href="/users/balance">Recharge balance</a></li>
+	</ul>
+	<h4>My trips</h4>
+	<ul>
+		<li><a id="my-trips-all-nav" href="/users/trips/all">All trips</a></li>
+		<li><a id="my-trips-active-nav" href="/users/trips/active">My active trips</a></li>
+		<li><a id="my-trips-past-nav" href="/users/trips/past">My past trips</a></li>
+	</ul>
+</aside>
+
+<!-- <div th:fragment="nav-inner">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle collapsed">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar top-bar"></span>
+			<span class="icon-bar middle-bar"></span>
+			<span class="icon-bar bottom-bar"></span>
+		</button>
+	</div>
+	<div id="navbar" class="navbar-collapse collapse">
+		<button type="button" class="navbar-toggle collapsed">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar top-bar"></span>
+			<span class="icon-bar middle-bar"></span>
+			<span class="icon-bar bottom-bar"></span>
+		</button>
+		<ul class="nav navbar-nav"> -->
+			<!-- <li class="hasSub current_page_item">
+				<a href="/index.html">Home</a>
+				<ul class="sub-menu">
+							<li class="current_page_item"><a href="http://like-themes.com/taxipark/index.html">Homepage 1</a></li>
+							<li><a href="http://like-themes.com/taxipark/homepage-2.html">Homepage 2</a></li>
+							<li><a href="http://like-themes.com/taxipark/homepage-3.html">Homepage 3</a></li>
+				</ul>
+			</li> -->
+			<!-- <li class="menu-item"><a id="index-nav" th:href="@{/index}" onClick="setActive(this.id)">Home</a></li>
+			<li class="menu-item"><a id="taxi-nav" th:href="@{href=/taxi}" onClick="setActive(this.id)">Get Taxi</a></li> -->
+
+			<!-- <li><a href="http://like-themes.com/taxipark/services.html">Services</a></li> -->
+			<!-- <li class="hasSub">
+					<a href="http://like-themes.com/taxipark/index.html#">Our blog</a>
+					<ul class="sub-menu">
+						<li><a href="http://like-themes.com/taxipark/blog.html">Classic Blog</a></li>
+						<li><a href="http://like-themes.com/taxipark/blog-3.html">Blog without Sidebar</a>
+						</li>
+						<li><a href="http://like-themes.com/taxipark/post.html">Blog Post</a></li>
+					</ul>
+				</li> -->
+			<!-- <li class="hasSub menu-item">
+					<a th:href="@{/user/home}">My account</a>
+					<ul class="sub-menu">
+						<li><a id="my-page-nav" th:href="@{/user/home}"  onClick="setActive(this.id)">My page</a></li>
+						<li><a id="my-trips-all-nav" th:href="@{/user/trips/all}"  onClick="setActive(this.id)">My trips</a></li>
+						<li><a id="my-trips-active-nav" th:href="@{user/trips/active}"  onClick="setActive(this.id)">My active trips</a></li>
+						<li><a id="my-trips-past-nav" th:href="@{user/trips/past}"  onClick="setActive(this.id)">My past trips</a></li>
+					</ul>
+			</li> -->
+			<!-- <li><a href="http://like-themes.com/taxipark/testimonials.html">Testimonials</a></li> -->
+			<!-- <li class="menu-item"><a id="registration-nav" th:href="@{/registration}" onClick="setActive(this.id)">Registration</a></li> -->
+			<!-- <li class="hasSub">
+					<a href="http://like-themes.com/taxipark/index.html#">Pages</a>
+					<ul class="sub-menu">
+						<li><a href="http://like-themes.com/taxipark/typo.html">Typography</a></li>
+						<li><a href="http://like-themes.com/taxipark/shortcodes.html">Shortcodes</a></li>
+					</ul>
+				</li> -->
+		<!-- </ul>
+	</div>
+</div> -->
+
+
+
+
+
+
+
+
+
+
+
 
 <section th:fragment="tariffs" id="tariffs">
 	<div class="container">
@@ -185,6 +298,40 @@
 </section>
 
 
+<div th:fragment="contacts-block" class="col-lg-4 col-md-6">
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-sm-6">
+
+			<h2 class="spanned"><span>Opening Hours:</span> 24/7</h2>
+			<p>Nam eu mi eget velit vulputate tempor gravida quis massa. In malesuada condimentum
+				ultrices. Sed et mauris a purus fermentum elementum. Sed tristique semper enim, et
+				gravida orci iaculis et. Nulla facilisi. </p>
+		</div>
+		<div class="col-lg-12 col-md-12 col-sm-6">
+			<ul class="address">
+				<li class="large"><span class="fa fa-phone"></span>800-5-800</li>
+				<li><span class="fa fa-skype"></span>gettaxipark </li>
+				<li><span class="fa fa-map-marker"></span>43 2-nd Avenue, New York, 29004-7153</li>
+			</ul>
+			<p>QWQWqwqw!1</p>
+		</div>
+		<div class="col-lg-12 col-sm-12">
+			<strong>Social:</strong>
+			<ul class="social social-big">
+				<li><a th:href="@{/https://www.facebook.com}"
+						class="social-fb fa fa-facebook"></a></li>
+				<li><a th:href="@{https://twitter.com}"
+						class="social-twitter fa fa-twitter"></a></li>
+				<li><a th:href="@{/https://www.youtube.com}"
+						class="social-youtube fa fa-youtube"></a></li>
+				<li><a th:href="@{/https://www.instagram.com}"
+						class="social-inst fa fa-instagram"></a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+
 <section th:fragment="block-footer" id="block-footer">
 	<div class="container">
 		<div class="row">
@@ -193,11 +340,10 @@
 				<p>Nullam orci dui, dictum et magna sollicitudin, tempor blandit erat. Maecenas suscipit tellus sit
 					amet augue placerat fringilla a id lacus. Fusce tincidunt in leo lacinia condimentum. </p>
 				<div class="social-small social-yellow">
-					<a href="http://like-themes.com/taxipark/index.html#" class="fa fa-twitter"></a>
-					<a href="http://like-themes.com/taxipark/index.html#" class="fa fa-facebook"></a>
-					<a href="http://like-themes.com/taxipark/index.html#" class="fa fa-instagram"></a>
-					<a href="http://like-themes.com/taxipark/index.html#" class="fa fa-google-plus"></a>
-					<a href="http://like-themes.com/taxipark/index.html#" class="fa fa-pinterest"></a>
+					<a href="https://twitter.com" class="fa fa-twitter"></a>
+					<a href="https://www.facebook.com" class="fa fa-facebook"></a>
+					<a href="https://www.instagram.com" class="fa fa-instagram"></a>
+					<a href="https://www.youtube.com/" class="fa fa-youtube"></a>
 				</div>
 			</div>
 			<div class="col-lg-5 col-md-5 hidden-md hidden-sm hidden-xs hidden-ms">
@@ -254,7 +400,7 @@
 	<script>var base_href = '/';</script>
 	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/jquery-ui.min.js}"></script>
-	<script type="text/javascript" th:src="@{/js/custom.js}"></script>
+	<!-- <script type="text/javascript" th:src="@{/js/custom.js}"></script> -->
 	<script type="text/javascript" th:src="@{/js/plugins.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/js}"></script>
 	<script type="text/javascript" th:src="@{/js/scripts.js}"></script>

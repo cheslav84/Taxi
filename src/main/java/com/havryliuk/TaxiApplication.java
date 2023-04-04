@@ -5,10 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@EnableJpaRepositories("com.havryliuk.persistence.repository")
-@EntityScan("com.havryliuk.persistence.model")
+@EnableJpaRepositories("com.havryliuk.repository")
+@EntityScan("com.havryliuk.model")
 @SpringBootApplication
 public class TaxiApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(TaxiApplication.class, args);
     }

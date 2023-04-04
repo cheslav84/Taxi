@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!-- saved from url=(0041)http://like-themes.com/taxipark/typo.html -->
+<html lang="en" style=""
+	class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths">
+
+	<head th:replace="/fragments :: head"></head>
+
+<body>
+	<div th:replace="/fragments :: top-bar"></div>
+	<div th:replace="/fragments :: nav"></div>
+	<header class="page-header bgMove" style="background-image: url(assets/images/_inner-bg.jpg);">
+		<div class="container">
+			<ol class="bread">
+				<li>
+					<a th:href="@{/index}"><span>Home</span></a>
+				</li>
+				<li class="divider"><span>//</span></li>
+				<li>
+					<a th:href="@{#}"><span>My account</span></a>
+				</li>
+				<li class="divider"><span>//</span></li>
+				<li>
+					<span>My page</span>
+				</li>
+			</ol>
+			<h1 th:text="|Welcome,  *{user.name}|" ></h1>
+		</div>
+	</header>
+
+
+	<div class="container">
+		<div class="inner inner-two-col row">
+			<div class="col-lg-8 text-page">
+				<h4 class="margin-top-0 ">My data</h4>
+				<hr class="lg">	
+				<div class="row">
+					<div class="col-md-6">
+						<blockquote>
+							<div class="yellow large">Name:</div>
+							<div class="yellow large">Surname:</div>
+							<div class="yellow large">Date of birth:</div>
+							<div class="yellow large">Email:</div>
+							<div class="yellow large">Phone:</div>
+						</blockquote>
+					</div>				
+					<div class="col-md-6">
+						<div class="personal-data-container">
+							<div class="large" th:text="*{user.name}"></div>
+							<div class="large" th:text="*{user.surname}"></div>
+							<div class="large" th:text="*{user.birthDate}"></div>
+							<div class="large" th:text="*{user.email}"></div>
+							<div class="large" th:text="*{user.phone}"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-4">
+				<div class="widget-area" role="complementary">
+					<aside th:replace="/fragments :: aside-nav"></aside>
+
+					<!-- <aside class="widget">	
+						<h4>My account</h4>
+						<ul>
+							<li><a id="my-page-nav" href="/passengers/details">My page</a></li>
+						</ul>
+						<h4>My balance</h4>
+						<ul>
+							<li><a id="my-page-nav" href="/passengers/balance">Recharge balance</a></li>
+						</ul>
+						<h4>My trips</h4>
+						<ul>
+							<li><a id="my-trips-all-nav" href="/passengers/trips/all">All trips</a></li>
+							<li><a id="my-trips-active-nav" href="/passengers/trips/active">My active trips</a></li>
+							<li><a id="my-trips-past-nav" href="/passengers/trips/past">My past trips</a></li>
+						</ul>
+					</aside> -->
+
+					<aside class="widget">
+						<strong>Social:</strong>
+						<hr>
+						<ul class="social social-big">
+							<li><a href="https://www.facebook.com" class="social-fb fa fa-facebook"></a></li>
+							<li><a href="https://twitter.com" class="social-twitter fa fa-twitter"></a></li>
+							<li><a href="https://www.youtube.com" class="social-youtube fa fa-youtube"></a></li>
+							<li><a href="https://www.instagram.com" class="social-inst fa fa-instagram"></a></li>
+						</ul>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <section th:replace="/fragments :: block-footer"></section>
+
+    <footer th:replace="/fragments :: footer"></footer>
+
+    <div th:include="/fragments :: scripts-bottom"></div>
+
+</body>
+
+</html>
