@@ -1,6 +1,6 @@
 package com.havryliuk.controller;
 
-import com.havryliuk.dto.NewBalanceDTO;
+import com.havryliuk.dto.NewBalanceDto;
 import com.havryliuk.model.*;
 import com.havryliuk.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -32,21 +32,15 @@ public class BalanceController {
     @GetMapping
     public ModelAndView userBalance(ModelAndView modelAndView) {
         log.trace("user balance page");
-        modelAndView.addObject("newBalanceDTO", new NewBalanceDTO());
+        modelAndView.addObject("newBalanceDTO", new NewBalanceDto());
         setResponseProperties(modelAndView);
-//        final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        modelAndView.addObject("user", user);
-//        modelAndView.addObject("newBalance", new NewBalanceDTO());
-//        modelAndView.addObject("activePage", "myAccount");
-//        modelAndView.addObject("subPage", "balance");
-//        modelAndView.setViewName("users/balance");
         return modelAndView;
     }
 
 
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
     @PutMapping("/recharge")
-    public ModelAndView rechargeBalance(@Valid NewBalanceDTO newBalance, Errors errors, ModelAndView modelAndView) {
+    public ModelAndView rechargeBalance(@Valid NewBalanceDto newBalance, Errors errors, ModelAndView modelAndView) {
         log.trace("recharging user balance");
         if (errors.hasErrors()) {
             setResponseProperties(modelAndView);

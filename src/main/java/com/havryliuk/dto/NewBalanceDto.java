@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Setter
 @Getter
 @ToString
-public class NewBalanceDTO {
+public class NewBalanceDto {
 
     @NotNull
     @DecimalMin(value = "0.0", inclusive = false)

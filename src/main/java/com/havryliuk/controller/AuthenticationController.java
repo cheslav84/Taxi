@@ -1,11 +1,11 @@
 package com.havryliuk.controller;
 
-import com.havryliuk.dto.UserDTO;
+import com.havryliuk.dto.UserDto;
 
 import com.havryliuk.exceptions.UserAlreadyExistException;
 import com.havryliuk.model.*;
 import com.havryliuk.service.UserService;
-import com.havryliuk.util.factories.UserFactory;
+import com.havryliuk.util.mappers.UserFromDtoMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,33 +22,33 @@ import java.util.List;
 @Controller
 @RequestMapping("/auth")
 public class AuthenticationController {
-    private final UserFactory factory;
+    private final UserFromDtoMapper mapper;
     private final UserService userService;
 
     @Autowired
-    public AuthenticationController(UserFactory factory, UserService userService) {
-        this.factory = factory;
+    public AuthenticationController(UserFromDtoMapper mapper, UserService userService) {
+        this.mapper = mapper;
         this.userService = userService;
     }
 
     @GetMapping("/registration")
     public ModelAndView registrationPage(ModelAndView modelAndView) {
         log.trace("registrationPage");
-        modelAndView.addObject("userDTO", new UserDTO());
-        addObjectsToModelOnNewUser(modelAndView);
+        modelAndView.addObject("userDTO", new UserDto());
+        setResponseProperties(modelAndView);
         return modelAndView;
     }
 
     @PostMapping("/registration")
-    public ModelAndView createNewUser(@Valid UserDTO userDTO, Errors errors, ModelAndView modelAndView, RedirectAttributes redirectAttributes) {
+    public ModelAndView createNewUser(@Valid UserDto userDTO, Errors errors, ModelAndView modelAndView, RedirectAttributes redirectAttributes) {
         log.trace("createNewUser");
         if (errors.hasErrors()) {
             log.debug("validation error");
-            addObjectsToModelOnNewUser(modelAndView);
+            setResponseProperties(modelAndView);
             return modelAndView;
         }
         try {
-            User user = factory.createUser(userDTO);
+            User user = mapper.map(userDTO);
             userService.save(user);
         } catch (UserAlreadyExistException e) {
             redirectAttributes.addFlashAttribute("userDTO", userDTO);
@@ -62,23 +62,21 @@ public class AuthenticationController {
         return modelAndView;
     }
 
-    private void addObjectsToModelOnNewUser(ModelAndView modelAndView) {
+    private void setResponseProperties(ModelAndView modelAndView) {
         modelAndView.addObject("roles", List.of(Role.values()));
         modelAndView.addObject("activePage", "auth");
         modelAndView.addObject("subPage", "registration");
         modelAndView.setViewName("registration");
     }
 
-
     @GetMapping(("/login"))
     public ModelAndView loginPage(ModelAndView modelAndView) {
         log.trace("loginPage");
+        modelAndView.addObject("activePage", "auth");
+        modelAndView.addObject("subPage", "login");
         modelAndView.setViewName("login");
         return modelAndView;
     }
-
-
-
 
     @GetMapping(("/logout"))
     public ModelAndView logoutPage(ModelAndView modelAndView) {
@@ -86,10 +84,5 @@ public class AuthenticationController {
         modelAndView.setViewName("logout");
         return modelAndView;
     }
-
-
-
-
-
 
 }

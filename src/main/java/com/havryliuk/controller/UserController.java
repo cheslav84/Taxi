@@ -29,14 +29,9 @@ public class UserController {
 
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
     @GetMapping("/info")//todo rename to userPage or so
-//    public ModelAndView userInfo(ModelAndView modelAndView, Principal principal) {
     public ModelAndView userInfo(ModelAndView modelAndView) {
         log.trace("user details page");
-//        final User user = service.loadUserByUsername(principal.getName());
-
-//        final User user = (User) principal;
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         modelAndView.addObject("user", user);//todo try to get user from thymeleaf
         modelAndView.addObject("activePage", "myAccount");
         modelAndView.addObject("subPage", "info");

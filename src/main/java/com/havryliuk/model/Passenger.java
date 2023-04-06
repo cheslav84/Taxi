@@ -18,8 +18,8 @@ public class Passenger extends User {
 
     private BigDecimal balance;
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    List<Trip> trips;
+    private List<Trip> trips;
 
 }

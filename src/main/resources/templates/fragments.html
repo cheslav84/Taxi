@@ -113,13 +113,13 @@
 							<a th:href="@{/users/balance}">My balance</a>
 						</li>
 						<li th:class="${subPage == 'allTrips'} ? 'menu-item current_page_item' : 'menu-item'">
-							<a th:href="@{/users/trips/all}">My trips</a>
+							<a th:href="@{/trips/users/all}">My trips</a>
 						</li>
 						<li th:class="${subPage == 'activeTrips'} ? 'menu-item current_page_item' : 'menu-item'">
-							<a th:href="@{users/trips/active}">My active trips</a>
+							<a th:href="@{/trips/users/active}">My active trips</a>
 						</li>
 						<li th:class="${subPage == 'pastTrips'} ? 'menu-item current_page_item' : 'menu-item'">
-							<a th:href="@{users/trips/past}">My past trips</a>
+							<a th:href="@{/trips/users/past}">My past trips</a>
 						</li>
 					</ul>
 			</li>
@@ -171,9 +171,9 @@
 	</ul>
 	<h4>My trips</h4>
 	<ul>
-		<li><a id="my-trips-all-nav" href="/users/trips/all">All trips</a></li>
-		<li><a id="my-trips-active-nav" href="/users/trips/active">My active trips</a></li>
-		<li><a id="my-trips-past-nav" href="/users/trips/past">My past trips</a></li>
+		<li><a id="my-trips-all-nav" href="/trips/users/all">All trips</a></li>
+		<li><a id="my-trips-active-nav" href="/trips/users/active">My active trips</a></li>
+		<li><a id="my-trips-past-nav" href="/trips/users/past">My past trips</a></li>
 	</ul>
 </aside>
 

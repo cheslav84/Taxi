@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @Getter
 @ToString
 @PasswordMatches (field = "matchingPassword")
-public class UserDTO {
+public class UserDto {
 
     @NotNull
     @NotEmpty
