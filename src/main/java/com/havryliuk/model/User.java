@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Polymorphism;
+import org.hibernate.annotations.PolymorphismType;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,9 +21,13 @@ import java.util.Collections;
 @Getter
 @Setter
 @ToString
+
+//@MappedSuperclass
+
 @Entity(name = "person")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User implements UserDetails {
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class User implements UserDetails {//todo make abstract if manager is separate
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")

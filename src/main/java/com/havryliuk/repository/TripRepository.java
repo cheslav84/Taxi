@@ -1,51 +1,83 @@
 package com.havryliuk.repository;
 
+import com.havryliuk.dto.trips.TripDtoForDriver;
 import com.havryliuk.dto.trips.TripDtoForPassenger;
 import com.havryliuk.model.Trip;
 import com.havryliuk.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 
 @Repository
-public interface TripRepository extends CrudRepository<Trip, String> {
+//public interface TripRepository extends PagingAndSortingRepository<Trip, String>, TripRepositoryCustom {
+public interface TripRepository extends PagingAndSortingRepository<Trip, String> {
 
-    @Query("""
+//    Page<TripDtoForPassenger> findAllByPassenger(@Param("user") User user, Pageable pageable);
+
+    @Query(value = """
             select new com.havryliuk.dto.trips.TripDtoForPassenger
-            (t.id, t.departureDateTime, t.originAddress, t.destinationAddress, d.id,
-            d.name, d.phone, d.car,
-            t.timeToTaxiArrivalInSeconds, t.paymentStatus, t.price)
+                (t.id, t.departureDateTime, t.originAddress.address, t.destinationAddress.address,
+                d.name || ', ' || d.phone AS driverNameAndPhone,
+                d.car.brand || ' ' || d.car.model || ' ' || d.car.number AS car,
+                cast(t.timeToTaxiArrivalInSeconds as string),
+                t.paymentStatus, t.price)
             from Trip t
             left join t.driver d
             left join d.car
             where t.passenger = :user
             order by t.departureDateTime desc
-            """)
-    List<TripDtoForPassenger> findAllByPassenger(@Param("user")User user);
+            """
+    )
+    Page<TripDtoForPassenger> findAllByPassenger(@Param("user") User user, Pageable pageable);
 
-//    where p.id = :pass_id    join t.passenger p where t.passenger = :user
+
+    @Query(value = """
+            select new com.havryliuk.dto.trips.TripDtoForPassenger
+                (t.id, t.departureDateTime, t.originAddress.address, t.destinationAddress.address,
+                d.name || ', ' || d.phone AS driverNameAndPhone,
+                d.car.brand || ' ' || d.car.model || ' ' || d.car.number AS car,
+                cast(t.timeToTaxiArrivalInSeconds as string),
+                t.paymentStatus, t.price)
+            from Trip t
+            left join t.driver d
+            left join d.car
+            where t.passenger = :user
+            and (t.tripStatus != 'COMPLETED' and t.tripStatus != 'CANCELED')
+            order by t.departureDateTime desc
+            """
+    )
+    Page<TripDtoForPassenger> findActiveByPassenger(@Param("user") User user, Pageable pageable);
+
+    @Query(value = """
+            select new com.havryliuk.dto.trips.TripDtoForPassenger
+                (t.id, t.departureDateTime, t.originAddress.address, t.destinationAddress.address,
+                d.name || ', ' || d.phone AS driverNameAndPhone,
+                d.car.brand || ' ' || d.car.model || ' ' || d.car.number AS car,
+                cast(t.timeToTaxiArrivalInSeconds as string),
+                t.paymentStatus, t.price)
+            from Trip t
+            left join t.driver d
+            left join d.car
+            where t.passenger = :user
+            and t.tripStatus = 'COMPLETED'
+            order by t.departureDateTime desc
+            """
+    )
+    Page<TripDtoForPassenger> findPastByPassenger(@Param("user") User user, Pageable pageable);
+
+    @Query(value = """
+            select new com.havryliuk.dto.trips.TripDtoForDriver
+                (t.id, t.departureDateTime, t.originAddress.address, t.destinationAddress.address, t.price)
+            from Trip t
+            where t.tripStatus = 'NEW'
+            order by t.departureDateTime desc
+            """
+    )
+    Page<TripDtoForDriver> findAllNew(Pageable pageable);
+
 
 }
-
-//    @Query("""
-//            select new com.havryliuk.dto.trips.TripDtoForPassenger
-//            (t.id, t.departureDateTime, t.originAddress, t.destinationAddress, d.id,
-//            d.name, d.phone, d.car, t.paymentStatus, t.price)
-//            from Trip t
-//            join t.driver d
-//            where t.passenger = :user
-//            order by t.departureDateTime desc
-//            """)
-//    List<TripDtoForPassenger> findAllByPassenger(@Param("user")User user);
-
-//    @Query("""
-//            select new com.havryliuk.dto.trips.TripDtoForPassenger
-//            (t.id, t.departureDateTime, t.originAddress, t.destinationAddress, t.paymentStatus, t.price)
-//            from Trip t
-//            where t.passenger = :user
-//            order by t.departureDateTime desc
-//            """)
-//    List<TripDtoForPassenger> findAllByPassenger(@Param("user")User user);

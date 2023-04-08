@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)http://like-themes.com/taxipark/shortcodes.html -->
+<html lang="en" style=""
+	class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths">
+
+<head th:replace="/fragments :: head"></head>
+
+<body>
+	<div th:replace="/fragments :: top-bar"></div>
+	<div th:replace="/fragments :: nav"></div>
+	<header class="page-header bgMove" style="background-image: url(assets/images/_inner-bg.jpg);">
+		<div class="container">
+			<ol class="bread">
+				<li>
+					<a th:href="@{/index}"><span>Home</span></a>
+				</li>
+				<li class="divider"><span>//</span></li>
+				<li>
+					<a th:href="@{#}"><span>My account</span></a>
+				</li>
+				<li class="divider"><span>//</span></li>
+				<li>
+					<span th:text="${subPage}"></span>
+				</li>
+			</ol>
+			<h1>My trips</h1>
+		</div>
+	</header>
+
+	<div class="container shortcodes text-page inner">
+		<div class="row">
+			<div class="col-xs-12">
+				<div id="table-scroll">
+
+					<div th:replace="/tables :: passenger-trips"></div>
+
+					<!-- <div class="tabs-ui ui-tabs ui-corner-all ui-widget ui-widget-content">
+
+						<div class="ui-tabs-nav ui-corner-all ui-helper-reset ui-helper-clearfix ui-widget-header">
+							<div th:classappend="${subPage == 'All trips' ? 'ui-tabs-active ui-state-active' : ''}"
+								class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" >
+									<a href="/trips/users/all"  class="ui-tabs-anchor trip-tab">All</a>
+							</div>
+
+							<div th:classappend="${subPage == 'Active trips' ? 'ui-tabs-active ui-state-active' : ''}"
+								class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" >
+									<a href="/trips/users/active"  class="ui-tabs-anchor trip-tab">Active</a>
+							</div>
+							<div th:classappend="${subPage == 'Past trips' ? 'ui-tabs-active ui-state-active' : ''}"
+							class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" >
+								<a href="/trips/users/past"  class="ui-tabs-anchor trip-tab">Past</a>
+							</div>
+						</div>
+
+						<div class="ui-tabs-panel ui-corner-bottom ui-widget-content" >
+
+							<div class="table-scroll">
+								<table>
+									<thead class="table-head">
+										<tr>
+											<th>Date and time</th>
+											<th>Origin</th>
+											<th>Destination</th>
+											<th>Price</th>
+											<th>Driver</th>
+											<th>Car</th>
+											<th>Approximate time until the taxi arrives</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="trip, state : ${page.pageItem.content}">
+											<td th:text="${#temporals.format(trip.departureDateTime, 'dd&#x2011MM&#x2011yyyy HH:mm')}" class="center"></td>
+											<td th:text="${trip.originAddress}"></td>
+											<td th:text="${trip.destinationAddress}"></td>
+											<td th:text="${trip.price}" class="center"></td>
+											<td th:text="${trip?.driverNameAndPhone}" class="center"></td>
+											<td th:text="${trip?.car}" class="center"></td>
+											<td th:text="${trip.timeToTaxiArrivalInSeconds}" class="center"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div> -->
+
+
+
+				</div>
+				
+				<div class="paging-navigation" th:if="${page.pageItem.totalPages > 1}">
+					<hr>
+					<div class="pagination">
+						<span th:if="${!page.isFirstPage}">
+							<a th:href="@{|${page.requestURI}/${page.currentPage - 1}/${page.size}|}"
+							class="prev"><span class="fa fa-caret-left"></span> prev</a>
+
+							<!-- <a th:href="@{/trips/users/all(size=${page.size}, currentPageNo=${page.currentPage - 1})}"
+								class="prev"><span class="fa fa-caret-left"></span> prev</a> -->
+						</span>
+						<a th:each="pageNumber : ${page.pageNumbers}"
+							th:href="@{|${page.requestURI}/${pageNumber}/${page.size}|}"
+							th:class="${pageNumber==page.pageItem.number + 1} ? 'page-numbers current' : 'page-numbers'"
+							th:text=${pageNumber}></a>
+
+							<!-- th:href="@{/trips/users/all(size=${page.size}, currentPageNo=${pageNumber})}" -->
+
+
+						<span th:if="${!page.isLastPage}">
+							<a th:href="@{|${page.requestURI}/${page.currentPage + 1}/${page.size}||}"
+								class="next">next <span class="fa fa-caret-right"></span>
+							</a>
+						</span>
+					</div>
+				</div>
+
+
+
+
+
+				<!-- <div class="paging-navigation" th:if="${tripsPage.totalPages > 0}">
+					<hr>
+					<div class="pagination">
+						<span th:if="${currentPage != 1}">
+							<a th:href="@{/trips/users/all(size=${tripsPage.size}, currentPageNo=${currentPage - 1})}"
+								class="prev"><span class="fa fa-caret-left"></span> prev</a>
+						</span>
+						<a th:each="pageNumber : ${pageNumbers}"
+							th:href="@{/trips/users/all(size=${tripsPage.size}, currentPageNo=${pageNumber})}"
+							th:class="${pageNumber==tripsPage.number + 1} ? 'page-numbers current' : 'page-numbers'"
+							th:text=${pageNumber}></a>
+						<span th:if="${currentPage != pageNumbers.size}">
+							<a th:href="@{/trips/users/all(size=${tripsPage.size}, currentPageNo=${currentPage + 1})}"
+								class="next">next <span class="fa fa-caret-right"></span>
+							</a>
+						</span>
+					</div>
+				</div> -->
+
+				
+
+
+
+			</div>
+		</div>
+	</div>
+	 
+	<section th:replace="/fragments :: block-footer"></section>
+
+	<footer th:replace="/fragments :: footer"></footer>
+
+	<div th:include="/fragments :: scripts-bottom"></div>
+
+</body>
+
+</html>

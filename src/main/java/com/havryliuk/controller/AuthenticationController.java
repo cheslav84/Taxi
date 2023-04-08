@@ -35,7 +35,7 @@ public class AuthenticationController {
     public ModelAndView registrationPage(ModelAndView modelAndView) {
         log.trace("registrationPage");
         modelAndView.addObject("userDTO", new UserDto());
-        setResponseProperties(modelAndView);
+        setModelAttributes(modelAndView);
         return modelAndView;
     }
 
@@ -44,7 +44,7 @@ public class AuthenticationController {
         log.trace("createNewUser");
         if (errors.hasErrors()) {
             log.debug("validation error");
-            setResponseProperties(modelAndView);
+            setModelAttributes(modelAndView);
             return modelAndView;
         }
         try {
@@ -62,7 +62,7 @@ public class AuthenticationController {
         return modelAndView;
     }
 
-    private void setResponseProperties(ModelAndView modelAndView) {
+    private void setModelAttributes(ModelAndView modelAndView) {
         modelAndView.addObject("roles", List.of(Role.values()));
         modelAndView.addObject("activePage", "auth");
         modelAndView.addObject("subPage", "registration");

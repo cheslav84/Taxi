@@ -33,7 +33,7 @@ public class BalanceController {
     public ModelAndView userBalance(ModelAndView modelAndView) {
         log.trace("user balance page");
         modelAndView.addObject("newBalanceDTO", new NewBalanceDto());
-        setResponseProperties(modelAndView);
+        setModelAttributes(modelAndView);
         return modelAndView;
     }
 
@@ -43,7 +43,7 @@ public class BalanceController {
     public ModelAndView rechargeBalance(@Valid NewBalanceDto newBalance, Errors errors, ModelAndView modelAndView) {
         log.trace("recharging user balance");
         if (errors.hasErrors()) {
-            setResponseProperties(modelAndView);
+            setModelAttributes(modelAndView);
             return modelAndView;
         }
         System.err.println(newBalance.getRechargeValue());
@@ -58,7 +58,7 @@ public class BalanceController {
     }
 
 
-    private void setResponseProperties(ModelAndView modelAndView) {
+    private void setModelAttributes(ModelAndView modelAndView) {
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         modelAndView.addObject("user", user);
         modelAndView.addObject("activePage", "myAccount");

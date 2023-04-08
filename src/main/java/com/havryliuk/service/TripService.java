@@ -1,5 +1,6 @@
 package com.havryliuk.service;
 
+import com.havryliuk.dto.trips.TripDtoForDriver;
 import com.havryliuk.dto.trips.TripDtoForPassenger;
 import com.havryliuk.model.*;
 import com.havryliuk.repository.TariffsRepository;
@@ -7,12 +8,12 @@ import com.havryliuk.repository.TripRepository;
 import com.havryliuk.util.google.map.GoogleService;
 //import com.havryliuk.util.mappers.MapStructMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
-import java.util.List;
 
 @Service
 public class TripService {
@@ -42,10 +43,7 @@ public class TripService {
         trip.setPaymentStatus(PaymentStatus.NOT_PAYED);
         setPrice(trip);
         trip.setPassenger(user);
-//        List<Trip> trips = ((Passenger) user).getTrips();
-//        trips.add(trip);
         return repository.save(trip).getId();
-//        return null;
     }
 
     private void setPrice(Trip trip) {//todo think of move to separate class ()
@@ -53,34 +51,74 @@ public class TripService {
         BigDecimal pricePerKilometer = tariff.getPricePerKilometer();
         long distanceInMeters = trip.getDistanceInMeters();
         BigDecimal distance = BigDecimal.valueOf(distanceInMeters);
-//        MathContext mathContext = new MathContext(2, RoundingMode.HALF_UP);
         BigDecimal distanceInKilometers = distance.divide(BigDecimal.valueOf(1000), 2, RoundingMode.HALF_UP);
-//        BigDecimal price = pricePerKilometer.multiply(distanceInKilometers, new MathContext(2, RoundingMode.HALF_UP));
         BigDecimal price = pricePerKilometer.multiply(distanceInKilometers);
-
-        System.err.println("pricePerKilometer " + pricePerKilometer);
-        System.err.println("distanceInMeters " + distanceInMeters);
-        System.err.println("distance " + distance);
-        System.err.println("distanceInKilometers " + distanceInKilometers);
-        System.err.println("price " + price);
-
         trip.setPrice(price);
     }
 
-    //    public List<TripDto> getByUser(User user) {
-    public List<TripDtoForPassenger> getByUser(User user) {
-//        UserTripDto userTripDto = structMapper.userToUserTripDto(user);
 
-        System.err.println(user.getId());
-
-//        return repository.findAllTrips();
-        return repository.findAllByPassenger(user);
-//        return repository.findAllByPassenger(userTripDto);
-
+    public Page<TripDtoForPassenger> getAllByUser(User user, Pageable pageable) {
+        Page<TripDtoForPassenger> tripsPage = repository.findAllByPassenger(user, pageable);
+        setTaxiArrivalTimeReadable(tripsPage);
+        return tripsPage;
     }
 
-//    public Optional<TripDTO> getByTripId(String id) {
-//
-//        return repository.findById(id);
-//    }
+    public Page<TripDtoForPassenger> getActiveByUser(User user, Pageable pageable) {
+        Page<TripDtoForPassenger> tripsPage = repository.findActiveByPassenger(user, pageable);
+        setTaxiArrivalTimeReadable(tripsPage);
+        return tripsPage;
+    }
+
+    public Page<TripDtoForPassenger> getPastByUser(User user, Pageable pageable) {
+        Page<TripDtoForPassenger> tripsPage = repository.findPastByPassenger(user, pageable);
+        setTaxiArrivalTimeReadable(tripsPage);
+        return tripsPage;
+    }
+
+    public Page<TripDtoForDriver> getAllNew(Pageable pageable) {
+        return repository.findAllNew(pageable);
+    }
+
+
+
+
+    private void setTaxiArrivalTimeReadable(Page<TripDtoForPassenger> trips) {
+        String messageIfTimeNotDefined = "Taxi not defined";
+        for (TripDtoForPassenger trip : trips) {
+            String time = trip. getTimeToTaxiArrivalInSeconds();
+            if (time.equals("0")) {
+                time = messageIfTimeNotDefined;
+            } else {
+                time = formatTime(time);
+            }
+            trip.setTimeToTaxiArrivalInSeconds(time);
+        }
+    }
+
+
+    private String formatTime(String time) {
+        int seconds = Integer.parseInt(time);
+        int hours = seconds / 3600 % 24;
+        int minutes = seconds / 60 % 60;
+        String hourSign = "hrs";
+        String minuteSign = "min";
+        StringBuilder stringBuilder = new StringBuilder();
+        if (hours != 0) {
+            stringBuilder.append(hours).append(" ").append(hourSign).append(" ");
+        }
+        if (minutes != 0) {
+            stringBuilder.append(minutes).append(" ").append(minuteSign).append(" ");
+        }
+        if (hours == 0 && minutes == 0) {
+            stringBuilder.append("1 ").append(minuteSign);
+        }
+        return stringBuilder.toString();
+    }
+
+
+
+
+
+
+
 }

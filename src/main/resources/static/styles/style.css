@@ -5072,6 +5072,24 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .warning-text {
   font-size: 14px;
 }
+
+.trip-tab {
+  width: 33%;
+  text-align: center;
+  margin: 0 0.167%;
+}
+
+.table-head tr th {
+  font-size: 98%;
+  text-align: center;
+}
+
+.table-scroll {
+  overflow: auto;
+}
+
+
+
 /* #show-reg-passwd, #show-log-passwd, #show-conf-passwd {
   background: transparent;
   position: absolute;

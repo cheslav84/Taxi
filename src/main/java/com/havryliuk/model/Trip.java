@@ -43,11 +43,11 @@ public class Trip {
     @JoinColumn(name = "taxi_location_address")
     private Address taxiLocationAddress;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "driver_id")
     private User driver;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "passenger_id")
     private User passenger;
 

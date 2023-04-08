@@ -1,0 +1,48 @@
+<div  th:fragment="passenger-trips" class="tabs-ui ui-tabs ui-corner-all ui-widget ui-widget-content">
+
+	<div class="ui-tabs-nav ui-corner-all ui-helper-reset ui-helper-clearfix ui-widget-header">
+		<div th:classappend="${subPage == 'All trips' ? 'ui-tabs-active ui-state-active' : ''}"
+			class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" >
+				<a href="/trips/users/all"  class="ui-tabs-anchor trip-tab">All</a>
+		</div>
+
+		<div th:classappend="${subPage == 'Active trips' ? 'ui-tabs-active ui-state-active' : ''}"
+			class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" >
+				<a href="/trips/users/active"  class="ui-tabs-anchor trip-tab">Active</a>
+		</div>
+		<div th:classappend="${subPage == 'Past trips' ? 'ui-tabs-active ui-state-active' : ''}"
+		class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" >
+			<a href="/trips/users/past"  class="ui-tabs-anchor trip-tab">Past</a>
+		</div>
+	</div>
+
+	<div class="ui-tabs-panel ui-corner-bottom ui-widget-content" >
+
+		<div class="table-scroll">
+			<table>
+				<thead class="table-head">
+					<tr>
+						<th>Date and time</th>
+						<th>Origin</th>
+						<th>Destination</th>
+						<th>Price</th>
+						<th>Driver</th>
+						<th>Car</th>
+						<th>Approximate time until the taxi arrives</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="trip, state : ${page.pageItem.content}">
+						<td th:text="${#temporals.format(trip.departureDateTime, 'dd&#x2011MM&#x2011yyyy HH:mm')}" class="center"></td>
+						<td th:text="${trip.originAddress}"></td>
+						<td th:text="${trip.destinationAddress}"></td>
+						<td th:text="${trip.price}" class="center"></td>
+						<td th:text="${trip?.driverNameAndPhone}" class="center"></td>
+						<td th:text="${trip?.car}" class="center"></td>
+						<td th:text="${trip.timeToTaxiArrivalInSeconds}" class="center"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
