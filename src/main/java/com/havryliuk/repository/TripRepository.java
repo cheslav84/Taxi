@@ -2,6 +2,7 @@ package com.havryliuk.repository;
 
 import com.havryliuk.dto.trips.TripDtoForDriver;
 import com.havryliuk.dto.trips.TripDtoForPassenger;
+import com.havryliuk.model.CarClass;
 import com.havryliuk.model.Trip;
 import com.havryliuk.model.User;
 import org.springframework.data.domain.Page;
@@ -74,10 +75,12 @@ public interface TripRepository extends PagingAndSortingRepository<Trip, String>
                 (t.id, t.departureDateTime, t.originAddress.address, t.destinationAddress.address, t.price)
             from Trip t
             where t.tripStatus = 'NEW'
+            and
+            t.carClass = :carClass
             order by t.departureDateTime desc
             """
     )
-    Page<TripDtoForDriver> findAllNew(Pageable pageable);
+    Page<TripDtoForDriver> findAllNewByCarClass(@Param("carClass") CarClass carClass, Pageable pageable);
 
 
 }

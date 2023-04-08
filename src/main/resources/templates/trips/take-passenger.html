@@ -7,7 +7,6 @@
 <body>
 	<div th:replace="/fragments :: top-bar"></div>
 	<div th:replace="/fragments :: nav"></div>
-
 	<header class="page-header" style="background-image: url(../images/_homepage-1-bg.jpg);">
 		<div class="container">
 			<ol class="bread">
@@ -16,34 +15,98 @@
 				</li>
 				<li class="divider"><span>//</span></li>
 				<li>
-					<span>Get Taxi</span>
+					<span>Take passenger</span>
 				</li>
 			</ol>
-			<h1>Get Taxi</h1>
+			<h1>Take passenger</h1>
 		</div>
 	</header>
 
 	<section class="form-taxi-short">
 		<div class="container">
-			<h4 class="yellow aligncenter">Our operators are waiting for your call:</h4>
+			<!-- <h4 class="yellow aligncenter">Our operators are waiting for your call:</h4>
 			<h3 class="aligncenter">800-5-800</h3>
-			<p class="form-label">Also you can order a taxi online</p>
-			<form th:action="@{/trips/new}" method="post" th:object="${trip}">
-				<div class="menu-types">
-					<a href="#" 
+			<p class="form-label">Also you can order a taxi online</p> -->
+			
+			<form th:action="@{|/trips/*{id}|}" method="put" th:object="${trip}">
+
+				<div class="col-lg-12 text-page">
+					<h4 class="margin-top-0 ">Trip details</h4>
+					<hr class="lg">	
+					<div class="row">
+						<div class="col-md-6 information">
+							<blockquote>
+								<div class="white large">Date and time:</div>
+							</blockquote>
+						</div>				
+						<div class="col-md-6">
+							<div class="trip-data-container">
+								<div class="large" th:text="*{#temporals.format(departureDateTime, 'dd&#x2011MM&#x2011yyyy HH:mm')}"></div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6 information">
+							<blockquote>
+								<div class="white large">Origin address:</div>
+							</blockquote>
+						</div>				
+						<div class="col-md-6">
+							<div class="trip-data-container">
+								<div class="large" th:text="*{originAddress.address}"></div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 information">
+							<blockquote>
+								<div class="white large">Destinatation address:</div>
+							</blockquote>
+						</div>				
+						<div class="col-md-6">
+							<div class="trip-data-container">
+								<div class="large" th:text="*{destinationAddress.address}"></div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 information">
+							<blockquote>
+								<div class="white large">Passenger:</div>
+							</blockquote>
+						</div>				
+						<div class="col-md-6">
+							<div class="trip-data-container">
+								<div class="large" th:text="|*{passenger.name}, ${passengerAge}&nbspy.o.|"></div>
+							</div>
+						</div>
+					</div>
+
+					
+				</div>
+
+
+
+				<!-- <div class="menu-types"> -->
+					<!-- <a href="#" 
 						th:each="carClass, state : ${carClasses}"
 						th:class="type- + ${state.count}"
 						th:classappend="${ __${state.index}__ == 0 ? 'active' : ''}"
 						th:data-value="${carClass}"
 						th:text="${carClass}" >
-					</a>
-					<input type="hidden" name="carClass" class="type-value ajaxField" th:value="${carClasses.get(0)}">
-				</div>
+					</a> -->
+					<!-- <input type="hidden" name="carClass" class="type-value ajaxField" th:value="${carClasses.get(0)}"> -->
+				<!-- </div> -->
 						<!-- th:classappend="${ __${state.current}__ == 'VIP' ? 'active' : ''}"			 -->
 
-				<address class="row form-with-labels">
+				<!-- <address class="row form-with-labels">
 					<div class="col-md-12">
 						<div class="form-group">
+
+
+
+
 							<input id="origin-input" type="text" th:field="*{originAddress.address}"
 								placeholder="Enter an origin location" class="ajaxField required" aria-required="true">
 							<div class="validationError" th:if="${#fields.hasErrors('originAddress.address')}"
@@ -51,9 +114,9 @@
 						</div>
 						<span class="fa fa-map-marker"></span>
 					</div>
-				</address>
+				</address> -->
 
-				<div class="row form-with-labels">
+				<!-- <div class="row form-with-labels">
 					<div class="col-md-12">
 						<div class="form-group">
 							<input id="destination-input" type="text" th:field="*{destinationAddress.address}"
@@ -64,9 +127,9 @@
 						</div>
 						<span class="fa fa-map-marker"></span>
 					</div>
-				</div>
+				</div> -->
 
-				<div class="row form-with-labels">
+				<!-- <div class="row form-with-labels">
 					<div class="col-md-12">
 						<div class="form-group">
 							<input type="datetime-local" min="2023-03-01T08:30" max="2050-06-30T16:30"
@@ -75,9 +138,8 @@
 								error</div>
 							<span class="fa fa-calendar"></span>
 						</div>
-					</div>
-					<input type="submit" value="Get Taxi" class="btn btn-lg btn-black btn-white aligncenter">
-					<!-- <button class="btn btn-lg btn-black btn-white aligncenter">Get Taxi</button> -->
+					</div> -->
+					<input type="submit" value="Take passenger" class="btn btn-lg btn-black btn-white aligncenter">
 			</form>
 
 
@@ -111,8 +173,10 @@
 	<div th:include="/fragments :: scripts-bottom"></div>
 
 	<!-- <script type="text/javascript" th:src="@{/js/map-style.js}"></script> -->
-	<script type="text/javascript" th:src="@{/js/map.js}"></script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5gfkKVMI4OYiiSBtfBx35Jc9GffAfALo&&callback=initMap&libraries=places"
+	<!-- <script type="text/javascript" th:src="@{/js/map.js}"></script> -->
+	<script type="text/javascript" th:src="@{/js/current-location.js}"></script>
+
+	<script th:src="@{https://maps.googleapis.com/maps/api/js?key=AIzaSyC5gfkKVMI4OYiiSBtfBx35Jc9GffAfALo&&callback=initMap&libraries=places}"
 	defer></script>
 
 </body>

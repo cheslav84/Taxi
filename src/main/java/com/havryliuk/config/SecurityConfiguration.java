@@ -14,10 +14,10 @@ public class SecurityConfiguration {
         http
                 .authorizeRequests()
                 .antMatchers("/login", "/index").permitAll()
-                .antMatchers("/trips/*").authenticated()//todo change to passengers
+                .antMatchers("/trips/**").authenticated()//todo change to passengers
                 .and()
                 .formLogin().loginPage("/auth/login").permitAll()
-                .defaultSuccessUrl("/trips/new")
+                .defaultSuccessUrl("/index")
                 .and().rememberMe()
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "POST"))

@@ -1,22 +1,22 @@
-<div  th:fragment="passenger-trips" class="tabs-ui ui-tabs ui-corner-all ui-widget ui-widget-content">
+<div th:fragment="passenger-trips" class="tabs-ui ui-tabs ui-corner-all ui-widget ui-widget-content">
 
 	<div class="ui-tabs-nav ui-corner-all ui-helper-reset ui-helper-clearfix ui-widget-header">
 		<div th:classappend="${subPage == 'All trips' ? 'ui-tabs-active ui-state-active' : ''}"
-			class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" >
-				<a href="/trips/users/all"  class="ui-tabs-anchor trip-tab">All</a>
+			class="ui-tabs-tab ui-corner-top ui-state-default ui-tab">
+			<a href="/trips/users/all" class="ui-tabs-anchor trip-tab">All</a>
 		</div>
 
 		<div th:classappend="${subPage == 'Active trips' ? 'ui-tabs-active ui-state-active' : ''}"
-			class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" >
-				<a href="/trips/users/active"  class="ui-tabs-anchor trip-tab">Active</a>
+			class="ui-tabs-tab ui-corner-top ui-state-default ui-tab">
+			<a href="/trips/users/active" class="ui-tabs-anchor trip-tab">Active</a>
 		</div>
 		<div th:classappend="${subPage == 'Past trips' ? 'ui-tabs-active ui-state-active' : ''}"
-		class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" >
-			<a href="/trips/users/past"  class="ui-tabs-anchor trip-tab">Past</a>
+			class="ui-tabs-tab ui-corner-top ui-state-default ui-tab">
+			<a href="/trips/users/past" class="ui-tabs-anchor trip-tab">Past</a>
 		</div>
 	</div>
 
-	<div class="ui-tabs-panel ui-corner-bottom ui-widget-content" >
+	<div class="ui-tabs-panel ui-corner-bottom ui-widget-content">
 
 		<div class="table-scroll">
 			<table>
@@ -32,16 +32,91 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="trip, state : ${page.pageItem.content}">
-						<td th:text="${#temporals.format(trip.departureDateTime, 'dd&#x2011MM&#x2011yyyy HH:mm')}" class="center"></td>
+					<!-- <tr th:each="trip, state : ${page.pageItem.content}"> -->
+
+						<tr th:each="trip, state : ${page.pageItem.content}" class="table-row"
+						th:data-name="|/trips/users/detailes/${trip.id}|"
+						th:onclick="getTripDetailes(this.getAttribute('data-name'))">
+
+						<td th:text="${#temporals.format(trip.departureDateTime, 'dd&#x2011MM&#x2011yyyy HH:mm')}"
+							class="center"></td>
 						<td th:text="${trip.originAddress}"></td>
 						<td th:text="${trip.destinationAddress}"></td>
-						<td th:text="${trip.price}" class="center"></td>
+						<td th:text="|${trip.price}&nbsp&#8372;|" class="center"></td>
 						<td th:text="${trip?.driverNameAndPhone}" class="center"></td>
 						<td th:text="${trip?.car}" class="center"></td>
 						<td th:text="${trip.timeToTaxiArrivalInSeconds}" class="center"></td>
 					</tr>
 				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+
+<div th:fragment="driver-trips" class="tabs-ui ui-tabs ui-corner-all ui-widget ui-widget-content">
+
+	<div class="ui-tabs-nav ui-corner-all ui-helper-reset ui-helper-clearfix ui-widget-header">
+		<!-- <div th:classappend="${subPage == 'All trips' ? 'ui-tabs-active ui-state-active' : ''}"
+			class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" >
+				<a href="/trips/users/all"  class="ui-tabs-anchor trip-tab">All</a>
+		</div> -->
+
+		<!-- <div th:classappend="${subPage == 'Active trips' ? 'ui-tabs-active ui-state-active' : ''}"
+			class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" >
+				<a href="/trips/users/active"  class="ui-tabs-anchor trip-tab">Active</a>
+		</div>
+		<div th:classappend="${subPage == 'Past trips' ? 'ui-tabs-active ui-state-active' : ''}"
+		class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" >
+			<a href="/trips/users/past"  class="ui-tabs-anchor trip-tab">Past</a>
+		</div> -->
+	</div>
+
+	<div class="ui-tabs-panel ui-corner-bottom ui-widget-content">
+		<div class="table-scroll">
+			<table>
+				<thead class="table-head">
+					<tr>
+						<th>Date and time</th>
+						<th>Origin</th>
+						<th>Destination</th>
+						<th>Price</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="trip, state : ${page.pageItem.content}" class="table-row"
+						th:data-name="|/trips/drivers/details/${trip.id}|"
+						th:onclick="getTripDetailes(this.getAttribute('data-name'))">
+						<!-- th:data-name="|/tips/drivers/details|" -->
+
+						<td th:text="${#temporals.format(trip.departureDateTime, 'dd&#x2011MM&#x2011yyyy HH:mm')}"
+							class="center"></td>
+						<td th:text="${trip.originAddress}"></td>
+						<td th:text="${trip.destinationAddress}"></td>
+						<td th:text="|${trip.price}&nbsp&#8372;|" class="center"></td>
+					</tr>
+				</tbody>
+
+
+				<!-- <tr th:each="trip, state : ${page.pageItem.content}" class="table-row" th:onclick="'javascript:rowClicked( ${trip.id});'"> -->
+				<!-- <tr th:each="trip, state : ${page.pageItem.content}" class="table-row" th:onclick='@{|window.location='url:/${trip.id}////'|}'> -->
+				<!-- <tr th:each="trip, state : ${page.pageItem.content}" class="table-row" th:onclick="@{|window.location='url://trip/drivers/detailes/${trip.id}'|}"> -->
+				<!-- th:onclick="window.location='https://www.studytonight.com/'"  -->
+				<!-- th:data-href='@{|url://trip/drivers/detailes/${trip.id}|}' -->
+
+				<!-- <tr th:each="trip, state : ${page.pageItem.content}" class="table-row" > -->
+				<!-- <a th:href="@{|/tips/drivers/detailes/${trip.id}|}"> -->
+				<!-- <td th:text="${#temporals.format(trip.departureDateTime, 'dd&#x2011MM&#x2011yyyy HH:mm')}"
+								class="center" th:data-href='@{|url://trip/drivers/detailes/${trip.id}|}'></td> -->
+
+				<!-- <td  th:text="${#temporals.format(trip.departureDateTime, 'dd&#x2011MM&#x2011yyyy HH:mm')}"
+								class="center"></td>
+							<td th:text="${trip.originAddress}"></td>
+							<td th:text="${trip.destinationAddress}"></td>
+							<td th:text="|${trip.price}&nbsp&#8372;|" class="center"></td> -->
+
+
+
 			</table>
 		</div>
 	</div>

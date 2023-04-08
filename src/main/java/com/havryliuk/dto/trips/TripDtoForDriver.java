@@ -1,6 +1,7 @@
 package com.havryliuk.dto.trips;
 
 
+import com.havryliuk.model.CarClass;
 import com.havryliuk.model.PaymentStatus;
 import lombok.*;
 
@@ -35,4 +36,5 @@ public class TripDtoForDriver implements TripDtoForUser {
     private String destinationAddress;
 
     private BigDecimal price;
+//    private CarClass carClass;
 }

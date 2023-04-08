@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 
@@ -31,8 +33,8 @@ import java.util.List;
 @RequestMapping("/trips")
 public class TripController {
 
-    private static int INITIAL_PAGE_NUMBER = 1;//todo set size in user page and cookies
-    private static int NUMBER_OF_ITEMS_PER_PAGE = 4;
+    private static final int INITIAL_PAGE_NUMBER = 1;//todo set size in user page and cookies
+    private static final int NUMBER_OF_ITEMS_PER_PAGE = 4;
 
     private final TripService tripService;
     private final UserService userService;
@@ -69,8 +71,8 @@ public class TripController {
 
     private void setModelAttributesForCreatePage(ModelAndView modelAndView) {
         modelAndView.addObject("carClasses", List.of(CarClass.values()));
-        modelAndView.addObject("activePage", "newTrip");
-        modelAndView.setViewName("new-trip");
+        modelAndView.addObject("activePage", "Get taxi");
+        modelAndView.setViewName("get-taxi");
     }
 
 
@@ -94,7 +96,7 @@ public class TripController {
         Pageable pageable = PageRequest.of(currentPageNo - 1, size);
         Page<TripDtoForPassenger> tripsPage = tripService.getAllByUser(user, pageable);
         PageWrapper<TripDtoForPassenger> page = new PageWrapper<>(tripsPage, currentPageNo, size, requestURI);
-        setModelAttributesForTripPages(modelAndView, user, page);
+        setModelAttributesForPassengerTripPages(modelAndView, page);
         modelAndView.addObject("subPage", "All trips");
         return modelAndView;
     }
@@ -118,7 +120,7 @@ public class TripController {
         Pageable pageable = PageRequest.of(currentPageNo - 1, size);
         Page<TripDtoForPassenger> tripsPage = tripService.getActiveByUser(user, pageable);
         PageWrapper<TripDtoForPassenger> page = new PageWrapper<>(tripsPage, currentPageNo, size, requestURI);
-        setModelAttributesForTripPages(modelAndView, user, page);
+        setModelAttributesForPassengerTripPages(modelAndView, page);
         modelAndView.addObject("subPage", "Active trips");
         return modelAndView;
     }
@@ -143,19 +145,20 @@ public class TripController {
         Pageable pageable = PageRequest.of(currentPageNo - 1, size);
         Page<TripDtoForPassenger> tripsPage = tripService.getPastByUser(user, pageable);
         PageWrapper<TripDtoForPassenger> page = new PageWrapper<>(tripsPage, currentPageNo, size, requestURI);
-        setModelAttributesForTripPages(modelAndView, user, page);
+        setModelAttributesForPassengerTripPages(modelAndView, page);
         modelAndView.addObject("subPage", "Past trips");
         return modelAndView;
     }
 
-    private void setModelAttributesForTripPages(
-            ModelAndView modelAndView, User user, PageWrapper<? extends TripDtoForUser> page) {
+    private void setModelAttributesForPassengerTripPages(
+            ModelAndView modelAndView, PageWrapper<? extends TripDtoForUser> page) {
         modelAndView.addObject("page", page);
-        modelAndView.addObject("user", user);
+//        modelAndView.addObject("user", user);
         modelAndView.addObject("activePage", "myAccount");
         modelAndView.setViewName("trips/passenger-trips");;
 
     }
+
 
 
 
@@ -174,17 +177,62 @@ public class TripController {
         log.trace("/drivers/active/{currentPageNo}/{size}");
         String requestURI = "/trips/drivers/active";
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        CarClass carClass = ((Driver) user).getCar().getCarClass();
         Pageable pageable = PageRequest.of(currentPageNo - 1, size);
-        Page<TripDtoForDriver> tripsPage = tripService.getAllNew(pageable);
+        Page<TripDtoForDriver> tripsPage = tripService.getAllNew(carClass, pageable);
         PageWrapper<TripDtoForDriver> page = new PageWrapper<>(tripsPage, currentPageNo, size, requestURI);
-
-        System.err.println(tripsPage.getContent());
-        setModelAttributesForTripPages(modelAndView, user, page);
+        setModelAttributesForDriverTripPages(modelAndView, page);
         modelAndView.addObject("subPage", "Past trips");
         return modelAndView;
     }
 
+    private void setModelAttributesForDriverTripPages(
+            ModelAndView modelAndView, PageWrapper<? extends TripDtoForUser> page) {
+        modelAndView.addObject("page", page);
+//        modelAndView.addObject("user", user);
+        modelAndView.addObject("activePage", "Find passengers");
+        modelAndView.setViewName("trips/find-passengers");;
 
+    }
+
+
+//    @PreAuthorize("hasRole('ROLE_DRIVER')")
+//    @GetMapping("/drivers/details")
+    @GetMapping("/drivers/details/{id}")
+    public ModelAndView getTrip(
+            @PathVariable String id,
+            ModelAndView modelAndView) {
+        log.trace("/drivers/details/{id}");
+        Trip trip = tripService.getById(id);
+        System.err.println(trip.getOriginAddress());
+        final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int passengerAge = userService.getUserAge(trip.getPassenger());
+
+        modelAndView.addObject("trip", trip);
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("passengerAge", passengerAge);
+        modelAndView.addObject("activePage", "Find passengers");
+        modelAndView.setViewName("trips/take-passenger");;
+
+        return modelAndView;
+    }
+
+
+//    @GetMapping("/drivers/details")
+//    public ModelAndView getTrips(
+//            ModelAndView modelAndView) {
+//        log.trace("/drivers/details/{id}");
+//        System.out.println("trip.getOriginAddress()");
+//        final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//
+//        modelAndView.addObject("user", user);
+//
+//        modelAndView.addObject("activePage", "Find passengers");
+//        modelAndView.setViewName("trips/trip-details");;
+//
+//
+//        return modelAndView;
+//    }
 
 
 }

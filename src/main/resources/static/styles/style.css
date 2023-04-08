@@ -5084,11 +5084,34 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   text-align: center;
 }
 
+.table-row:hover td {
+  cursor:pointer;
+  background-color: #eee6cf7c;
+  border-top:  1px solid #FFC61A;
+}
+
 .table-scroll {
   overflow: auto;
 }
 
+.information blockquote {
+  padding: 0;
+  margin: 15px 0;
+}
 
+.trip-data-container {
+  margin: 15px 0;
+}
+
+@media (max-width: 991px) {
+  .information blockquote {
+    margin: 3px 0;
+  }
+  .trip-data-container {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+}
 
 /* #show-reg-passwd, #show-log-passwd, #show-conf-passwd {
   background: transparent;

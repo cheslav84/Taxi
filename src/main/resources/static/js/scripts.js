@@ -324,6 +324,10 @@ show_conf_pw_btn.addEventListener('click', () => {
 })
 
 
+function getTripDetailes(value) {
+	location.href = value;
+}
+
 
 // const show_log_pw_btn = document.querySelector('#show-log-passwd')
 // const show_log_pw_icon = show_log_pw_btn.querySelector('img')

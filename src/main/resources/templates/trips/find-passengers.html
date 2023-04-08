@@ -7,7 +7,7 @@
 <body>
 	<div th:replace="/fragments :: top-bar"></div>
 	<div th:replace="/fragments :: nav"></div>
-	<header class="page-header bgMove" style="background-image: url(assets/images/_inner-bg.jpg);">
+	<header class="page-header" style="background-image: url(assets/images/_inner-bg.jpg);">
 		<div class="container">
 			<ol class="bread">
 				<li>
@@ -15,21 +15,18 @@
 				</li>
 				<li class="divider"><span>//</span></li>
 				<li>
-					<a th:href="@{#}"><span>My account</span></a>
-				</li>
-				<li class="divider"><span>//</span></li>
-				<li>
-					<span th:text="${subPage}"></span>
+					<span th:text="${activePage}"></span>
 				</li>
 			</ol>
-			<h1>My trips</h1>
+			<h1 th:text="${activePage}">Find passengers</h1>
 		</div>
 	</header>
+	
 	<div class="container shortcodes text-page inner">
 		<div class="row">
 			<div class="col-xs-12">
 				<div id="table-scroll">
-					<div sec:authorize="hasAuthority('PASSENGER')" th:replace="/tables :: passenger-trips"></div>
+					<div sec:authorize="hasAuthority('DRIVER')" th:replace="/tables :: driver-trips"></div>
 				</div>
 				<div class="paging-navigation" th:if="${page.pageItem.totalPages > 1}">
 					<hr>

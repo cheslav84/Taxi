@@ -35,6 +35,12 @@ public class TripService {
 //        this.repository = repository;
 //    }
 
+
+
+    public Trip getById (String id) {
+        return repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Such trip hasn't been found"));
+    }
+
     public String save(Trip trip, User user) {
         googleService.setAddressLocation(trip.getOriginAddress());
         googleService.setAddressLocation(trip.getDestinationAddress());
@@ -75,10 +81,9 @@ public class TripService {
         return tripsPage;
     }
 
-    public Page<TripDtoForDriver> getAllNew(Pageable pageable) {
-        return repository.findAllNew(pageable);
+    public Page<TripDtoForDriver> getAllNew(CarClass carClass, Pageable pageable) {
+        return repository.findAllNewByCarClass(carClass, pageable);
     }
-
 
 
 

@@ -59,6 +59,7 @@
 	</nav>
 </div>
 
+
 <div th:fragment="nav-inner">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle collapsed">
@@ -79,9 +80,14 @@
 			<li th:class="${activePage == 'index'} ? 'menu-item current_page_item' : 'menu-item'">
 				<a th:href="@{/index}">Home</a>
 			</li>
-			<li  th:class="${activePage == 'newTrip'} ? 'menu-item current_page_item' : 'menu-item'">
+
+			<li sec:authorize="hasAuthority('PASSENGER')" th:class="${activePage == 'Get taxi'} ? 'menu-item current_page_item' : 'menu-item'">
 				<a th:href="@{/trips/new}">Get Taxi</a>
 			</li>
+			<li sec:authorize="hasAuthority('DRIVER')" th:class="${activePage == 'Find passengers'} ? 'menu-item current_page_item' : 'menu-item'">
+				<a th:href="@{/trips/drivers/active}">Find passengers</a>
+			</li>
+
 			<li sec:authorize="isAuthenticated()" th:class="${activePage == 'myAccount'} ? 'hasSub menu-item current_page_item' : 'hasSub menu-item'">
 				<a th:href="@{/users/info}">My account</a>
 					<ul class="sub-menu">
@@ -138,6 +144,18 @@
 		<li><a id="my-trips-all-nav" href="/trips/users/all">All trips</a></li>
 		<li><a id="my-trips-active-nav" href="/trips/users/active">My active trips</a></li>
 		<li><a id="my-trips-past-nav" href="/trips/users/past">My past trips</a></li>
+	</ul>
+</aside>
+
+
+<aside th:fragment="aside-social" class="widget">
+	<strong>Social:</strong>
+	<hr>
+	<ul class="social social-big">
+		<li><a href="https://www.facebook.com" class="social-fb fa fa-facebook"></a></li>
+		<li><a href="https://twitter.com" class="social-twitter fa fa-twitter"></a></li>
+		<li><a href="https://www.youtube.com" class="social-youtube fa fa-youtube"></a></li>
+		<li><a href="https://www.instagram.com" class="social-inst fa fa-instagram"></a></li>
 	</ul>
 </aside>
 
@@ -299,7 +317,7 @@
 	<script type="text/javascript" th:src="@{/js/js}"></script>
 	<script type="text/javascript" th:src="@{/js/scripts.js}"></script>
 
-	<script>
+	<!-- <script>
 		(function (i, s, o, g, r, a, m) {
 			i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
 				(i[r].q = i[r].q || []).push(arguments)
@@ -309,6 +327,6 @@
 
 		ga('create', 'UA-91006724-1', 'auto');
 		ga('send', 'pageview');
-	</script>
+	</script> -->
 
 </div>
