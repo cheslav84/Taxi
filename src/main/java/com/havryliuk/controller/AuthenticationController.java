@@ -34,28 +34,31 @@ public class AuthenticationController {
     @GetMapping("/registration")
     public ModelAndView registrationPage(ModelAndView modelAndView) {
         log.trace("registrationPage");
-        modelAndView.addObject("userDTO", new UserDto());
+        modelAndView.addObject("userDto", new UserDto());
         setModelAttributes(modelAndView);
         return modelAndView;
     }
 
     @PostMapping("/registration")
-    public ModelAndView createNewUser(@Valid UserDto userDTO, Errors errors, ModelAndView modelAndView, RedirectAttributes redirectAttributes) {
+    public ModelAndView createNewUser(@Valid UserDto userDto, Errors errors,
+                                      ModelAndView modelAndView, RedirectAttributes redirectAttributes) {
         log.trace("createNewUser");
         if (errors.hasErrors()) {
             log.debug("validation error");
+            modelAndView.addObject("userDto", userDto);
             setModelAttributes(modelAndView);
             return modelAndView;
         }
         try {
-            User user = mapper.map(userDTO);
+            User user = mapper.map(userDto);
             userService.save(user);
         } catch (UserAlreadyExistException e) {
-            redirectAttributes.addFlashAttribute("userDTO", userDTO);
-            String warningMessage = "An account for '"+ userDTO.getEmail() + "' already exists.";
-            redirectAttributes.addFlashAttribute("warningMessage", warningMessage);
+            String warningMessage = "An account for '"+ userDto.getEmail() + "' already exists.";
+            modelAndView.addObject("warningMessage", warningMessage);
+            modelAndView.addObject("userDto", userDto);
+            modelAndView.setViewName("registration");
+            setModelAttributes(modelAndView);
             log.warn(warningMessage);
-            modelAndView.setViewName("redirect:/auth/registration");
             return modelAndView;
         }
         modelAndView.setViewName("redirect:/auth/login");

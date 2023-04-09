@@ -47,6 +47,7 @@ public class TripController {
         this.userService = userService;
     }
 
+
     @GetMapping("/new")
     public ModelAndView newTripPage(ModelAndView modelAndView) {
         log.trace("newTrip page");
@@ -74,7 +75,6 @@ public class TripController {
         modelAndView.addObject("activePage", "Get taxi");
         modelAndView.setViewName("get-taxi");
     }
-
 
 
     @PreAuthorize("hasRole('ROLE_PASSENGER')")
@@ -215,6 +215,7 @@ public class TripController {
 
         return modelAndView;
     }
+
 
 
     @PreAuthorize("hasRole('ROLE_DRIVER')")

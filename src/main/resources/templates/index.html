@@ -4,17 +4,6 @@
 
 <head th:replace="/fragments :: head"></head>
 
-
-
-
-
-
-
-
-
-
-
-
 <body>
 
 
@@ -168,8 +157,7 @@
                         <li>Good application</li>
                         <li>Stable orders</li>
                     </ul>
-                    <a href="http://like-themes.com/taxipark/index.html#" class="btn btn-yellow btn-lg btn-white">Become
-                        a Driver</a>
+                    <a th:href="@{/auth/registration}" class="btn btn-yellow btn-lg btn-white">Become a Driver</a>
                 </div>
             </div>
         </div>

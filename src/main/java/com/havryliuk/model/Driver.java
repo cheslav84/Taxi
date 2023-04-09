@@ -20,7 +20,6 @@ public class Driver extends User {
 
     private BigDecimal balance;
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "driver", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     List<Trip> trips;
 
