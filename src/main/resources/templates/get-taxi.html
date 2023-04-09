@@ -111,8 +111,8 @@
 
 	<!-- <script type="text/javascript" th:src="@{/js/map-style.js}"></script> -->
 	<script type="text/javascript" th:src="@{/js/map.js}"></script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5gfkKVMI4OYiiSBtfBx35Jc9GffAfALo&&callback=initMap&libraries=places"
-	defer></script>
+	<script th:replace="/fragments :: map-script"></script>
+
 
 </body>
 

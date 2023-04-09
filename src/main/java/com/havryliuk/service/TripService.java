@@ -1,12 +1,14 @@
 package com.havryliuk.service;
 
 import com.havryliuk.dto.trips.TripDtoForDriver;
+import com.havryliuk.dto.trips.TripDtoForDriverDetailed;
 import com.havryliuk.dto.trips.TripDtoForPassenger;
 import com.havryliuk.model.*;
 import com.havryliuk.repository.TariffsRepository;
 import com.havryliuk.repository.TripRepository;
 import com.havryliuk.util.google.map.GoogleService;
 //import com.havryliuk.util.mappers.MapStructMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+@Slf4j
 @Service
 public class TripService {
     private final GoogleService googleService;
@@ -39,6 +42,10 @@ public class TripService {
 
     public Trip getById (String id) {
         return repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Such trip hasn't been found"));
+    }
+
+    public TripDtoForDriverDetailed getDtoById (String id) {
+        return repository.findDtoById(id).orElseThrow(() -> new IllegalArgumentException("Such trip hasn't been found"));
     }
 
     public String save(Trip trip, User user) {
@@ -88,7 +95,7 @@ public class TripService {
 
 
     private void setTaxiArrivalTimeReadable(Page<TripDtoForPassenger> trips) {
-        String messageIfTimeNotDefined = "Taxi not defined";
+        String messageIfTimeNotDefined = "Time not defined";
         for (TripDtoForPassenger trip : trips) {
             String time = trip. getTimeToTaxiArrivalInSeconds();
             if (time.equals("0")) {
@@ -121,9 +128,15 @@ public class TripService {
     }
 
 
-
-
-
-
-
+    public void saveDriverAndTaxiLocation(Trip trip, User user, Address taxiLocationAddress) {
+        trip.setDriver(user);
+        try {
+            trip.setTaxiLocationAddress(taxiLocationAddress);
+            googleService.setAddressLocation(taxiLocationAddress);
+            googleService.setTaxiArrivalTime(trip);
+        } catch (Exception e) {
+            log.warn("Something wrong in setting taxi location address.");
+        }
+        repository.save(trip);
+    }
 }

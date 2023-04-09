@@ -314,7 +314,7 @@
 	<script type="text/javascript" th:src="@{/js/jquery-ui.min.js}"></script>
 	<!-- <script type="text/javascript" th:src="@{/js/custom.js}"></script> -->
 	<script type="text/javascript" th:src="@{/js/plugins.min.js}"></script>
-	<script type="text/javascript" th:src="@{/js/js}"></script>
+	<!-- <script type="text/javascript" th:src="@{/js/js}"></script> -->
 	<script type="text/javascript" th:src="@{/js/scripts.js}"></script>
 
 	<!-- <script>
@@ -330,3 +330,7 @@
 	</script> -->
 
 </div>
+
+
+<script th:fragment="map-script" th:src="@{https://maps.googleapis.com/maps/api/js?key=AIzaSyC5gfkKVMI4OYiiSBtfBx35Jc9GffAfALo&&callback=initMap&libraries=places}"
+defer></script>

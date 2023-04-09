@@ -89,4 +89,10 @@ public class UserService implements UserDetailsService, UserResource {
         LocalDate currentDate = LocalDate.now();
         return Period.between(birthDate, currentDate).getYears();
     }
+
+    public int getUserAge(LocalDate birthDate) {
+//        LocalDate birthDate = user.getBirthDate();
+        LocalDate currentDate = LocalDate.now();
+        return Period.between(birthDate, currentDate).getYears();
+    }
 }

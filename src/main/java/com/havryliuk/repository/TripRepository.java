@@ -1,6 +1,7 @@
 package com.havryliuk.repository;
 
 import com.havryliuk.dto.trips.TripDtoForDriver;
+import com.havryliuk.dto.trips.TripDtoForDriverDetailed;
 import com.havryliuk.dto.trips.TripDtoForPassenger;
 import com.havryliuk.model.CarClass;
 import com.havryliuk.model.Trip;
@@ -11,6 +12,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 
 @Repository
@@ -51,7 +54,7 @@ public interface TripRepository extends PagingAndSortingRepository<Trip, String>
             order by t.departureDateTime desc
             """
     )
-    Page<TripDtoForPassenger> findActiveByPassenger(@Param("user") User user, Pageable pageable);
+    Page<TripDtoForPassenger> findActiveByPassenger(@Param("user") User user, Pageable pageable);//todo виключити з пошуку поїздки дата яких минула
 
     @Query(value = """
             select new com.havryliuk.dto.trips.TripDtoForPassenger
@@ -80,7 +83,17 @@ public interface TripRepository extends PagingAndSortingRepository<Trip, String>
             order by t.departureDateTime desc
             """
     )
-    Page<TripDtoForDriver> findAllNewByCarClass(@Param("carClass") CarClass carClass, Pageable pageable);
+    Page<TripDtoForDriver> findAllNewByCarClass(@Param("carClass") CarClass carClass, Pageable pageable);//todo виключити з пошуку поїздки дата яких минула
 
+    @Query(value = """
+            select new com.havryliuk.dto.trips.TripDtoForDriverDetailed
+                (t.id, t.departureDateTime, t.originAddress.address, t.destinationAddress.address,
+                 t.price, p.name, p.birthDate)
+            from Trip t
+            join t.passenger p
+            where t.id = :id
+            """
+    )
+    Optional<TripDtoForDriverDetailed> findDtoById(@Param("id") String id);
 
 }

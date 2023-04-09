@@ -5111,6 +5111,23 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     margin-top: 0;
     margin-bottom: 10px;
   }
+
+  .tabs-ui .ui-tabs-panel {
+    padding: 30px 15px 25px 15px !important;
+}
+}
+
+#map {
+  border:  1px solid #FFC61A;
+  border-radius: 8px;
+}
+
+.width-300 {
+  width: 300px;
+}
+
+.hidden {
+  display: none;
 }
 
 /* #show-reg-passwd, #show-log-passwd, #show-conf-passwd {

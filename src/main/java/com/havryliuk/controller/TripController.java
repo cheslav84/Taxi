@@ -1,7 +1,9 @@
 package com.havryliuk.controller;
 
+import com.havryliuk.dto.NewBalanceDto;
 import com.havryliuk.dto.PageWrapper;
 import com.havryliuk.dto.trips.TripDtoForDriver;
+import com.havryliuk.dto.trips.TripDtoForDriverDetailed;
 import com.havryliuk.dto.trips.TripDtoForPassenger;
 import com.havryliuk.dto.trips.TripDtoForUser;
 import com.havryliuk.model.CarClass;
@@ -23,8 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.List;
 
 
@@ -160,8 +160,6 @@ public class TripController {
     }
 
 
-
-
     @PreAuthorize("hasRole('ROLE_DRIVER')")
     @GetMapping("/drivers/active")
     public ModelAndView allActiveTrips(ModelAndView modelAndView) {
@@ -195,18 +193,19 @@ public class TripController {
 
     }
 
-
-//    @PreAuthorize("hasRole('ROLE_DRIVER')")
-//    @GetMapping("/drivers/details")
+    @PreAuthorize("hasRole('ROLE_DRIVER')")//TODO doesn't work try set Authorities
     @GetMapping("/drivers/details/{id}")
     public ModelAndView getTrip(
             @PathVariable String id,
             ModelAndView modelAndView) {
         log.trace("/drivers/details/{id}");
-        Trip trip = tripService.getById(id);
-        System.err.println(trip.getOriginAddress());
+//        Trip trip = tripService.getById(id);
+        TripDtoForDriverDetailed trip = tripService.getDtoById(id);
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        int passengerAge = userService.getUserAge(trip.getPassenger());
+
+//        int passengerAge = userService.getUserAge(trip.getPassenger());
+        int passengerAge = userService.getUserAge(trip.getPassengerBirthDate());
+//        int passengerAge = userService.getUserAge(trip.getPassenger());
 
         modelAndView.addObject("trip", trip);
         modelAndView.addObject("user", user);
@@ -218,21 +217,22 @@ public class TripController {
     }
 
 
-//    @GetMapping("/drivers/details")
-//    public ModelAndView getTrips(
-//            ModelAndView modelAndView) {
-//        log.trace("/drivers/details/{id}");
-//        System.out.println("trip.getOriginAddress()");
-//        final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//
-//        modelAndView.addObject("user", user);
-//
-//        modelAndView.addObject("activePage", "Find passengers");
-//        modelAndView.setViewName("trips/trip-details");;
-//
-//
-//        return modelAndView;
-//    }
+    @PreAuthorize("hasRole('ROLE_DRIVER')")
+    @PutMapping
+    public ModelAndView setDriver(TripDtoForDriverDetailed tripDto, Errors errors, ModelAndView modelAndView) {
+            log.trace("setDriver");
+
+        if (tripDto.getId() == null) {
+           throw new IllegalArgumentException("Something went wrong. Try again later.");
+        }
+        // Якщо немає адреси то не надсилати її в гугл сервіс. Зберігати без неї
+        final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Trip trip = tripService.getById(tripDto.getId());
+        tripService.saveDriverAndTaxiLocation(trip, user, tripDto.getTaxiLocationAddress());
+        modelAndView.setViewName("redirect:/drivers/details/" + tripDto.getId());//todo change
+        return modelAndView;
+    }
+
 
 
 }

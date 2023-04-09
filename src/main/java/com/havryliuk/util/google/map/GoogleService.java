@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 @Component
 public class GoogleService {
@@ -24,9 +26,25 @@ public class GoogleService {
         address.setLongitude(location.lng);
     }
 
+//    public void setDistanceAndDuration(Trip trip) {
+//        try {
+//            DistanceAndDuration distanceAndDuration = resolver.getDistanceAndDuration(trip);
+//            long distanceInMeters = distanceAndDuration.getDistance().inMeters;
+//            long durationInSeconds = distanceAndDuration.getDuration().inSeconds;
+//            trip.setDistanceInMeters(distanceInMeters);
+//            trip.setDurationInSeconds(durationInSeconds);
+//        } catch (Exception e) {
+//            log.warn("Unable to get distance, location, or both.", e);
+//        }
+//    }
+
     public void setDistanceAndDuration(Trip trip) {
         try {
-            DistanceAndDuration distanceAndDuration = resolver.getDistanceAndDuration(trip);
+            DistanceAndDuration distanceAndDuration = resolver.getDistanceAndDuration(
+                    trip.getDepartureDateTime(),
+                    trip.getOriginAddress(),
+                    trip.getDestinationAddress()
+            );
             long distanceInMeters = distanceAndDuration.getDistance().inMeters;
             long durationInSeconds = distanceAndDuration.getDuration().inSeconds;
             trip.setDistanceInMeters(distanceInMeters);
@@ -35,5 +53,20 @@ public class GoogleService {
             log.warn("Unable to get distance, location, or both.", e);
         }
     }
+
+    public void setTaxiArrivalTime(Trip trip) {
+        try {
+            DistanceAndDuration distanceAndDuration = resolver.getDistanceAndDuration(
+                    LocalDateTime.now(),
+                    trip.getTaxiLocationAddress(),
+                    trip.getOriginAddress()
+            );
+            long durationInSeconds = distanceAndDuration.getDuration().inSeconds;
+            trip.setTimeToTaxiArrivalInSeconds(durationInSeconds);
+        } catch (Exception e) {
+            log.warn("Unable to get distance, location, or both.", e);
+        }
+    }
+
 
 }
