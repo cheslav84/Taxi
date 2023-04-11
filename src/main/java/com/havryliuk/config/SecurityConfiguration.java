@@ -32,10 +32,4 @@ public class SecurityConfiguration {
                 .and().csrf().disable();
         return http.build();
     }
-
-
-
-
-
-
 }

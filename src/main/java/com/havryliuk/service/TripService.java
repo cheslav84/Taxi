@@ -1,13 +1,14 @@
 package com.havryliuk.service;
 
-import com.havryliuk.dto.trips.TripDtoForDriver;
+import com.havryliuk.dto.trips.TripDtoForDriverPage;
+import com.havryliuk.dto.trips.TripDtoShortInfo;
 import com.havryliuk.dto.trips.TripDtoForDriverDetailed;
-import com.havryliuk.dto.trips.TripDtoForPassenger;
+import com.havryliuk.dto.trips.TripDtoForPassengerPage;
+import com.havryliuk.exceptions.PaymentException;
 import com.havryliuk.model.*;
 import com.havryliuk.repository.TariffsRepository;
 import com.havryliuk.repository.TripRepository;
 import com.havryliuk.util.google.map.GoogleService;
-//import com.havryliuk.util.mappers.MapStructMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,17 +17,25 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Optional;
 
 @Slf4j
 @Service
 public class TripService {
+
+
+    private final AddressService addressService;
     private final GoogleService googleService;
     private final TripRepository repository;
     private final TariffsRepository tariffsRepository;
-//    private final MapStructMapper structMapper;
+
 
     @Autowired
-    public TripService(GoogleService googleService, TripRepository repository, TariffsRepository tariffsRepository) {
+    public TripService(AddressService addressService, GoogleService googleService,
+                       TripRepository repository, TariffsRepository tariffsRepository) {
+        this.addressService = addressService;
         this.googleService = googleService;
         this.repository = repository;
         this.tariffsRepository = tariffsRepository;
@@ -45,19 +54,41 @@ public class TripService {
     }
 
     public TripDtoForDriverDetailed getDtoById (String id) {
-        return repository.findDtoById(id).orElseThrow(() -> new IllegalArgumentException("Such trip hasn't been found"));
+        TripDtoForDriverDetailed trip = repository.findDetailedDtoById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Such trip hasn't been found"));
+        int passengerAge = getAgeFromBirthData(trip.getPassengerBirthDate());
+        trip.setPassengerAge(passengerAge);
+        return trip;
     }
 
     public String save(Trip trip, User user) {
-        googleService.setAddressLocation(trip.getOriginAddress());
-        googleService.setAddressLocation(trip.getDestinationAddress());
+        trip.setOriginAddress(addressService.arrangeAddress(trip.getOriginAddress()));
+        trip.setDestinationAddress(addressService.arrangeAddress(trip.getDestinationAddress()));
         googleService.setDistanceAndDuration(trip);
         trip.setTripStatus(TripStatus.NEW);
-        trip.setPaymentStatus(PaymentStatus.NOT_PAYED);
+        trip.setPaymentStatus(PaymentStatus.NOT_PAID);
         setPrice(trip);
         trip.setPassenger(user);
         return repository.save(trip).getId();
     }
+
+    public void setStatusDrivingById(String id) {
+        Trip trip = getById(id);
+        trip.setTripStatus(TripStatus.DRIVING);
+        repository.save(trip);
+    }
+
+    public void setStatusCompletedById(String id) throws PaymentException {
+        Trip trip = getById(id);
+        if (trip.getPaymentStatus().equals(PaymentStatus.PAID)) {
+            trip.setTripStatus(TripStatus.DRIVING);
+            repository.save(trip);
+        } else {
+            throw new PaymentException("Passenger hasn't paid for trip yet. Ask for payment!");
+        }
+    }
+
+
 
     private void setPrice(Trip trip) {//todo think of move to separate class ()
         Tariffs tariff = tariffsRepository.getTariffByCarClass(trip.getCarClass());
@@ -70,41 +101,44 @@ public class TripService {
     }
 
 
-    public Page<TripDtoForPassenger> getAllByUser(User user, Pageable pageable) {
-        Page<TripDtoForPassenger> tripsPage = repository.findAllByPassenger(user, pageable);
+    public Page<TripDtoForPassengerPage> getAllByPassenger(User user, Pageable pageable) {
+        Page<TripDtoForPassengerPage> tripsPage = repository.findAllByPassenger(user, pageable);
         setTaxiArrivalTimeReadable(tripsPage);
         return tripsPage;
     }
 
-    public Page<TripDtoForPassenger> getActiveByUser(User user, Pageable pageable) {
-        Page<TripDtoForPassenger> tripsPage = repository.findActiveByPassenger(user, pageable);
+    public Page<TripDtoForPassengerPage> getActiveByPassenger(User user, Pageable pageable) {
+        Page<TripDtoForPassengerPage> tripsPage = repository.findActiveByPassenger(user, pageable);
         setTaxiArrivalTimeReadable(tripsPage);
         return tripsPage;
     }
 
-    public Page<TripDtoForPassenger> getPastByUser(User user, Pageable pageable) {
-        Page<TripDtoForPassenger> tripsPage = repository.findPastByPassenger(user, pageable);
+    public Page<TripDtoForPassengerPage> getPastByPassenger(User user, Pageable pageable) {
+        Page<TripDtoForPassengerPage> tripsPage = repository.findPastByPassenger(user, pageable);
         setTaxiArrivalTimeReadable(tripsPage);
         return tripsPage;
     }
 
-    public Page<TripDtoForDriver> getAllNew(CarClass carClass, Pageable pageable) {
+    public Page<TripDtoShortInfo> getAllNew(CarClass carClass, Pageable pageable) {
         return repository.findAllNewByCarClass(carClass, pageable);
     }
 
 
+    private void setTaxiArrivalTimeReadable(Page<TripDtoForPassengerPage> trips) {
+        for (TripDtoForPassengerPage trip : trips) {
+            setTaxiArrivalTimeReadable(trip);
+        }
+    }
 
-    private void setTaxiArrivalTimeReadable(Page<TripDtoForPassenger> trips) {
+    private void setTaxiArrivalTimeReadable(TripDtoForPassengerPage trip) {
         String messageIfTimeNotDefined = "Time not defined";
-        for (TripDtoForPassenger trip : trips) {
-            String time = trip. getTimeToTaxiArrivalInSeconds();
+        String time = trip. getTimeToTaxiArrivalInSeconds();
             if (time.equals("0")) {
                 time = messageIfTimeNotDefined;
             } else {
                 time = formatTime(time);
             }
             trip.setTimeToTaxiArrivalInSeconds(time);
-        }
     }
 
 
@@ -127,16 +161,119 @@ public class TripService {
         return stringBuilder.toString();
     }
 
-
     public void saveDriverAndTaxiLocation(Trip trip, User user, Address taxiLocationAddress) {
         trip.setDriver(user);
         try {
-            trip.setTaxiLocationAddress(taxiLocationAddress);
-            googleService.setAddressLocation(taxiLocationAddress);
+            trip.setTaxiLocationAddress(addressService.arrangeAddress(taxiLocationAddress));
+            trip.setTripStatus(TripStatus.OFFERED);
             googleService.setTaxiArrivalTime(trip);
         } catch (Exception e) {
             log.warn("Something wrong in setting taxi location address.");
         }
         repository.save(trip);
     }
+
+    public Page<TripDtoForDriverPage> getAllByDriver(User user, Pageable pageable) {
+        Page<TripDtoForDriverPage> trips = repository.findAllByDriver(user, pageable);
+        setPassengersAge(trips);
+        replaceMetersToKilometers(trips);
+        return trips;
+    }
+
+
+
+    public Page<TripDtoForDriverPage> getActiveByDriver(User user, Pageable pageable) {
+        Page<TripDtoForDriverPage> trips = repository.findActiveByDriver(user, pageable);
+        setPassengersAge(trips);
+        replaceMetersToKilometers(trips);
+        return trips;
+    }
+
+    public Page<TripDtoForDriverPage> getPastByDriver(User user, Pageable pageable) {
+        Page<TripDtoForDriverPage> trips = repository.findPastByDriver(user, pageable);
+        setPassengersAge(trips);
+        replaceMetersToKilometers(trips);
+        return trips;
+    }
+
+    public TripDtoForDriverPage getDtoForDriverById(String id) {
+        Optional<TripDtoForDriverPage> tripOptional = repository.findDtoForDriverById(id);
+        TripDtoForDriverPage trip = tripOptional.orElseThrow(
+                () -> new IllegalArgumentException("Such trip has not been found. Trip id =" + id));
+        int passengerAge = getAgeFromBirthData(trip.getPassengerBirthDate());
+        trip.setPassengerAge(passengerAge);
+        replaceMetersToKilometers(trip);
+        setDriversFunds(trip);
+        return trip;
+    }
+
+
+    public TripDtoForPassengerPage getDtoFoPassengerById(String id) {
+        Optional<TripDtoForPassengerPage> tripOptional = repository.findDtoForPassengerById(id);
+        TripDtoForPassengerPage trip = tripOptional.orElseThrow(
+                () -> new IllegalArgumentException("Such trip has not been found. Trip id =" + id));
+        setTaxiArrivalTimeReadable(trip);
+        return trip;
+    }
+
+    private void setDriversFunds(TripDtoForDriverPage trip) {
+        Tariffs tariffs = tariffsRepository.getTariffByCarClass(trip.getCarClass());
+        BigDecimal driverPartInPercent = BigDecimal.valueOf(tariffs.getDriverPartInPercent());
+        BigDecimal price = trip.getPrice();
+        BigDecimal driverFunds = price
+                .multiply(driverPartInPercent)
+                .divide(BigDecimal.valueOf(100),2, RoundingMode.HALF_UP);
+        trip.setDriverFunds(driverFunds);
+    }
+
+
+
+    private void setPassengersAge(Page<TripDtoForDriverPage> trips) {
+        for (TripDtoForDriverPage trip: trips) {
+            int passengerAge = getAgeFromBirthData(trip.getPassengerBirthDate());
+            trip.setPassengerAge(passengerAge);
+        }
+    }
+
+    private int getAgeFromBirthData(LocalDate birthDate) {
+        LocalDate currentDate = LocalDate.now();
+        return Period.between(birthDate, currentDate).getYears();
+    }
+
+
+
+    private void replaceMetersToKilometers(Page<TripDtoForDriverPage> trips) {
+        for (TripDtoForDriverPage trip: trips) {
+            replaceMetersToKilometers(trip);
+        }
+    }
+
+    private void replaceMetersToKilometers(TripDtoForDriverPage trip) {
+        String distanceInMeters = trip.getDistance();
+        String distanceInKiloMeters = formatInKilometers(distanceInMeters);
+        trip.setDistance(distanceInKiloMeters);
+    }
+
+    private String formatInKilometers(String meters) {
+        double distanceInMeters = Double.parseDouble(meters);
+        double distanceInKilometers = distanceInMeters / 1000;
+        String distance = Double.toString(distanceInKilometers);
+        distance = distance.replaceAll("\\.", ",");
+        int comaPlace = distance.indexOf(',');
+        int symbolsAfterComa = distance.substring(comaPlace).length();
+        if (symbolsAfterComa > 2) {
+            distance = distance.substring(0, (comaPlace + 3));
+        }
+        return distance;
+    }
+
+    public String getNextActionDependingOnStatus(TripStatus status) {
+        switch (status) {
+            case OFFERED -> { return "start"; }
+            case DRIVING -> { return "complete"; }
+            default -> { return null; }
+        }
+    }
+
+
 }

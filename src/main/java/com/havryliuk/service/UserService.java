@@ -1,10 +1,12 @@
 package com.havryliuk.service;
 
+import com.havryliuk.exceptions.PaymentException;
 import com.havryliuk.exceptions.UserAlreadyExistException;
 import com.havryliuk.model.Driver;
 import com.havryliuk.model.Passenger;
 import com.havryliuk.model.User;
 import com.havryliuk.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,11 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class UserService implements UserDetailsService, UserResource {
     private final UserRepository repository;
@@ -55,7 +56,13 @@ public class UserService implements UserDetailsService, UserResource {
     }
 
 
-    public void updateBalance(User user, BigDecimal rechargeValue) {
+    public void recharge(User user, BigDecimal rechargeValue) {
+        setNewBalanceIfNotManager(user, rechargeValue);
+        repository.save(user);
+    }
+
+    public void withdraw(User user, BigDecimal rechargeValue) throws PaymentException {
+        isUserHasRequiredValue(user, rechargeValue);
         setNewBalanceIfNotManager(user, rechargeValue);
         repository.save(user);
     }
@@ -69,12 +76,20 @@ public class UserService implements UserDetailsService, UserResource {
             }
             case DRIVER -> {
                 BigDecimal balance = ((Driver) user).getBalance();
-                balance = balance.add(rechargeValue);
+                balance = balance.remainder(rechargeValue);
                 ((Driver) user).setBalance(balance);
             }
         }
     }
 
+    public void isUserHasRequiredValue(User user, BigDecimal rechargeValue) throws PaymentException {
+        BigDecimal currentBalance = ((Driver) user).getBalance();
+        if (rechargeValue.compareTo(currentBalance) > 0) {
+            String message = "The there are not enough funds in the account.";
+            log.warn(message);
+            throw new PaymentException(message);
+        }
+    }
 
     private void setInitialBalanceIfNotManager(User user) {
         switch (user.getRole()) {
@@ -84,15 +99,5 @@ public class UserService implements UserDetailsService, UserResource {
     }
 
 
-    public int getUserAge(User user) {
-        LocalDate birthDate = user.getBirthDate();
-        LocalDate currentDate = LocalDate.now();
-        return Period.between(birthDate, currentDate).getYears();
-    }
 
-    public int getUserAge(LocalDate birthDate) {
-//        LocalDate birthDate = user.getBirthDate();
-        LocalDate currentDate = LocalDate.now();
-        return Period.between(birthDate, currentDate).getYears();
-    }
 }

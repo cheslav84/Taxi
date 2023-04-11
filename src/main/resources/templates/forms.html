@@ -1,0 +1,207 @@
+<div th:fragment="trip-passenger-managing" class="edit-form">
+
+		<div class="col-lg-12 text-page">
+			<h4 class="margin-top-0 ">Trip details</h4>
+			<hr class="lg">
+
+			<div th:replace="/forms :: date-time-item"></div>
+			<div th:replace="/forms :: origin-address-item"></div>
+			<div th:replace="/forms :: destination-address-item"></div>
+			<div th:replace="/forms :: driver-item"></div>
+			<div th:replace="/forms :: car-item"></div>
+			<div th:replace="/forms :: wait-time-item"></div>
+			<div th:replace="/forms :: payment-status-item"></div>
+			<div th:replace="/forms :: error-message-item"></div>
+
+		</div>
+
+		<a th:href="@{/trips/passengers/pay/__${trip.id}__}" 
+		class="btn btn-lg btn-black btn-white aligncenter width-300 highlight-height">Pay for trip</a>
+
+		<a th:href="@{/trips/passengers/update/__${trip.id}__}" 
+		class="btn btn-lg btn-black btn-white aligncenter width-300 highlight-height">Update trip</a>
+
+		<a th:href="@{/trips/passengers/update/__${trip.id}__}" 
+		class="btn btn-lg btn-black btn-white aligncenter width-300 highlight-height">Cancel trip</a>
+
+</div>
+
+
+<form th:fragment="trip-driver-managing"  class="no-float"
+	th:action="@{/trips/drivers/__${action}__/__${trip.id}__}" th:method="put" th:object="${trip}">
+	<div class="col-lg-12 text-page">
+		<h4 class="margin-top-0 ">Trip details</h4>
+		<hr class="lg">
+
+		<div th:replace="/forms :: date-time-item"></div>
+		<div th:replace="/forms :: origin-address-item"></div>
+		<div th:replace="/forms :: destination-address-item"></div>
+		<div th:replace="/forms :: passenger-item"></div>
+		<div th:replace="/forms :: distance-item"></div>
+		<div th:replace="/forms :: fare-item"></div>
+		<div th:replace="/forms :: driver-part-fare-item"></div>
+		<div th:replace="/forms :: payment-status-item"></div>
+		<div th:replace="/forms :: error-message-item"></div>
+
+	</div>
+	<input type="submit" class="btn btn-lg btn-black btn-white aligncenter width-300" 
+						th:disabled="${trip.tripStatus == T(com.havryliuk.model.TripStatus).COMPLETED  
+									or trip.tripStatus == T(com.havryliuk.model.TripStatus).CANCELED}" 
+						th:value="${trip.tripStatus == T(com.havryliuk.model.TripStatus).COMPLETED 
+									or trip.tripStatus == T(com.havryliuk.model.TripStatus).CANCELED} 
+									? '__${trip.tripStatus}__' : '__${action}__ the trip'">
+
+	<!-- TODO "cancel a trip" button -->
+</form>
+
+
+
+<div th:fragment="date-time-item" class="row">
+	<div class="col-md-6 information">
+		<blockquote>
+			<div class="white large">Date and time:</div>
+		</blockquote>
+	</div>
+	<div class="col-md-6">
+		<div class="trip-data-container">
+			<div class="large"
+				th:text="${#temporals.format(trip.departureDateTime, 'dd&#x2011MM&#x2011yyyy HH:mm')}">
+			</div>
+		</div>
+	</div>
+</div>
+
+<div th:fragment="origin-address-item" class="row">
+	<div class="col-md-6 information">
+		<blockquote>
+			<div class="white large">Origin address:</div>
+		</blockquote>
+	</div>
+	<div class="col-md-6">
+		<div class="trip-data-container">
+			<address id="originAddr" class="large" th:text="${trip.originAddress}"></address>
+		</div>
+	</div>
+</div>
+
+<div th:fragment="destination-address-item" class="row">
+	<div class="col-md-6 information">
+		<blockquote>
+			<div class="white large">Destination address:</div>
+		</blockquote>
+	</div>
+	<div class="col-md-6">
+		<div class="trip-data-container">
+			<address id="destinationAddr" class="large" th:text="${trip.destinationAddress}">
+			</address>
+		</div>
+	</div>
+</div>
+
+<div th:fragment="passenger-item" class="row">
+	<div class="col-md-6 information">
+		<blockquote>
+			<div class="white large">Passenger:</div>
+		</blockquote>
+	</div>
+	<div class="col-md-6">
+		<div class="trip-data-container">
+			<div class="large" th:text="|${trip?.passengerNameAndPhone}, ${trip.passengerAge}&nbspy.o.|">
+			</div>
+		</div>
+	</div>
+</div>
+
+<div th:fragment="driver-item" class="row">
+	<div class="col-md-6 information">
+		<blockquote>
+			<div class="white large">Driver:</div>
+		</blockquote>
+	</div>
+	<div class="col-md-6">
+		<div class="trip-data-container">
+			<div class="large" th:text="${trip.driverNameAndPhone != null} ? ${trip.driverNameAndPhone} : 'Not assigned'"></div>
+		</div>
+	</div>
+</div>
+
+<div th:fragment="distance-item" class="row">
+	<div class="col-md-6 information">
+		<blockquote>
+			<div class="white large">Distance:</div>
+		</blockquote>
+	</div>
+	<div class="col-md-6">
+		<div class="trip-data-container">
+			<div class="large" th:text="|${trip.distance}&nbspkm|"></div>
+		</div>
+	</div>
+</div>
+
+<div th:fragment="fare-item" class="row">
+	<div class="col-md-6 information">
+		<blockquote>
+			<div class="white large">Fare:</div>
+		</blockquote>
+	</div>
+	<div class="col-md-6">
+		<div class="trip-data-container">
+			<div class="large" th:text="|${trip.price}&nbsp&#8372;|"></div>
+		</div>
+	</div>
+</div>
+<div th:fragment="driver-part-fare-item" class="row">
+	<div class="col-md-6 information">
+		<blockquote>
+			<div class="white large">Your part:</div>
+		</blockquote>
+	</div>
+	<div class="col-md-6">
+		<div class="trip-data-container">
+			<div class="large" th:text="|${trip.driverFunds}&nbsp&#8372;|"></div>
+		</div>
+	</div>
+</div>
+<div th:fragment="payment-status-item" class="row">
+	<div class="col-md-6 information">
+		<blockquote>
+			<div class="white large">Payment status:</div>
+		</blockquote>
+	</div>
+	<div class="col-md-6">
+		<div class="trip-data-container">
+			<div class="large" th:text="${trip.paymentStatus.name}"></div>	
+		</div>
+	</div>
+</div>
+<div th:fragment="car-item" class="row">
+	<div class="col-md-6 information">
+		<blockquote>
+			<div class="white large">Car:</div>
+		</blockquote>
+	</div>
+	<div class="col-md-6">
+		<div class="trip-data-container">
+			<div class="large" th:text="${trip.car != null} ? ${trip.car} : 'Not assigned'"></div>
+		</div>
+	</div>
+</div>
+<div th:if="${trip.tripStatus == T(com.havryliuk.model.TripStatus).OFFERED}"
+	 th:fragment="wait-time-item" class="row">
+	<div class="col-md-6 information">
+		<blockquote>
+			<div class="white large">Wait time:</div>
+		</blockquote>
+	</div>
+	<div class="col-md-6">
+		<div class="trip-data-container">
+			<div class="large" th:text="${trip.timeToTaxiArrivalInSeconds}"></div>
+		</div>
+	</div>
+</div>
+<div th:fragment="error-message-item"  class="row">
+	<div th:if="${errorMessage}" class="alert alert-black">
+		<div class="header"><span class="fa fa-info-circle"></span>Warning</div>
+		<p th:text="${errorMessage}"></p>
+	</div>
+</div>

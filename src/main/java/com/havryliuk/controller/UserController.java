@@ -27,7 +27,7 @@ public class UserController {
         this.service = service;
     }
 
-    @PreAuthorize("hasRole('ROLE_PASSENGER')")
+//    @PreAuthorize("hasAuthority('PASSENGER')")
     @GetMapping("/info")//todo rename to userPage or so
     public ModelAndView userInfo(ModelAndView modelAndView) {
         log.trace("user details page");

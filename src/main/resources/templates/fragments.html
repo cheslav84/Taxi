@@ -85,7 +85,7 @@
 				<a th:href="@{/trips/new}">Get Taxi</a>
 			</li>
 			<li sec:authorize="hasAuthority('DRIVER')" th:class="${activePage == 'Find passengers'} ? 'menu-item current_page_item' : 'menu-item'">
-				<a th:href="@{/trips/drivers/active}">Find passengers</a>
+				<a th:href="@{/trips/drivers/available}">Find passengers</a>
 			</li>
 
 			<li sec:authorize="isAuthenticated()" th:class="${activePage == 'myAccount'} ? 'hasSub menu-item current_page_item' : 'hasSub menu-item'">
@@ -94,17 +94,33 @@
 						<li th:class="${subPage == 'info'} ? 'menu-item current_page_item' : 'menu-item'">
 							<a th:href="@{/users/info}">My page</a>						
 						</li>
-						<li th:class="${subPage == 'balance'} ? 'menu-item current_page_item' : 'menu-item'">
-							<a th:href="@{/users/balance}">My balance</a>
+
+						<li sec:authorize="hasAuthority('PASSENGER')" th:class="${subPage == 'balance'} ? 'menu-item current_page_item' : 'menu-item'">
+							<a th:href="@{/balance}">My balance</a>
 						</li>
-						<li th:class="${subPage == 'All trips'} ? 'menu-item current_page_item' : 'menu-item'">
-							<a th:href="@{/trips/users/all}">All my trips</a>
+						
+						<li sec:authorize="hasAuthority('PASSENGER')" th:class="${subPage == 'All trips'} ? 'menu-item current_page_item' : 'menu-item'">
+							<a th:href="@{/trips/passengers/all}">All my trips</a>
 						</li>
-						<li th:class="${subPage == 'Active trips'} ? 'menu-item current_page_item' : 'menu-item'">
-							<a th:href="@{/trips/users/active}">My active trips</a>
+						<li sec:authorize="hasAuthority('PASSENGER')" th:class="${subPage == 'Active trips'} ? 'menu-item current_page_item' : 'menu-item'">
+							<a th:href="@{/trips/passengers/active}">My active trips</a>
 						</li>
-						<li th:class="${subPage == 'Past trips'} ? 'menu-item current_page_item' : 'menu-item'">
-							<a th:href="@{/trips/users/past}">My past trips</a>
+						<li sec:authorize="hasAuthority('PASSENGER')" th:class="${subPage == 'Past trips'} ? 'menu-item current_page_item' : 'menu-item'">
+							<a th:href="@{/trips/passengers/past}">My past trips</a>
+						</li>
+
+
+						<li sec:authorize="hasAuthority('DRIVER')" th:class="${subPage == 'balance'} ? 'menu-item current_page_item' : 'menu-item'">
+							<a th:href="@{/balance}">My balance</a>
+						</li>
+						<li sec:authorize="hasAuthority('DRIVER')" th:class="${subPage == 'All trips'} ? 'menu-item current_page_item' : 'menu-item'">
+							<a th:href="@{/trips/drivers/all}">All my trips</a>
+						</li>
+						<li sec:authorize="hasAuthority('DRIVER')" th:class="${subPage == 'Active trips'} ? 'menu-item current_page_item' : 'menu-item'">
+							<a th:href="@{/trips/drivers/active}">My active trips</a>
+						</li>
+						<li sec:authorize="hasAuthority('DRIVER')" th:class="${subPage == 'Past trips'} ? 'menu-item current_page_item' : 'menu-item'">
+							<a th:href="@{/trips/drivers/past}">My past trips</a>
 						</li>
 					</ul>
 			</li>
@@ -115,7 +131,7 @@
 							<a th:href="@{/auth/login}">Log in</a>
 						</li>
 						<li th:class="${subPage == 'registration'} ? 'menu-item current_page_item' : 'menu-item'">
-							<a th:href="@{/auth/registration}">Registration</a>
+							<a th:href="@{/auth/registration}">Create account</a>
 						</li>
 					</ul>
 			</li>
@@ -136,17 +152,25 @@
 		<li><a id="my-page-nav" href="/users/info">My page</a></li>
 	</ul>
 	<h4>My balance</h4>
-	<ul>
-		<li><a id="my-page-nav" href="/users/balance">Recharge balance</a></li>
+	<ul sec:authorize="hasAuthority('PASSENGER')">
+		<li><a id="my-page-nav" href="/balance">Recharge balance</a></li>
+	</ul>
+	<ul sec:authorize="hasAuthority('DRIVER')">
+		<li><a id="my-page-nav" href="/balance">Withdraw funds</a></li>
 	</ul>
 	<h4>My trips</h4>
-	<ul>
-		<li><a id="my-trips-all-nav" href="/trips/users/all">All trips</a></li>
-		<li><a id="my-trips-active-nav" href="/trips/users/active">My active trips</a></li>
-		<li><a id="my-trips-past-nav" href="/trips/users/past">My past trips</a></li>
+	<ul sec:authorize="hasAuthority('PASSENGER')">
+		<li><a id="my-trips-all-nav" href="/trips/passengers/all">All trips</a></li>
+		<li><a id="my-trips-active-nav" href="/trips/passengers/active">My active trips</a></li>
+		<li><a id="my-trips-past-nav" href="/trips/passengers/past">My past trips</a></li>
+	</ul>
+
+	<ul sec:authorize="hasAuthority('DRIVER')">
+		<li><a id="my-trips-all-nav" href="/trips/drivers/all">All trips</a></li>
+		<li><a id="my-trips-active-nav" href="/trips/drivers/active">My active trips</a></li>
+		<li><a id="my-trips-past-nav" href="/trips/drivers/past">My past trips</a></li>
 	</ul>
 </aside>
-
 
 <aside th:fragment="aside-social" class="widget">
 	<strong>Social:</strong>
@@ -159,50 +183,19 @@
 	</ul>
 </aside>
 
-
 <section th:fragment="tariffs" id="tariffs">
 	<div class="container">
 		<h4 class="yellow">See Our</h4>
 		<h2 class="h1">Tariffs</h2>
 		<div class="row">
-			<div class="col-md-3 col-sm-6">
+			<div th:each="tariff, state : ${tariffs}" class="col-md-3 col-sm-6">
 				<div class="item matchHeight" style="height: 371px;">
 					<div class="image">
-						<img th:src="@{/images/common/_tariff-1.png}" class="full-width" alt="Tariff">
+						<img th:src="@{|/images/common/_tariff-__${state.index + 1}__.png|}" class="full-width" alt="Tariff">
 					</div>
-					<h4>Standart</h4>
+					<h4 th:text="${tariff.carClass.name}"></h4>
 					<p>Standard sedan for a drive around the city at your service</p>
-					<div class="price">$2<span>/km</span></div>
-				</div>
-			</div>
-			<div class="col-md-3 col-sm-6">
-				<div class="item matchHeight" style="height: 371px;">
-					<div class="image">
-						<img th:src="@{/images/common/_tariff-2.png}" class="full-width" alt="Tariff">
-					</div>
-					<h4>Business</h4>
-					<p>Standard sedan for a drive around the city at your service</p>
-					<div class="price">$2,7<span>/km</span></div>
-				</div>
-			</div>
-			<div class="col-md-3 col-sm-6">
-				<div class="item matchHeight vip" style="height: 371px;">
-					<div class="image">
-						<img th:src="@{/images/common/_tariff-3.png}" class="full-width" alt="Tariff">
-					</div>
-					<h4 class="red">Vip</h4>
-					<p>Standard sedan for a drive around the city at your service</p>
-					<div class="price">$5<span>/km</span></div>
-				</div>
-			</div>
-			<div class="col-md-3 col-sm-6">
-				<div class="item matchHeight" style="height: 371px;">
-					<div class="image">
-						<img th:src="@{/images/common/_tariff-4.png}" class="full-width" alt="Tariff">
-					</div>
-					<h4>Bus-minivan</h4>
-					<p>Standard sedan for a drive around the city at your service</p>
-					<div class="price">$4,5<span>/km</span></div>
+					<div class="price" th:text="|${tariff.pricePerKilometer}&#8372;/km|"></div>
 				</div>
 			</div>
 		</div>

@@ -26,7 +26,7 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<div id="table-scroll">
-					<div sec:authorize="hasAuthority('DRIVER')" th:replace="/tables :: driver-trips"></div>
+					<div sec:authorize="hasAuthority('DRIVER')" th:replace="/tables :: driver-available-trips"></div>
 				</div>
 				<div class="paging-navigation" th:if="${page.pageItem.totalPages > 1}">
 					<hr>

@@ -14,8 +14,7 @@ public class NewBalanceDto {
 
     @NotNull
     @DecimalMin(value = "0.0", inclusive = false)
-    @DecimalMax(value = "2000.0")
     @Digits(integer=3, fraction=2)
-    private BigDecimal rechargeValue;
+    private BigDecimal value;
 
 }

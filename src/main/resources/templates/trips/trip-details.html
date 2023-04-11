@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http:/ /www.w3.org/1999/xhtml" xmlns:th="http:/ /www.thymeleaf.org"
+	class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths">
+
+<head th:replace="/fragments :: head"></head>
+
+<body>
+	<div th:replace="/fragments :: top-bar"></div>
+	<div th:replace="/fragments :: nav"></div>
+	<header class="page-header" style="background-image: url(../images/_homepage-1-bg.jpg);">
+		<div class="container">
+			<ol class="bread">
+				<li>
+					<a th:href="@{/index}"><span>Home</span></a>
+				</li>
+				<li class="divider"><span>//</span></li>
+				<li>
+					<span>Manage trip</span>
+				</li>
+			</ol>
+			<h1>Manage trip</h1>
+		</div>
+	</header>
+
+	<div class="container">
+		<div class="inner inner-two-col row">
+			<div class="col-lg-8 text-page">
+				<section class="form-taxi-short">
+
+					<div sec:authorize="hasAuthority('PASSENGER')" th:replace="/forms :: trip-passenger-managing"></div>
+					<!-- <form sec:authorize="hasAuthority('PASSENGER')" th:replace="/forms :: trip-passenger-managing"></form> -->
+					<form sec:authorize="hasAuthority('DRIVER')" th:replace="/forms :: trip-driver-managing"></form>
+
+				</section>
+			</div>
+			<div class="col-lg-4">
+				<div class="widget-area" role="complementary">
+					<aside th:replace="/fragments :: aside-nav"></aside>
+					<aside th:replace="/fragments :: aside-social"></aside>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- TODO Display trip in a map -->
+
+
+	<!-- <section id="maps">
+		<div class="container">
+			<h4 class="yellow">See you way on</h4>
+			<h2 class="h1">Map</h2>
+			<div style="display: none">
+			</div>
+			<div id="map"></div>
+			<hr class="lg">
+			<div id="sidebar">
+				<h5 class="yellow">Distance to passenger: <span id="total"></span></h5>
+				<div id="panel"></div>
+			</div>
+		</div>
+	</section> -->
+
+
+	<section th:replace="/fragments :: block-footer"></section>
+	<footer th:replace="/fragments :: footer"></footer>
+	<div th:include="/fragments :: scripts-bottom"></div>
+
+
+	<!-- <script type="text/javascript" th:src="@{/js/current-location.js}"></script> -->
+
+	<!-- <script th:replace="/fragments :: map-script"></script> -->
+
+
+</body>
+
+</html>

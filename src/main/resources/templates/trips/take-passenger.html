@@ -28,8 +28,7 @@
 			<h3 class="aligncenter">800-5-800</h3>
 			<p class="form-label">Also you can order a taxi online</p> -->
 			
-			<form th:action="@{/trips}" th:method="put"  th:object="${trip}">
-
+			<form th:action="@{/trips/drivers/take/__${trip.id}__}" th:method="put"  th:object="${trip}">
 				<div class="col-lg-12 text-page">
 					<h4 class="margin-top-0 ">Trip details</h4>
 					<hr class="lg">	
@@ -61,7 +60,7 @@
 					<div class="row">
 						<div class="col-md-6 information">
 							<blockquote>
-								<div class="white large">Destinatation address:</div>
+								<div class="white large">Destination address:</div>
 							</blockquote>
 						</div>				
 						<div class="col-md-6">
@@ -78,7 +77,7 @@
 						</div>				
 						<div class="col-md-6">
 							<div class="trip-data-container">
-								<div class="large" th:text="|*{passengerName}, ${passengerAge}&nbspy.o.|"></div>
+								<div class="large" th:text="|*{passengerName}, *{passengerAge}&nbspy.o.|"></div>
 							</div>
 						</div>
 					</div>
@@ -86,12 +85,12 @@
 				</div>
 
 				<div class="hidden">
-					<input th:field="*{id}"  type="text" th:value="${id}"/>
+					<!-- <input th:field="*{id}"  type="text" th:value="${id}"/> -->
 					<input type="text" id="taxiAddr" th:field="*{taxiLocationAddress.address}" th:value="*{taxiLocationAddress.address}">
 				</div>
 			
 				<input type="submit" value="Take passenger" class="btn btn-lg btn-black btn-white aligncenter width-300">
-				<a th:href="@{/trips/drivers/active}" class="btn btn-lg btn-black btn-white aligncenter width-300">Search anoter</a>
+				<a th:href="@{/trips/drivers/available}" class="btn btn-lg btn-black btn-white aligncenter width-300">Search another</a>
 					<!-- <input type="hidden" id="orgAddrLat" value="originAddress.latitude" >
 					<input type="hidden" id="orgAddrLng" value="originAddress.longitude" >
 					<input type="hidden" id="destAddrLat" value="destinationAddress.latitude" >

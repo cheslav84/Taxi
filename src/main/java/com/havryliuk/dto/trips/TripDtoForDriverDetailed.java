@@ -13,17 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @ToString
-public class TripDtoForDriverDetailed implements TripDtoForUser {
-
-    private String id;
-
-    private LocalDateTime departureDateTime;
-
-    private String originAddress;
-
-    private String destinationAddress;
-
-    private BigDecimal price;
+public class TripDtoForDriverDetailed extends TripDtoShortInfo {
 
     private String passengerName;
 
@@ -31,15 +21,14 @@ public class TripDtoForDriverDetailed implements TripDtoForUser {
 
     private Address taxiLocationAddress;
 
+    private int passengerAge;
+
     public TripDtoForDriverDetailed(String id, LocalDateTime departureDateTime,
                                     String originAddress, String destinationAddress,
                                     BigDecimal price, String passengerName,
                                     LocalDate passengerBirthDate) {
-        this.id = id;
-        this.departureDateTime = departureDateTime;
-        this.originAddress = originAddress;
-        this.destinationAddress = destinationAddress;
-        this.price = price;
+
+        super(id, departureDateTime, originAddress, destinationAddress, price);
         this.passengerName = passengerName;
         this.passengerBirthDate = passengerBirthDate;
         this.taxiLocationAddress = new Address();

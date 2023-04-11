@@ -87,7 +87,7 @@
             </form> -->
 
             <a sec:authorize="hasAuthority('PASSENGER')"  th:href="@{/trips/new}" class="btn btn-lg btn-red aligncenter width-300">Get Taxi</a>
-            <a sec:authorize="hasAuthority('DRIVER')"  th:href="@{/trips/drivers/active}" class="btn btn-lg btn-red aligncenter width-300">Find passengers</a>
+            <a sec:authorize="hasAuthority('DRIVER')"  th:href="@{/trips/drivers/available}" class="btn btn-lg btn-red aligncenter width-300">Find passengers</a>
 
         </div>
     </div>

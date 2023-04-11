@@ -1,11 +1,8 @@
 package com.havryliuk.controller;
 
-import com.havryliuk.dto.NewBalanceDto;
 import com.havryliuk.dto.PageWrapper;
-import com.havryliuk.dto.trips.TripDtoForDriver;
-import com.havryliuk.dto.trips.TripDtoForDriverDetailed;
-import com.havryliuk.dto.trips.TripDtoForPassenger;
-import com.havryliuk.dto.trips.TripDtoForUser;
+import com.havryliuk.dto.trips.*;
+import com.havryliuk.exceptions.PaymentException;
 import com.havryliuk.model.CarClass;
 import com.havryliuk.model.Trip;
 import com.havryliuk.model.*;
@@ -66,7 +63,7 @@ public class TripController {
         }
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         tripService.save(trip, user);
-        modelAndView.setViewName("redirect:/trips/users/all");
+        modelAndView.setViewName("redirect:/trips/passengers/all");
         return modelAndView;
     }
 
@@ -76,164 +73,275 @@ public class TripController {
         modelAndView.setViewName("get-taxi");
     }
 
-
-    @PreAuthorize("hasRole('ROLE_PASSENGER')")
-    @GetMapping("/users/all")
+    @PreAuthorize("hasAuthority('PASSENGER')")
+    @GetMapping("/passengers/all")
     public ModelAndView allUserTrips(ModelAndView modelAndView) {
         return allUserTripsPaginated(INITIAL_PAGE_NUMBER, NUMBER_OF_ITEMS_PER_PAGE, modelAndView);
     }
 
 
-    @PreAuthorize("hasRole('ROLE_PASSENGER')")
-    @GetMapping("/users/all/{currentPageNo}/{size}")
+    @PreAuthorize("hasAuthority('PASSENGER')")
+    @GetMapping("/passengers/all/{currentPageNo}/{size}")
     public ModelAndView allUserTripsPaginated(
                                  @PathVariable int currentPageNo,
                                  @PathVariable int size,
                                  ModelAndView modelAndView) {
-        log.trace("/users/all/{currentPageNo}/{size}");
-        String requestURI = "/trips/users/all";//todo think of getting from request (then will need to get rid of PathVariables)
+        log.trace("/passengers/all/{currentPageNo}/{size}");
+        String requestURI = "/trips/passengers/all";//todo think of getting from request (then will need to get rid of PathVariables)
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();//todo think to reuse of code
         Pageable pageable = PageRequest.of(currentPageNo - 1, size);
-        Page<TripDtoForPassenger> tripsPage = tripService.getAllByUser(user, pageable);
-        PageWrapper<TripDtoForPassenger> page = new PageWrapper<>(tripsPage, currentPageNo, size, requestURI);
-        setModelAttributesForPassengerTripPages(modelAndView, page);
+        Page<TripDtoForPassengerPage> tripsPage = tripService.getAllByPassenger(user, pageable);
+        PageWrapper<TripDtoForPassengerPage> page = new PageWrapper<>(tripsPage, currentPageNo, size, requestURI);
+        setModelAttributesForAccountTripPages(modelAndView, page);
         modelAndView.addObject("subPage", "All trips");
         return modelAndView;
     }
 
-    @PreAuthorize("hasRole('ROLE_PASSENGER')")
-    @GetMapping("/users/active")
+    @PreAuthorize("hasAuthority('PASSENGER')")
+    @GetMapping("/passengers/active")
     public ModelAndView activeUserTrips(ModelAndView modelAndView) {
         return activeUserTripsPaginated(INITIAL_PAGE_NUMBER, NUMBER_OF_ITEMS_PER_PAGE, modelAndView);
     }
 
 
-    @PreAuthorize("hasRole('ROLE_PASSENGER')")
-    @GetMapping("/users/active/{currentPageNo}/{size}")
+    @PreAuthorize("hasAuthority('PASSENGER')")
+    @GetMapping("/passengers/active/{currentPageNo}/{size}")
     public ModelAndView activeUserTripsPaginated(
             @PathVariable int currentPageNo,
             @PathVariable int size,
             ModelAndView modelAndView) {
-        log.trace("/users/active/{currentPageNo}/{size}");
-        String requestURI = "/trips/users/active";
+        log.trace("/passengers/active/{currentPageNo}/{size}");
+        String requestURI = "/trips/passengers/active";
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Pageable pageable = PageRequest.of(currentPageNo - 1, size);
-        Page<TripDtoForPassenger> tripsPage = tripService.getActiveByUser(user, pageable);
-        PageWrapper<TripDtoForPassenger> page = new PageWrapper<>(tripsPage, currentPageNo, size, requestURI);
-        setModelAttributesForPassengerTripPages(modelAndView, page);
+        Page<TripDtoForPassengerPage> tripsPage = tripService.getActiveByPassenger(user, pageable);
+        PageWrapper<TripDtoForPassengerPage> page = new PageWrapper<>(tripsPage, currentPageNo, size, requestURI);
+        setModelAttributesForAccountTripPages(modelAndView, page);
         modelAndView.addObject("subPage", "Active trips");
         return modelAndView;
     }
 
 
-    @PreAuthorize("hasRole('ROLE_PASSENGER')")
-    @GetMapping("/users/past")
+    @PreAuthorize("hasAuthority('PASSENGER')")
+    @GetMapping("/passengers/past")
     public ModelAndView pastUserTrips(ModelAndView modelAndView) {
         return pastUserTripsPaginated(INITIAL_PAGE_NUMBER, NUMBER_OF_ITEMS_PER_PAGE, modelAndView);
     }
 
 
-    @PreAuthorize("hasRole('ROLE_PASSENGER')")
-    @GetMapping("/users/past/{currentPageNo}/{size}")
+    @PreAuthorize("hasAuthority('PASSENGER')")
+    @GetMapping("/passengers/past/{currentPageNo}/{size}")
     public ModelAndView pastUserTripsPaginated(
             @PathVariable int currentPageNo,
             @PathVariable int size,
             ModelAndView modelAndView) {
-        log.trace("/users/past/{currentPageNo}/{size}");
-        String requestURI = "/trips/users/past";
+        log.trace("/passengers/past/{currentPageNo}/{size}");
+        String requestURI = "/trips/passengers/past";
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Pageable pageable = PageRequest.of(currentPageNo - 1, size);
-        Page<TripDtoForPassenger> tripsPage = tripService.getPastByUser(user, pageable);
-        PageWrapper<TripDtoForPassenger> page = new PageWrapper<>(tripsPage, currentPageNo, size, requestURI);
-        setModelAttributesForPassengerTripPages(modelAndView, page);
+        Page<TripDtoForPassengerPage> tripsPage = tripService.getPastByPassenger(user, pageable);
+        PageWrapper<TripDtoForPassengerPage> page = new PageWrapper<>(tripsPage, currentPageNo, size, requestURI);
+        setModelAttributesForAccountTripPages(modelAndView, page);
         modelAndView.addObject("subPage", "Past trips");
         return modelAndView;
     }
 
-    private void setModelAttributesForPassengerTripPages(
-            ModelAndView modelAndView, PageWrapper<? extends TripDtoForUser> page) {
-        modelAndView.addObject("page", page);
-//        modelAndView.addObject("user", user);
-        modelAndView.addObject("activePage", "myAccount");
-        modelAndView.setViewName("trips/passenger-trips");;
 
-    }
-
-
-    @PreAuthorize("hasRole('ROLE_DRIVER')")
-    @GetMapping("/drivers/active")
+    @PreAuthorize("hasAuthority('DRIVER')")
+    @GetMapping("/drivers/available")
     public ModelAndView allActiveTrips(ModelAndView modelAndView) {
         return allActiveTripsPaginated(INITIAL_PAGE_NUMBER, NUMBER_OF_ITEMS_PER_PAGE, modelAndView);
     }
 
-    @PreAuthorize("hasRole('ROLE_DRIVER')")
-    @GetMapping("/drivers/active/{currentPageNo}/{size}")
+    @PreAuthorize("hasAuthority('DRIVER')")
+    @GetMapping("/drivers/available/{currentPageNo}/{size}")
     public ModelAndView allActiveTripsPaginated(
+            @PathVariable int currentPageNo,
+            @PathVariable int size,
+            ModelAndView modelAndView) {
+        log.trace("/drivers/available/{currentPageNo}/{size}");
+        String requestURI = "/trips/drivers/available";
+        final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        CarClass carClass = ((Driver) user).getCar().getCarClass();
+        Pageable pageable = PageRequest.of(currentPageNo - 1, size);
+        Page<TripDtoShortInfo> tripsPage = tripService.getAllNew(carClass, pageable);
+        PageWrapper<TripDtoShortInfo> page = new PageWrapper<>(tripsPage, currentPageNo, size, requestURI);
+        setModelAttributesForGetPassengerPages(modelAndView, page);
+        modelAndView.addObject("subPage", "Past trips");
+        return modelAndView;
+    }
+
+
+
+    @PreAuthorize("hasAuthority('DRIVER')")
+    @GetMapping("/drivers/details/{id}")
+    public ModelAndView getTrip(
+            @PathVariable String id,
+            ModelAndView modelAndView) {
+        log.trace("/drivers/details/{id}");
+        TripDtoForDriverDetailed trip = tripService.getDtoById(id);
+        final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        modelAndView.addObject("trip", trip);
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("activePage", "Find passengers");
+        modelAndView.setViewName("trips/take-passenger");;
+        return modelAndView;
+    }
+
+
+    @PreAuthorize("hasAuthority('DRIVER')")
+    @PutMapping ("/drivers/take/{id}")
+    public ModelAndView setDriver(@PathVariable String id, TripDtoForDriverDetailed tripDto,
+                                  ModelAndView modelAndView) {
+        log.trace("setDriver");
+        final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Trip trip = tripService.getById(id);
+        tripService.saveDriverAndTaxiLocation(trip, user, tripDto.getTaxiLocationAddress());
+        modelAndView.setViewName("redirect:/trips/drivers/active");
+        return modelAndView;
+    }
+
+
+    @PreAuthorize("hasAuthority('DRIVER')")
+    @GetMapping("/drivers/all")
+    public ModelAndView allDriverTrips(ModelAndView modelAndView) {
+        return allDriverTripsPaginated(INITIAL_PAGE_NUMBER, NUMBER_OF_ITEMS_PER_PAGE, modelAndView);
+    }
+
+
+    @PreAuthorize("hasAuthority('DRIVER')")
+    @GetMapping("/drivers/all/{currentPageNo}/{size}")
+    public ModelAndView allDriverTripsPaginated(
+            @PathVariable int currentPageNo,
+            @PathVariable int size,
+            ModelAndView modelAndView) {
+        log.trace("/drivers/all/{currentPageNo}/{size}");
+        String requestURI = "/trips/drivers/all";
+        final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Pageable pageable = PageRequest.of(currentPageNo - 1, size);
+        Page<TripDtoForDriverPage> tripsPage = tripService.getAllByDriver(user, pageable);
+        PageWrapper<TripDtoForDriverPage> page = new PageWrapper<>(tripsPage, currentPageNo, size, requestURI);
+        setModelAttributesForAccountTripPages(modelAndView, page);
+        modelAndView.addObject("subPage", "All trips");
+        return modelAndView;
+    }
+
+
+    @PreAuthorize("hasAuthority('DRIVER')")
+    @GetMapping("/drivers/active")
+    public ModelAndView activeDriverTrips(ModelAndView modelAndView) {
+        return activeDriverTripsPaginated(INITIAL_PAGE_NUMBER, NUMBER_OF_ITEMS_PER_PAGE, modelAndView);
+    }
+
+
+    @PreAuthorize("hasAuthority('DRIVER')")
+    @GetMapping("/drivers/active/{currentPageNo}/{size}")
+    public ModelAndView activeDriverTripsPaginated(
             @PathVariable int currentPageNo,
             @PathVariable int size,
             ModelAndView modelAndView) {
         log.trace("/drivers/active/{currentPageNo}/{size}");
         String requestURI = "/trips/drivers/active";
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        CarClass carClass = ((Driver) user).getCar().getCarClass();
         Pageable pageable = PageRequest.of(currentPageNo - 1, size);
-        Page<TripDtoForDriver> tripsPage = tripService.getAllNew(carClass, pageable);
-        PageWrapper<TripDtoForDriver> page = new PageWrapper<>(tripsPage, currentPageNo, size, requestURI);
-        setModelAttributesForDriverTripPages(modelAndView, page);
+        Page<TripDtoForDriverPage> tripsPage = tripService.getActiveByDriver(user, pageable);
+        PageWrapper<TripDtoForDriverPage> page = new PageWrapper<>(tripsPage, currentPageNo, size, requestURI);
+        setModelAttributesForAccountTripPages(modelAndView, page);
+        modelAndView.addObject("subPage", "Active trips");
+        return modelAndView;
+    }
+
+    @PreAuthorize("hasAuthority('DRIVER')")
+    @GetMapping("/drivers/past")
+    public ModelAndView pastDriverTrips(ModelAndView modelAndView) {
+        return pastDriverTripsPaginated(INITIAL_PAGE_NUMBER, NUMBER_OF_ITEMS_PER_PAGE, modelAndView);
+    }
+
+
+    @PreAuthorize("hasAuthority('DRIVER')")
+    @GetMapping("/drivers/past/{currentPageNo}/{size}")
+    public ModelAndView pastDriverTripsPaginated(
+            @PathVariable int currentPageNo,
+            @PathVariable int size,
+            ModelAndView modelAndView) {
+        log.trace("/drivers/past/{currentPageNo}/{size}");
+        String requestURI = "/trips/drivers/past";
+        final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Pageable pageable = PageRequest.of(currentPageNo - 1, size);
+        Page<TripDtoForDriverPage> tripsPage = tripService.getPastByDriver(user, pageable);
+        PageWrapper<TripDtoForDriverPage> page = new PageWrapper<>(tripsPage, currentPageNo, size, requestURI);
+        setModelAttributesForAccountTripPages(modelAndView, page);
         modelAndView.addObject("subPage", "Past trips");
         return modelAndView;
     }
 
-    private void setModelAttributesForDriverTripPages(
-            ModelAndView modelAndView, PageWrapper<? extends TripDtoForUser> page) {
+
+    @PreAuthorize("hasAuthority('DRIVER')")
+    @GetMapping("/drivers/manage/{id}")
+    public ModelAndView tripDriverDetailsPage(@PathVariable String id, ModelAndView modelAndView) {
+        log.trace("/drivers/manage/{id}");
+        setModelAttributesForDriverTripDetailsPage(id, modelAndView);
+        return modelAndView;
+    }
+
+    @PreAuthorize("hasAuthority('DRIVER')")
+    @PutMapping ("/drivers/start/{id}")
+    public ModelAndView startTrip(@PathVariable String id, ModelAndView modelAndView) {
+        log.trace("/drivers/start/{id}");
+        tripService.setStatusDrivingById(id);
+        setModelAttributesForDriverTripDetailsPage(id, modelAndView);
+        return modelAndView;
+    }
+
+    @PreAuthorize("hasAuthority('DRIVER')")
+    @PutMapping ("/drivers/complete/{id}")
+    public ModelAndView completeTrip(@PathVariable String id, ModelAndView modelAndView) {
+        log.trace("/drivers/complete/{id}");
+        try {
+            tripService.setStatusCompletedById(id);
+        } catch (PaymentException e) {
+            modelAndView.addObject("errorMessage", e.getMessage());
+            setModelAttributesForDriverTripDetailsPage(id, modelAndView);
+            return modelAndView;
+        }
+        modelAndView.setViewName("redirect:/trips/drivers/all");
+        return modelAndView;
+    }
+
+    @PreAuthorize("hasAuthority('PASSENGER')")
+    @GetMapping("/passengers/manage/{id}")
+    public ModelAndView tripPassengerDetailsPage(@PathVariable String id, ModelAndView modelAndView) {
+        log.trace("/passengers/manage/{id}");
+        setModelAttributesForPassengerTripDetailsPage(id, modelAndView);
+        return modelAndView;
+    }
+
+    private void setModelAttributesForPassengerTripDetailsPage(String id, ModelAndView modelAndView) {
+        TripDtoForPassengerPage trip = tripService.getDtoFoPassengerById(id);
+        modelAndView.addObject("trip", trip);
+        modelAndView.setViewName("trips/trip-details");
+    }
+
+    private void setModelAttributesForDriverTripDetailsPage(String id, ModelAndView modelAndView) {
+        TripDtoForDriverPage trip = tripService.getDtoForDriverById(id);
+        String nextPossibleAction = tripService.getNextActionDependingOnStatus(trip.getTripStatus());
+        modelAndView.addObject("trip", trip);
+        modelAndView.addObject("action", nextPossibleAction);
+        modelAndView.setViewName("trips/trip-details");
+    }
+
+    private void setModelAttributesForAccountTripPages(
+            ModelAndView modelAndView, PageWrapper<? extends TripDtoShortInfo> page) {
         modelAndView.addObject("page", page);
-//        modelAndView.addObject("user", user);
+        modelAndView.addObject("activePage", "myAccount");
+        modelAndView.setViewName("trips/user-trips");;
+    }
+
+    private void setModelAttributesForGetPassengerPages(
+            ModelAndView modelAndView, PageWrapper<? extends TripDtoShortInfo> page) {
+        modelAndView.addObject("page", page);
         modelAndView.addObject("activePage", "Find passengers");
         modelAndView.setViewName("trips/find-passengers");;
-
     }
-
-    @PreAuthorize("hasRole('ROLE_DRIVER')")//TODO doesn't work try set Authorities
-    @GetMapping("/drivers/details/{id}")
-    public ModelAndView getTrip(
-            @PathVariable String id,
-            ModelAndView modelAndView) {
-        log.trace("/drivers/details/{id}");
-//        Trip trip = tripService.getById(id);
-        TripDtoForDriverDetailed trip = tripService.getDtoById(id);
-        final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-//        int passengerAge = userService.getUserAge(trip.getPassenger());
-        int passengerAge = userService.getUserAge(trip.getPassengerBirthDate());
-//        int passengerAge = userService.getUserAge(trip.getPassenger());
-
-        modelAndView.addObject("trip", trip);
-        modelAndView.addObject("user", user);
-        modelAndView.addObject("passengerAge", passengerAge);
-        modelAndView.addObject("activePage", "Find passengers");
-        modelAndView.setViewName("trips/take-passenger");;
-
-        return modelAndView;
-    }
-
-
-
-    @PreAuthorize("hasRole('ROLE_DRIVER')")
-    @PutMapping
-    public ModelAndView setDriver(TripDtoForDriverDetailed tripDto, Errors errors, ModelAndView modelAndView) {
-            log.trace("setDriver");
-
-        if (tripDto.getId() == null) {
-           throw new IllegalArgumentException("Something went wrong. Try again later.");
-        }
-        // Якщо немає адреси то не надсилати її в гугл сервіс. Зберігати без неї
-        final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Trip trip = tripService.getById(tripDto.getId());
-        tripService.saveDriverAndTaxiLocation(trip, user, tripDto.getTaxiLocationAddress());
-        modelAndView.setViewName("redirect:/drivers/details/" + tripDto.getId());//todo change
-        return modelAndView;
-    }
-
-
 
 }

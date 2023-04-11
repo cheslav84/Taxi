@@ -26,12 +26,10 @@
 		</div>
 	</header>
 
-
-
 	<div class="container">
 		<div class="inner inner-two-col row">
 			<div class="col-lg-8 text-page">
-				<h4 class="margin-top-0 ">My data</h4>
+				<h4 class="margin-top-0 ">My balance</h4>
 				<hr class="lg">	
 				<div class="row">
 					<div class="col-md-6">
@@ -46,16 +44,31 @@
 					</div>
 				</div>
 
-				<form th:action="@{/users/balance/recharge}" th:method="put" th:object="${newBalanceDTO}">
+				<form sec:authorize="hasAuthority('PASSENGER')" th:action="@{/balance/recharge}" 
+					th:method="put" th:object="${newBalanceDTO}">
 					<div class="form-group">
 						<label>Recharge my balance <span class="red">*</span></label>
-						<input type="number" th:field="*{rechargeValue}" placeholder="1.0" step="0.01" min="0" max="2000">
-						<div class="validationError" th:if="${#fields.hasErrors('rechargeValue')}"
-							th:errors="*{rechargeValue}">Balance error</div>
+						<input type="number" th:field="*{value}" placeholder="1.0" step="0.01" min="0">
+						<div class="validationError" th:if="${#fields.hasErrors('value')}"
+							th:errors="*{value}">Balance error</div>
 					</div>
 					<input type="submit" value="Recharge" class="btn btn-yellow aligncenter btn-lg">
 				</form>
-	
+
+				<form sec:authorize="hasAuthority('DRIVER')" th:action="@{/balance/withdraw}" 
+					th:method="put" th:object="${newBalanceDTO}">
+					<div class="form-group">
+						<label>Withdraw my funds <span class="red">*</span></label>
+						<input type="number" th:field="*{value}" placeholder="1.0" step="0.01" min="0">
+						<div class="validationError" th:if="${#fields.hasErrors('value')}"
+							th:errors="*{value}">Balance error</div>
+					</div>
+					<div th:if="${errorMessage}" class="alert alert-black" >
+						<div class="header"><span class="fa fa-info-circle"></span>Warning</div>
+						<p th:text="${errorMessage}"></p>
+					</div>
+					<input type="submit" value="Withdraw" class="btn btn-yellow aligncenter btn-lg">
+				</form>
 			</div>
 
 			<div class="col-lg-4">
