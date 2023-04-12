@@ -6,15 +6,16 @@ import com.havryliuk.dto.trips.TripDtoForDriverDetailed;
 import com.havryliuk.dto.trips.TripDtoForPassengerPage;
 import com.havryliuk.exceptions.PaymentException;
 import com.havryliuk.model.*;
-import com.havryliuk.repository.TariffsRepository;
 import com.havryliuk.repository.TripRepository;
 import com.havryliuk.util.google.map.GoogleService;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -25,32 +26,36 @@ import java.util.Optional;
 @Service
 public class TripService {
 
-
     private final AddressService addressService;
     private final GoogleService googleService;
     private final TripRepository repository;
-    private final TariffsRepository tariffsRepository;
+
+    private final PaymentService paymentService;
+//
+//    private final TariffsRepository tariffsRepository;
 
 
     @Autowired
     public TripService(AddressService addressService, GoogleService googleService,
-                       TripRepository repository, TariffsRepository tariffsRepository) {
+                       TripRepository repository, PaymentService paymentService) {
         this.addressService = addressService;
         this.googleService = googleService;
         this.repository = repository;
-        this.tariffsRepository = tariffsRepository;
+        this.paymentService = paymentService; // todo move to payment service
     }
-
-//    @Autowired
-//    public TripService(GoogleService googleService, TripRepository repository) {
-//        this.googleService = googleService;
-//        this.repository = repository;
-//    }
-
-
 
     public Trip getById (String id) {
         return repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Such trip hasn't been found"));
+    }
+
+    @Transactional
+    public void payForTrip(User user, String tripId) throws PaymentException {
+        Trip trip = getById(tripId);
+        CompanyBalance companyBalance = paymentService.getCompanyBalance();
+        paymentService.setPaymentPrices(user, trip, companyBalance);
+        trip.setPaymentStatus(PaymentStatus.PAID);
+        paymentService.saveCompanyBalance(companyBalance);
+        repository.save(trip);
     }
 
     public TripDtoForDriverDetailed getDtoById (String id) {
@@ -89,10 +94,10 @@ public class TripService {
     }
 
 
-
     private void setPrice(Trip trip) {//todo think of move to separate class ()
-        Tariffs tariff = tariffsRepository.getTariffByCarClass(trip.getCarClass());
+        Tariffs tariff = paymentService.getTariffByCarClass(trip.getCarClass());
         BigDecimal pricePerKilometer = tariff.getPricePerKilometer();
+
         long distanceInMeters = trip.getDistanceInMeters();
         BigDecimal distance = BigDecimal.valueOf(distanceInMeters);
         BigDecimal distanceInKilometers = distance.divide(BigDecimal.valueOf(1000), 2, RoundingMode.HALF_UP);
@@ -217,15 +222,20 @@ public class TripService {
     }
 
     private void setDriversFunds(TripDtoForDriverPage trip) {
-        Tariffs tariffs = tariffsRepository.getTariffByCarClass(trip.getCarClass());
-        BigDecimal driverPartInPercent = BigDecimal.valueOf(tariffs.getDriverPartInPercent());
-        BigDecimal price = trip.getPrice();
-        BigDecimal driverFunds = price
-                .multiply(driverPartInPercent)
-                .divide(BigDecimal.valueOf(100),2, RoundingMode.HALF_UP);
+        BigDecimal tripPrice = trip.getPrice();
+        Tariffs tariffs = paymentService.getTariffByCarClass(trip.getCarClass());
+        BigDecimal driverFunds = paymentService.getDriverPart(tripPrice, tariffs);
         trip.setDriverFunds(driverFunds);
     }
 
+    @NotNull
+    private BigDecimal getBigDecimal(TripDtoForDriverPage trip, Tariffs tariffs) {
+        BigDecimal driverPartInPercent = BigDecimal.valueOf(tariffs.getDriverPartInPercent());
+        BigDecimal price = trip.getPrice();
+        return price
+                .multiply(driverPartInPercent)
+                .divide(BigDecimal.valueOf(100),2, RoundingMode.HALF_UP);
+    }
 
 
     private void setPassengersAge(Page<TripDtoForDriverPage> trips) {

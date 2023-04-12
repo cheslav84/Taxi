@@ -56,40 +56,40 @@ public class UserService implements UserDetailsService, UserResource {
     }
 
 
-    public void recharge(User user, BigDecimal rechargeValue) {
-        setNewBalanceIfNotManager(user, rechargeValue);
-        repository.save(user);
-    }
+//    public void recharge(User user, BigDecimal rechargeValue) {
+//        setNewBalanceIfNotManager(user, rechargeValue);
+//        repository.save(user);
+//    }
 
-    public void withdraw(User user, BigDecimal rechargeValue) throws PaymentException {
-        isUserHasRequiredValue(user, rechargeValue);
-        setNewBalanceIfNotManager(user, rechargeValue);
-        repository.save(user);
-    }
+//    public void withdraw(User user, BigDecimal rechargeValue) throws PaymentException {
+//        isUserHasRequiredValue(user, rechargeValue);
+//        setNewBalanceIfNotManager(user, rechargeValue);
+//        repository.save(user);
+//    }
 
-    private void setNewBalanceIfNotManager(User user, BigDecimal rechargeValue) {
-        switch (user.getRole()) {
-            case PASSENGER -> {
-                BigDecimal balance = ((Passenger) user).getBalance();
-                balance = balance.add(rechargeValue);
-                ((Passenger) user).setBalance(balance);
-            }
-            case DRIVER -> {
-                BigDecimal balance = ((Driver) user).getBalance();
-                balance = balance.remainder(rechargeValue);
-                ((Driver) user).setBalance(balance);
-            }
-        }
-    }
+//    private void setNewBalanceIfNotManager(User user, BigDecimal rechargeValue) {
+//        switch (user.getRole()) {
+//            case PASSENGER -> {
+//                BigDecimal balance = ((Passenger) user).getBalance();
+//                balance = balance.add(rechargeValue);
+//                ((Passenger) user).setBalance(balance);
+//            }
+//            case DRIVER -> {
+//                BigDecimal balance = ((Driver) user).getBalance();
+//                balance = balance.remainder(rechargeValue);
+//                ((Driver) user).setBalance(balance);
+//            }
+//        }
+//    }
 
-    public void isUserHasRequiredValue(User user, BigDecimal rechargeValue) throws PaymentException {
-        BigDecimal currentBalance = ((Driver) user).getBalance();
-        if (rechargeValue.compareTo(currentBalance) > 0) {
-            String message = "The there are not enough funds in the account.";
-            log.warn(message);
-            throw new PaymentException(message);
-        }
-    }
+//    public void isUserHasRequiredValue(User user, BigDecimal rechargeValue) throws PaymentException {
+//        BigDecimal currentBalance = ((Driver) user).getBalance();
+//        if (rechargeValue.compareTo(currentBalance) > 0) {
+//            String message = "The there are not enough funds in the account.";
+//            log.warn(message);
+//            throw new PaymentException(message);
+//        }
+//    }
 
     private void setInitialBalanceIfNotManager(User user) {
         switch (user.getRole()) {

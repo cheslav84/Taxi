@@ -5153,6 +5153,10 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   line-height: 1.38em;
 }
 
+.edit-form form {
+  padding: 0;
+}
+
 
 /* .margin-0 {
   margin: 0 !important;

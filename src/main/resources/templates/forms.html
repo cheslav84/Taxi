@@ -10,24 +10,30 @@
 			<div th:replace="/forms :: driver-item"></div>
 			<div th:replace="/forms :: car-item"></div>
 			<div th:replace="/forms :: wait-time-item"></div>
+			<div th:replace="/forms :: fare-item"></div>
 			<div th:replace="/forms :: payment-status-item"></div>
 			<div th:replace="/forms :: error-message-item"></div>
 
 		</div>
 
-		<a th:href="@{/trips/passengers/pay/__${trip.id}__}" 
-		class="btn btn-lg btn-black btn-white aligncenter width-300 highlight-height">Pay for trip</a>
+		<form th:if="${trip.paymentStatus != T(com.havryliuk.model.PaymentStatus).PAID}" 
+			th:action="@{/trips/pay/__${trip.id}__}" th:method="put" >
+			<input type="submit" value="Pay for trip" class="btn btn-lg btn-black btn-white aligncenter width-300">		
+		</form>
 
-		<a th:href="@{/trips/passengers/update/__${trip.id}__}" 
-		class="btn btn-lg btn-black btn-white aligncenter width-300 highlight-height">Update trip</a>
-
-		<a th:href="@{/trips/passengers/update/__${trip.id}__}" 
-		class="btn btn-lg btn-black btn-white aligncenter width-300 highlight-height">Cancel trip</a>
-
+		<div th:if="${trip.tripStatus == T(com.havryliuk.model.TripStatus).NEW  
+				or trip.tripStatus == T(com.havryliuk.model.TripStatus).OFFERED}">
+			<form th:action="@{/trips/passengers/update/__${trip.id}__}" th:method="put" >
+				<input type="submit" value="Update trip" class="btn btn-lg btn-black btn-white aligncenter width-300">		
+			</form>
+			<form th:action="@{/trips/passengers/delete/__${trip.id}__}" th:method="delete" >
+				<input type="submit" value="Cancel trip" class="btn btn-lg btn-black btn-white aligncenter width-300">		
+			</form>
+		</div>
 </div>
 
 
-<form th:fragment="trip-driver-managing"  class="no-float"
+<form th:fragment="trip-driver-managing" class="no-float"
 	th:action="@{/trips/drivers/__${action}__/__${trip.id}__}" th:method="put" th:object="${trip}">
 	<div class="col-lg-12 text-page">
 		<h4 class="margin-top-0 ">Trip details</h4>
