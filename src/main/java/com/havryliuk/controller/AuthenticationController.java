@@ -25,6 +25,7 @@ public class AuthenticationController {
     private final UserFromDtoMapper mapper;
     private final UserService userService;
 
+    @SuppressWarnings("unused")
     @Autowired
     public AuthenticationController(UserFromDtoMapper mapper, UserService userService) {
         this.mapper = mapper;

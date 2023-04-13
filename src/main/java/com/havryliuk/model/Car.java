@@ -24,9 +24,6 @@ public class Car {
     @NotNull
     private String model;
 
-//    @NotNull
-//    private String color;
-
     @NotNull
     @Column(unique=true)
     private String number;

@@ -1,6 +1,5 @@
 package com.havryliuk.util.validators.annotations;
 
-import com.havryliuk.util.validators.EmailValidator;
 import com.havryliuk.util.validators.PhoneValidator;
 
 import javax.validation.Constraint;

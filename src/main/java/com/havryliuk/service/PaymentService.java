@@ -87,21 +87,6 @@ public class PaymentService {
     }
 
 
-//    private void setNewBalanceIfNotManager(User user, BigDecimal rechargeValue) {
-//        switch (user.getRole()) {
-//            case PASSENGER -> {
-//                BigDecimal balance = ((Passenger) user).getBalance();
-//                balance = balance.add(rechargeValue);
-//                ((Passenger) user).setBalance(balance);
-//            }
-//            case DRIVER -> {
-//                BigDecimal balance = ((Driver) user).getBalance();
-//                balance = balance.remainder(rechargeValue);
-//                ((Driver) user).setBalance(balance);
-//            }
-//        }
-//    }
-
     private void checkIfNotPaid(Trip trip) throws PaymentException {
         if(trip.getPaymentStatus().equals(PaymentStatus.PAID)) {
             String message = "Trip has already paid.";

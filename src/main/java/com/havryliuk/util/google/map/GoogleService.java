@@ -26,18 +26,6 @@ public class GoogleService {
         address.setLongitude(location.lng);
     }
 
-//    public void setDistanceAndDuration(Trip trip) {
-//        try {
-//            DistanceAndDuration distanceAndDuration = resolver.getDistanceAndDuration(trip);
-//            long distanceInMeters = distanceAndDuration.getDistance().inMeters;
-//            long durationInSeconds = distanceAndDuration.getDuration().inSeconds;
-//            trip.setDistanceInMeters(distanceInMeters);
-//            trip.setDurationInSeconds(durationInSeconds);
-//        } catch (Exception e) {
-//            log.warn("Unable to get distance, location, or both.", e);
-//        }
-//    }
-
     public void setDistanceAndDuration(Trip trip) {
         try {
             DistanceAndDuration distanceAndDuration = resolver.getDistanceAndDuration(

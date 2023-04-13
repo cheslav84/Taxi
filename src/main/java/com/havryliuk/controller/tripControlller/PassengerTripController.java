@@ -2,8 +2,6 @@ package com.havryliuk.controller.tripControlller;
 
 import com.havryliuk.dto.PageWrapper;
 import com.havryliuk.dto.trips.*;
-import com.havryliuk.model.CarClass;
-import com.havryliuk.model.Trip;
 import com.havryliuk.model.*;
 
 import com.havryliuk.service.PaymentService;
@@ -226,7 +224,7 @@ public class PassengerTripController {
             ModelAndView modelAndView, PageWrapper<? extends TripDtoShortInfo> page) {
         modelAndView.addObject("page", page);
         modelAndView.addObject("activePage", "myAccount");
-        modelAndView.setViewName("trips/user-trips");;
+        modelAndView.setViewName("trips/user-trips");
     }
 
 

@@ -34,9 +34,6 @@ public class PaymentController {
         this.passengerTripService = passengerTripService;
     }
 
-
-
-//    @PreAuthorize("hasAuthority('PASSENGER')")
     @GetMapping("/balance")
     public ModelAndView userBalance(ModelAndView modelAndView) {
         log.trace("user balance page");

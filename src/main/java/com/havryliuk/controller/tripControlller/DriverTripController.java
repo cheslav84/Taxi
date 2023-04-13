@@ -4,7 +4,7 @@ import com.havryliuk.dto.PageWrapper;
 import com.havryliuk.dto.trips.*;
 import com.havryliuk.exceptions.PaymentException;
 import com.havryliuk.model.*;
-import com.havryliuk.service.PaymentService;
+
 import com.havryliuk.service.tripService.DriverTripService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +26,7 @@ public class DriverTripController {
     private static final int INITIAL_PAGE_NUMBER = 1;//todo set size in user page and cookies
     private static final int NUMBER_OF_ITEMS_PER_PAGE = 4;
     private final DriverTripService driverTripService;
-//    private final PaymentService paymentService;
 
-//    @Autowired
-//    public DriverTripController(DriverTripService driverTripService, PaymentService paymentService) {
-//        this.driverTripService = driverTripService;
-//        this.paymentService = paymentService;
-//    }
 
     @Autowired
     public DriverTripController(DriverTripService driverTripService) {
@@ -76,7 +70,7 @@ public class DriverTripController {
         modelAndView.addObject("trip", trip);
         modelAndView.addObject("user", user);
         modelAndView.addObject("activePage", "Find passengers");
-        modelAndView.setViewName("trips/take-passenger");;
+        modelAndView.setViewName("trips/take-passenger");
         return modelAndView;
     }
 
@@ -214,14 +208,14 @@ public class DriverTripController {
             ModelAndView modelAndView, PageWrapper<? extends TripDtoShortInfo> page) {
         modelAndView.addObject("page", page);
         modelAndView.addObject("activePage", "myAccount");
-        modelAndView.setViewName("trips/user-trips");;
+        modelAndView.setViewName("trips/user-trips");
     }
 
     private void setModelAttributesForGetPassengerPages(
             ModelAndView modelAndView, PageWrapper<? extends TripDtoShortInfo> page) {
         modelAndView.addObject("page", page);
         modelAndView.addObject("activePage", "Find passengers");
-        modelAndView.setViewName("trips/find-passengers");;
+        modelAndView.setViewName("trips/find-passengers");
     }
 
 }
