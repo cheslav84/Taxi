@@ -21,7 +21,7 @@ public class AddressService {
     }
 
     public Address arrangeAddress(Address originAddress) {
-        return   repository.findByAddress(originAddress.getAddress())
+        return repository.findByAddress(originAddress.getAddress())
                 .orElseGet(() -> {
                     googleService.setAddressLocation(originAddress);
                     return originAddress;

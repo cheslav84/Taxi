@@ -2,21 +2,12 @@ package com.havryliuk.dto.trips;
 
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
-//public record TripDtoForPassenger(
-// String id,
-// LocalDateTime departureDateTime,
-// String originAddress,
-// String destinationAddress,
-// String driverNameAndPhone,
-// String car,
-// String timeToTaxiArrivalInSeconds,
-// PaymentStatus paymentStatus,//todo display price in different colors
-// BigDecimal price
-//) {}
 
 @Setter
 @Getter
@@ -27,10 +18,16 @@ public class TripDtoShortInfo {
 
     private String id;
 
+    @NotNull(message="Choose the trip date please")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime departureDateTime;
 
+    @NotNull
+    @Valid
     private String originAddress;
 
+    @NotNull
+    @Valid
     private String destinationAddress;
 
     private BigDecimal price;

@@ -1,13 +1,13 @@
-package com.havryliuk.service;
+package com.havryliuk.service.tripServices;
 
-import com.havryliuk.dto.trips.TripDtoForDriverPage;
-import com.havryliuk.dto.trips.TripDtoShortInfo;
-import com.havryliuk.dto.trips.TripDtoForDriverDetailed;
-import com.havryliuk.dto.trips.TripDtoForPassengerPage;
+import com.havryliuk.dto.trips.*;
 import com.havryliuk.exceptions.PaymentException;
 import com.havryliuk.model.*;
 import com.havryliuk.repository.TripRepository;
+import com.havryliuk.service.AddressService;
+import com.havryliuk.service.PaymentService;
 import com.havryliuk.util.google.map.GoogleService;
+import com.havryliuk.util.mappers.TripUpdateMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,19 +29,21 @@ public class TripService {
     private final AddressService addressService;
     private final GoogleService googleService;
     private final TripRepository repository;
-
     private final PaymentService paymentService;
+    private final TripUpdateMapper tripUpdateMapper;
 //
 //    private final TariffsRepository tariffsRepository;
 
 
     @Autowired
     public TripService(AddressService addressService, GoogleService googleService,
-                       TripRepository repository, PaymentService paymentService) {
+                       TripRepository repository, PaymentService paymentService,
+                       TripUpdateMapper tripUpdateMapper) {
         this.addressService = addressService;
         this.googleService = googleService;
         this.repository = repository;
-        this.paymentService = paymentService; // todo move to payment service
+        this.paymentService = paymentService;
+        this.tripUpdateMapper = tripUpdateMapper;
     }
 
     public Trip getById (String id) {
@@ -64,6 +66,11 @@ public class TripService {
         int passengerAge = getAgeFromBirthData(trip.getPassengerBirthDate());
         trip.setPassengerAge(passengerAge);
         return trip;
+    }
+
+    public TripDtoForPassengerUpdate getTripDtoForUserUpdateById(String id) {
+        return repository.findTripDtoForUserUpdateById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Such trip hasn't been found"));
     }
 
     public String save(Trip trip, User user) {
@@ -97,7 +104,6 @@ public class TripService {
     private void setPrice(Trip trip) {//todo think of move to separate class ()
         Tariffs tariff = paymentService.getTariffByCarClass(trip.getCarClass());
         BigDecimal pricePerKilometer = tariff.getPricePerKilometer();
-
         long distanceInMeters = trip.getDistanceInMeters();
         BigDecimal distance = BigDecimal.valueOf(distanceInMeters);
         BigDecimal distanceInKilometers = distance.divide(BigDecimal.valueOf(1000), 2, RoundingMode.HALF_UP);
@@ -107,7 +113,11 @@ public class TripService {
 
     public void deleteTrip(String id) {
         Trip trip = getById(id);
-        repository.delete(trip);
+        if (trip.getTripStatus().equals(TripStatus.NEW) || trip.getTripStatus().equals(TripStatus.OFFERED)) {
+            repository.delete(trip);
+        } else {
+            throw new UnsupportedOperationException("Finished or driving trip can't be canceled.");
+        }
     }
 
     public Page<TripDtoForPassengerPage> getAllByPassenger(User user, Pageable pageable) {
@@ -208,7 +218,12 @@ public class TripService {
     public TripDtoForDriverPage getDtoForDriverById(String id) {
         Optional<TripDtoForDriverPage> tripOptional = repository.findDtoForDriverById(id);
         TripDtoForDriverPage trip = tripOptional.orElseThrow(
-                () -> new IllegalArgumentException("Such trip has not been found. Trip id =" + id));
+                () -> {
+                    String message = "Such trip has not been found. Trip id =" + id;
+                    log.warn(message);
+                    return new IllegalArgumentException(message);
+                }
+        );
         int passengerAge = getAgeFromBirthData(trip.getPassengerBirthDate());
         trip.setPassengerAge(passengerAge);
         replaceMetersToKilometers(trip);
@@ -232,14 +247,14 @@ public class TripService {
         trip.setDriverFunds(driverFunds);
     }
 
-    @NotNull
-    private BigDecimal getBigDecimal(TripDtoForDriverPage trip, Tariffs tariffs) {
-        BigDecimal driverPartInPercent = BigDecimal.valueOf(tariffs.getDriverPartInPercent());
-        BigDecimal price = trip.getPrice();
-        return price
-                .multiply(driverPartInPercent)
-                .divide(BigDecimal.valueOf(100),2, RoundingMode.HALF_UP);
-    }
+//    @NotNull
+//    private BigDecimal getBigDecimal(TripDtoForDriverPage trip, Tariffs tariffs) {
+//        BigDecimal driverPartInPercent = BigDecimal.valueOf(tariffs.getDriverPartInPercent());
+//        BigDecimal price = trip.getPrice();
+//        return price
+//                .multiply(driverPartInPercent)
+//                .divide(BigDecimal.valueOf(100),2, RoundingMode.HALF_UP);
+//    }
 
 
     private void setPassengersAge(Page<TripDtoForDriverPage> trips) {
@@ -290,5 +305,19 @@ public class TripService {
     }
 
 
+    public void updateTrip(TripDtoForPassengerUpdate tripDto) {
+        Trip trip = getById(tripDto.getId());
+        if (tripStatusAllowsUpdateTrip(trip.getTripStatus())) {
+            tripUpdateMapper.setUpdatedValues(trip, tripDto);
+            repository.save(trip);
+        } else {
+            String message = "Finished or driving trip can't be updated.";
+            log.info(message);
+            throw new UnsupportedOperationException(message);
+        }
+    }
 
+    private boolean tripStatusAllowsUpdateTrip(TripStatus tripStatus) {
+        return tripStatus.equals(TripStatus.NEW) || tripStatus.equals(TripStatus.OFFERED);
+    }
 }

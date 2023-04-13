@@ -1,9 +1,6 @@
 package com.havryliuk.repository;
 
-import com.havryliuk.dto.trips.TripDtoForDriverPage;
-import com.havryliuk.dto.trips.TripDtoShortInfo;
-import com.havryliuk.dto.trips.TripDtoForDriverDetailed;
-import com.havryliuk.dto.trips.TripDtoForPassengerPage;
+import com.havryliuk.dto.trips.*;
 import com.havryliuk.model.CarClass;
 import com.havryliuk.model.Trip;
 import com.havryliuk.model.User;
@@ -103,6 +100,17 @@ public interface TripRepository extends PagingAndSortingRepository<Trip, String>
             """
     )
     Page<TripDtoShortInfo> findAllNewByCarClass(@Param("carClass") CarClass carClass, Pageable pageable);//todo виключити з пошуку поїздки дата яких минула
+
+
+    @Query(value = """
+            select new com.havryliuk.dto.trips.TripDtoForPassengerUpdate
+                (t.id, t.departureDateTime, t.originAddress.address,
+                 t.destinationAddress.address, t.price, t.carClass)
+            from Trip t
+            where t.id = :id
+            """
+    )
+    Optional<TripDtoForPassengerUpdate> findTripDtoForUserUpdateById(@Param("id") String ide);
 
     @Query(value = """
             select new com.havryliuk.dto.trips.TripDtoForDriverDetailed

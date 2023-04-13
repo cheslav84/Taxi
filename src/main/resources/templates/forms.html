@@ -25,7 +25,7 @@
 	</form>
 	<div th:if="${trip.tripStatus == T(com.havryliuk.model.TripStatus).NEW  
 		or trip.tripStatus == T(com.havryliuk.model.TripStatus).OFFERED}">
-		<form th:action="@{/trips/passengers/update/__${trip.id}__}" th:method="put" >
+		<form th:action="@{/trips/passengers/update-page/__${trip.id}__}" th:method="get" >
 			<input type="submit" value="Update trip" class="btn btn-lg btn-black btn-white aligncenter width-300">		
 		</form>
 		<form th:action="@{/trips/__${trip.id}__}" th:method="delete" >
@@ -76,6 +76,9 @@
 		<div class="trip-data-container">
 			<div class="large"
 				th:text="${#temporals.format(trip.departureDateTime, 'dd&#x2011MM&#x2011yyyy HH:mm')}">
+
+
+				
 			</div>
 		</div>
 	</div>

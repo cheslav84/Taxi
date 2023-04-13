@@ -87,20 +87,20 @@ public class PaymentService {
     }
 
 
-    private void setNewBalanceIfNotManager(User user, BigDecimal rechargeValue) {
-        switch (user.getRole()) {
-            case PASSENGER -> {
-                BigDecimal balance = ((Passenger) user).getBalance();
-                balance = balance.add(rechargeValue);
-                ((Passenger) user).setBalance(balance);
-            }
-            case DRIVER -> {
-                BigDecimal balance = ((Driver) user).getBalance();
-                balance = balance.remainder(rechargeValue);
-                ((Driver) user).setBalance(balance);
-            }
-        }
-    }
+//    private void setNewBalanceIfNotManager(User user, BigDecimal rechargeValue) {
+//        switch (user.getRole()) {
+//            case PASSENGER -> {
+//                BigDecimal balance = ((Passenger) user).getBalance();
+//                balance = balance.add(rechargeValue);
+//                ((Passenger) user).setBalance(balance);
+//            }
+//            case DRIVER -> {
+//                BigDecimal balance = ((Driver) user).getBalance();
+//                balance = balance.remainder(rechargeValue);
+//                ((Driver) user).setBalance(balance);
+//            }
+//        }
+//    }
 
     private void checkIfNotPaid(Trip trip) throws PaymentException {
         if(trip.getPaymentStatus().equals(PaymentStatus.PAID)) {
@@ -129,8 +129,6 @@ public class PaymentService {
     }
 
 
-
-
     private BigDecimal getUserBalance(User user) {
         switch (user.getRole()) {
             case PASSENGER -> {
@@ -151,7 +149,6 @@ public class PaymentService {
         }
     }
 
-
     public Iterable<Tariffs> findAll () {
         return tariffsRepository.findAll();
     }
@@ -161,40 +158,12 @@ public class PaymentService {
     }
 
 
-
-
-
-
-    BigDecimal getDriverPart(BigDecimal tripPrice, Tariffs tariffs) {
+    public BigDecimal getDriverPart(BigDecimal tripPrice, Tariffs tariffs) {
         BigDecimal driverPartInPercent = BigDecimal.valueOf(tariffs.getDriverPartInPercent());
         return tripPrice
                 .multiply(driverPartInPercent)
                 .divide(BigDecimal.valueOf(100),2, RoundingMode.HALF_UP);
     }
-
-//
-//    BigDecimal getDriverPart(Trip trip) {
-////    BigDecimal getDriverPart(TripDtoForDriverPage trip) {
-//
-//
-//        Tariffs tariffs = getTariffByCarClass(trip.getCarClass());
-//
-//        BigDecimal driverPartInPercent = BigDecimal.valueOf(tariffs.getDriverPartInPercent());
-//        BigDecimal price = trip.getPrice();
-//        return price
-//                .multiply(driverPartInPercent)
-//                .divide(BigDecimal.valueOf(100),2, RoundingMode.HALF_UP);
-//    }
-
-
-
-
-    //    private void setInitialBalanceIfNotManager(User user) {
-//        switch (user.getRole()) {
-//            case PASSENGER -> ((Passenger) user).setBalance(BigDecimal.ZERO);
-//            case DRIVER -> ((Driver) user).setBalance(BigDecimal.ZERO);
-//        }
-//    }
 
 
 }

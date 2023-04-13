@@ -7,8 +7,8 @@ import com.havryliuk.model.CarClass;
 import com.havryliuk.model.Trip;
 import com.havryliuk.model.*;
 
-import com.havryliuk.service.TripService;
-import com.havryliuk.service.UserService;
+import com.havryliuk.service.PaymentService;
+import com.havryliuk.service.tripServices.TripService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,16 +32,14 @@ public class TripController {
 
     private static final int INITIAL_PAGE_NUMBER = 1;//todo set size in user page and cookies
     private static final int NUMBER_OF_ITEMS_PER_PAGE = 4;
-
     private final TripService tripService;
-    private final UserService userService;
+    private final PaymentService paymentService;
 
-    //todoвказати параметри пагінації
 
     @Autowired
-    public TripController(TripService tripService, UserService userService) {
+    public TripController(TripService tripService, PaymentService paymentService) {
         this.tripService = tripService;
-        this.userService = userService;
+        this.paymentService = paymentService;
     }
 
 
@@ -68,6 +66,8 @@ public class TripController {
     }
 
     private void setModelAttributesForCreatePage(ModelAndView modelAndView) {
+        Iterable<Tariffs> tariffs = paymentService.findAll();
+        modelAndView.addObject("tariffs", tariffs);
         modelAndView.addObject("carClasses", List.of(CarClass.values()));
         modelAndView.addObject("activePage", "Get taxi");
         modelAndView.setViewName("get-taxi");
@@ -86,7 +86,7 @@ public class TripController {
                                  @PathVariable int currentPageNo,
                                  @PathVariable int size,
                                  ModelAndView modelAndView) {
-        log.trace("/passengers/all/{currentPageNo}/{size}");
+        log.trace("/passengers/all/{}/{}", currentPageNo, size);
         String requestURI = "/trips/passengers/all";//todo think of getting from request (then will need to get rid of PathVariables)
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();//todo think to reuse of code
         Pageable pageable = PageRequest.of(currentPageNo - 1, size);
@@ -110,7 +110,7 @@ public class TripController {
             @PathVariable int currentPageNo,
             @PathVariable int size,
             ModelAndView modelAndView) {
-        log.trace("/passengers/active/{currentPageNo}/{size}");
+        log.trace("/passengers/active/{}/{}", currentPageNo, size);
         String requestURI = "/trips/passengers/active";
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Pageable pageable = PageRequest.of(currentPageNo - 1, size);
@@ -135,7 +135,7 @@ public class TripController {
             @PathVariable int currentPageNo,
             @PathVariable int size,
             ModelAndView modelAndView) {
-        log.trace("/passengers/past/{currentPageNo}/{size}");
+        log.trace("/passengers/past/{}/{}", currentPageNo, size);
         String requestURI = "/trips/passengers/past";
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Pageable pageable = PageRequest.of(currentPageNo - 1, size);
@@ -159,7 +159,7 @@ public class TripController {
             @PathVariable int currentPageNo,
             @PathVariable int size,
             ModelAndView modelAndView) {
-        log.trace("/drivers/available/{currentPageNo}/{size}");
+        log.trace("/drivers/available/{}/{}", currentPageNo, size);
         String requestURI = "/trips/drivers/available";
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         CarClass carClass = ((Driver) user).getCar().getCarClass();
@@ -178,7 +178,7 @@ public class TripController {
     public ModelAndView getTrip(
             @PathVariable String id,
             ModelAndView modelAndView) {
-        log.trace("/drivers/details/{id}");
+        log.trace("/drivers/details/{}", id);
         TripDtoForDriverDetailed trip = tripService.getDtoById(id);
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         modelAndView.addObject("trip", trip);
@@ -215,7 +215,7 @@ public class TripController {
             @PathVariable int currentPageNo,
             @PathVariable int size,
             ModelAndView modelAndView) {
-        log.trace("/drivers/all/{currentPageNo}/{size}");
+        log.trace("/drivers/all/{}/{}", currentPageNo, size);
         String requestURI = "/trips/drivers/all";
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Pageable pageable = PageRequest.of(currentPageNo - 1, size);
@@ -240,7 +240,7 @@ public class TripController {
             @PathVariable int currentPageNo,
             @PathVariable int size,
             ModelAndView modelAndView) {
-        log.trace("/drivers/active/{currentPageNo}/{size}");
+        log.trace("/drivers/active/{}/{}", currentPageNo, size);
         String requestURI = "/trips/drivers/active";
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Pageable pageable = PageRequest.of(currentPageNo - 1, size);
@@ -264,7 +264,7 @@ public class TripController {
             @PathVariable int currentPageNo,
             @PathVariable int size,
             ModelAndView modelAndView) {
-        log.trace("/drivers/past/{currentPageNo}/{size}");
+        log.trace("/drivers/past/{}/{}", currentPageNo, size);
         String requestURI = "/trips/drivers/past";
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Pageable pageable = PageRequest.of(currentPageNo - 1, size);
@@ -279,7 +279,7 @@ public class TripController {
     @PreAuthorize("hasAuthority('DRIVER')")
     @GetMapping("/drivers/manage/{id}")
     public ModelAndView tripDriverDetailsPage(@PathVariable String id, ModelAndView modelAndView) {
-        log.trace("/drivers/manage/{id}");
+        log.trace("/drivers/manage/{}", id);
         setModelAttributesForDriverTripDetailsPage(id, modelAndView);
         return modelAndView;
     }
@@ -287,7 +287,7 @@ public class TripController {
     @PreAuthorize("hasAuthority('DRIVER')")
     @PutMapping ("/drivers/start/{id}")
     public ModelAndView startTrip(@PathVariable String id, ModelAndView modelAndView) {
-        log.trace("/drivers/start/{id}");
+        log.trace("/drivers/start/{}", id);
         tripService.setStatusDrivingById(id);
         setModelAttributesForDriverTripDetailsPage(id, modelAndView);
         return modelAndView;
@@ -296,7 +296,7 @@ public class TripController {
     @PreAuthorize("hasAuthority('DRIVER')")
     @PutMapping ("/drivers/complete/{id}")
     public ModelAndView completeTrip(@PathVariable String id, ModelAndView modelAndView) {
-        log.trace("/drivers/complete/{id}");
+        log.trace("/drivers/complete/{}", id);
         try {
             tripService.setStatusCompletedById(id);
         } catch (PaymentException e) {
@@ -311,7 +311,7 @@ public class TripController {
     @PreAuthorize("hasAuthority('PASSENGER')")
     @GetMapping("/passengers/manage/{id}")
     public ModelAndView tripPassengerDetailsPage(@PathVariable String id, ModelAndView modelAndView) {
-        log.trace("/passengers/manage/{id}");
+        log.trace("/passengers/manage/{}", id);
         setModelAttributesForPassengerTripDetailsPage(id, modelAndView);
         return modelAndView;
     }
@@ -319,17 +319,64 @@ public class TripController {
     @PreAuthorize("hasAuthority('PASSENGER')")
     @DeleteMapping ("/{id}")
     public ModelAndView deleteTrip(@PathVariable String id, ModelAndView modelAndView) {
-        log.trace("(delete)/{id}");
-//        try {
+        log.trace("(delete)/{}", id);
+        try {
             tripService.deleteTrip(id);
-//        } catch (PaymentException e) {
-//            modelAndView.addObject("errorMessage", e.getMessage());
-//            setModelAttributesForPassengerTripDetailsPage(id, modelAndView);
-//            return modelAndView;
-//        }
+        } catch (UnsupportedOperationException e) {
+            modelAndView.addObject("errorMessage", e.getMessage());
+            setModelAttributesForPassengerTripDetailsPage(id, modelAndView);
+            return modelAndView;
+        }
         modelAndView.setViewName("redirect:/trips/passengers/all");
         return modelAndView;
     }
+
+    @PreAuthorize("hasAuthority('PASSENGER')")
+    @GetMapping ("/passengers/update-page/{id}")
+    public ModelAndView updatePageTrip(@PathVariable String id, ModelAndView modelAndView) {
+        log.trace("/passengers/update-page/{}", id);
+        setAttributesForUpdatePage(id, modelAndView);
+        return modelAndView;
+    }
+
+
+    @PreAuthorize("hasAuthority('PASSENGER')")
+    @PutMapping ("/update")
+    public ModelAndView updateTrip(@Valid TripDtoForPassengerUpdate trip, Errors errors, ModelAndView modelAndView) {
+        log.trace("update/");
+        System.err.println(trip);
+        if (errors.hasErrors()) {
+            setAttributesForUpdatePage(trip.getId(), modelAndView);
+            log.trace("Trip data is invalid.");
+            return modelAndView;
+        }
+        try {
+            tripService.updateTrip(trip);
+            log.trace("Trip was successfully updated.");
+        } catch (UnsupportedOperationException e) {
+            setAttributesForUpdatePage(trip.getId(), modelAndView);
+            modelAndView.addObject("errorMessage", e.getMessage());
+            log.trace("Trip wasn't updated. {}", e.getMessage());
+            return modelAndView;
+        }
+        modelAndView.setViewName("redirect:/trips/passengers/update-page/" + trip.getId());
+        return modelAndView;
+    }
+
+
+    private void setAttributesForUpdatePage(String id, ModelAndView modelAndView) {
+        TripDtoForPassengerUpdate trip = tripService.getTripDtoForUserUpdateById(id);
+        Iterable<Tariffs> tariffs = paymentService.findAll();
+        List<CarClass> carClasses =  List.of(CarClass.values());
+//        int currentCarClass =  carClasses.indexOf(trip.getCarClass());
+        modelAndView.addObject("tariffs", tariffs);
+        modelAndView.addObject("carClasses", carClasses);
+//        modelAndView.addObject("currentCarClass", currentCarClass);
+        modelAndView.addObject("trip", trip);
+        modelAndView.setViewName("trips/update-trip");
+    }
+
+
 
     private void setModelAttributesForPassengerTripDetailsPage(String id, ModelAndView modelAndView) {
         TripDtoForPassengerPage trip = tripService.getDtoFoPassengerById(id);

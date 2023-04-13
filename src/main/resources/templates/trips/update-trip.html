@@ -15,10 +15,10 @@
 				</li>
 				<li class="divider"><span>//</span></li>
 				<li>
-					<span>Get Taxi</span>
+					<span>Update trip</span>
 				</li>
 			</ol>
-			<h1>Get Taxi</h1>
+			<h1>Update trip</h1>
 		</div>
 	</header>
 
@@ -26,26 +26,29 @@
 		<div class="container">
 			<h4 class="yellow aligncenter">Our operators are waiting for your call:</h4>
 			<h3 class="aligncenter">800-5-800</h3>
-			<p class="form-label">Also you can order a taxi online</p>
-			<form th:action="@{/trips/new}" method="post" th:object="${trip}">
+			<form th:action="@{/trips/update}" th:method="put" th:object="${trip}">
 				<div class="menu-types">
 					<a href="#" 
 						th:each="carClass, state : ${carClasses}"
 						th:class="type- + ${state.count}"
-						th:classappend="${ __${state.index}__ == 0 ? 'active' : ''}"
 						th:data-value="${carClass}"
 						th:text="${carClass}" >
 					</a>
-					<input type="hidden" name="carClass" class="type-value ajaxField" th:value="${carClasses.get(0)}">
+
+					<div th:text="${currentCarClass}"></div>
+
+					<!-- <input type="hidden" name="carClass" class="type-value ajaxField" th:value="${carClasses.get(0)}"> -->
+					<!-- <input type="hidden" name="carClass" class="type-value ajaxField" th:value="${carClasses.get(__${currentCarClass}__)}"> -->
+
+					<input type="hidden" name="carClass" class="type-value ajaxField" th:value="${trip.carClass}">
 				</div>
-						<!-- th:classappend="${ __${state.current}__ == 'VIP' ? 'active' : ''}"			 -->
 
 				<address class="row form-with-labels">
 					<div class="col-md-12">
 						<div class="form-group">
-							<input id="origin-input" type="text" th:field="*{originAddress.address}"
+							<input id="origin-input" type="text" th:field="*{originAddress}"
 								placeholder="Enter an origin location" class="ajaxField required" aria-required="true">
-							<div class="validationError" th:if="${#fields.hasErrors('originAddress.address')}"
+							<div class="validationError" th:if="${#fields.hasErrors('originAddress')}"
 								th:errors="*{originAddress.address}">Origin address error</div>
 						</div>
 						<span class="fa fa-map-marker"></span>
@@ -55,10 +58,10 @@
 				<div class="row form-with-labels">
 					<div class="col-md-12">
 						<div class="form-group">
-							<input id="destination-input" type="text" th:field="*{destinationAddress.address}"
+							<input id="destination-input" type="text" th:field="*{destinationAddress}"
 								placeholder="Enter a destination location" class="ajaxField controls required"
 								aria-required="true">
-							<div class="validationError" th:if="${#fields.hasErrors('destinationAddress.address')}"
+							<div class="validationError" th:if="${#fields.hasErrors('destinationAddress')}"
 								th:errors="*{destinationAddress.address}">Destinatation address error</div>
 						</div>
 						<span class="fa fa-map-marker"></span>
@@ -69,15 +72,17 @@
 					<div class="col-md-12">
 						<div class="form-group">
 							<input type="datetime-local" min="2023-03-01T08:30" max="2050-06-30T16:30"
-								th:field="*{departureDateTime}" placeholder="Date and Time" class="ajaxField">
-							<div class="validationError" th:if="${#fields.hasErrors('departureDateTime')}" th:errors="*{departureDateTime}">Departure Date and Time
-								error</div>
+							th:field="*{departureDateTime}" placeholder="Date and Time" class="ajaxField">
+						<div class="validationError" th:if="${#fields.hasErrors('departureDateTime')}" th:errors="*{departureDateTime}">Departure Date and Time
+							error</div>
 							<span class="fa fa-calendar"></span>
 						</div>
 					</div>
 				</div>
-					<input type="submit" value="Get Taxi" class="btn btn-lg btn-black btn-white aligncenter">
-					<!-- <button class="btn btn-lg btn-black btn-white aligncenter">Get Taxi</button> -->
+				<input type="submit" value="Update trip" class="btn btn-lg btn-black btn-white aligncenter">
+				<div class="hidden">
+					<input th:field="*{id}"  type="text" th:value="${id}"/>
+				</div>
 			</form>
 
 
@@ -110,7 +115,7 @@
 
 	<div th:include="/fragments :: scripts-bottom"></div>
 
-	<!-- <script type="text/javascript" th:src="@{/js/map-style.js}"></script> -->
+	
 	<script type="text/javascript" th:src="@{/js/map.js}"></script>
 	<script th:replace="/fragments :: map-script"></script>
 
