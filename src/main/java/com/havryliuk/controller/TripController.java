@@ -316,6 +316,21 @@ public class TripController {
         return modelAndView;
     }
 
+    @PreAuthorize("hasAuthority('PASSENGER')")
+    @DeleteMapping ("/{id}")
+    public ModelAndView deleteTrip(@PathVariable String id, ModelAndView modelAndView) {
+        log.trace("(delete)/{id}");
+//        try {
+            tripService.deleteTrip(id);
+//        } catch (PaymentException e) {
+//            modelAndView.addObject("errorMessage", e.getMessage());
+//            setModelAttributesForPassengerTripDetailsPage(id, modelAndView);
+//            return modelAndView;
+//        }
+        modelAndView.setViewName("redirect:/trips/passengers/all");
+        return modelAndView;
+    }
+
     private void setModelAttributesForPassengerTripDetailsPage(String id, ModelAndView modelAndView) {
         TripDtoForPassengerPage trip = tripService.getDtoFoPassengerById(id);
         modelAndView.addObject("trip", trip);

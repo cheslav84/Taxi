@@ -56,6 +56,7 @@ public class PaymentService {
         BigDecimal passengerBalance = getUserBalance(passenger);
         User driver = trip.getDriver();
 
+        checkIfNotPaid(trip);
         checkIfDriverAssigned(driver);
         checkIfWithdrawValueNotExceedBalance(passengerBalance, tripPrice);
 
@@ -100,6 +101,15 @@ public class PaymentService {
             }
         }
     }
+
+    private void checkIfNotPaid(Trip trip) throws PaymentException {
+        if(trip.getPaymentStatus().equals(PaymentStatus.PAID)) {
+            String message = "Trip has already paid.";
+            log.warn(message);
+            throw new PaymentException(message);
+        }
+    }
+
 
     private void checkIfDriverAssigned(User driver) throws PaymentException {
         if(driver == null) {

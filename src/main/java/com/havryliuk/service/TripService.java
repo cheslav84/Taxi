@@ -105,6 +105,10 @@ public class TripService {
         trip.setPrice(price);
     }
 
+    public void deleteTrip(String id) {
+        Trip trip = getById(id);
+        repository.delete(trip);
+    }
 
     public Page<TripDtoForPassengerPage> getAllByPassenger(User user, Pageable pageable) {
         Page<TripDtoForPassengerPage> tripsPage = repository.findAllByPassenger(user, pageable);
@@ -284,6 +288,7 @@ public class TripService {
             default -> { return null; }
         }
     }
+
 
 
 }
