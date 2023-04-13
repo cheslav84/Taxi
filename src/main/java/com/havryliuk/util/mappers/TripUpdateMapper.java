@@ -70,7 +70,6 @@ public class TripUpdateMapper {
         return wasUpdated;
     }
 
-
     private Address getNewAddress(String receivedAddress) {
         Address address = new Address();
         address.setAddress(receivedAddress);

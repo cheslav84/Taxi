@@ -34,12 +34,6 @@
 						th:data-value="${carClass}"
 						th:text="${carClass}" >
 					</a>
-
-					<div th:text="${currentCarClass}"></div>
-
-					<!-- <input type="hidden" name="carClass" class="type-value ajaxField" th:value="${carClasses.get(0)}"> -->
-					<!-- <input type="hidden" name="carClass" class="type-value ajaxField" th:value="${carClasses.get(__${currentCarClass}__)}"> -->
-
 					<input type="hidden" name="carClass" class="type-value ajaxField" th:value="${trip.carClass}">
 				</div>
 

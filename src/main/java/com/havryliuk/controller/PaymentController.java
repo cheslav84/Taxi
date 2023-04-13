@@ -5,7 +5,7 @@ import com.havryliuk.dto.trips.TripDtoForPassengerPage;
 import com.havryliuk.exceptions.PaymentException;
 import com.havryliuk.model.*;
 import com.havryliuk.service.PaymentService;
-import com.havryliuk.service.tripServices.TripService;
+import com.havryliuk.service.tripService.PassengerTripService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,12 +26,12 @@ import javax.validation.Valid;
 public class PaymentController {
 
     private final PaymentService paymentService;
-    private final TripService tripService;
+    private final PassengerTripService passengerTripService;
 
     @Autowired
-    public PaymentController(PaymentService paymentService, TripService tripService) {
+    public PaymentController(PaymentService paymentService, PassengerTripService passengerTripService) {
         this.paymentService = paymentService;
-        this.tripService = tripService;
+        this.passengerTripService = passengerTripService;
     }
 
 
@@ -52,9 +52,9 @@ public class PaymentController {
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         try {
-            tripService.payForTrip(user, tripId);
+            passengerTripService.payForTrip(user, tripId);
         } catch (PaymentException e) {
-            TripDtoForPassengerPage trip = tripService.getDtoFoPassengerById(tripId);// todo think if would be better receive that DTO from front-end
+            TripDtoForPassengerPage trip = passengerTripService.getDtoFoPassengerById(tripId);// todo think if would be better receive that DTO from front-end
             modelAndView.addObject("errorMessage", e.getMessage());// todo code repeats in another controller think of refactoring
             modelAndView.addObject("trip", trip);
             modelAndView.setViewName("trips/trip-details");

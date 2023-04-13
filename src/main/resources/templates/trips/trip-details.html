@@ -28,7 +28,6 @@
 				<section class="form-taxi-short">
 
 					<div sec:authorize="hasAuthority('PASSENGER')" th:replace="/forms :: trip-passenger-managing"></div>
-					<!-- <form sec:authorize="hasAuthority('PASSENGER')" th:replace="/forms :: trip-passenger-managing"></form> -->
 					<form sec:authorize="hasAuthority('DRIVER')" th:replace="/forms :: trip-driver-managing"></form>
 
 				</section>
