@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html xmlns="http:/ /www.w3.org/1999/xhtml" xmlns:th="http:/ /www.thymeleaf.org"
-	class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org" 
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head th:replace="/fragments :: head"></head>
 
@@ -41,7 +43,7 @@
 					<div class="col-md-12">
 						<div class="form-group">
 							<input id="origin-input" type="text" th:field="*{originAddress}"
-								placeholder="Enter an origin location" class="ajaxField required" aria-required="true">
+								placeholder="Enter an origin location" class="ajaxField required" required minlength="10">
 							<div class="validationError" th:if="${#fields.hasErrors('originAddress')}"
 								th:errors="*{originAddress.address}">Origin address error</div>
 						</div>
@@ -54,7 +56,7 @@
 						<div class="form-group">
 							<input id="destination-input" type="text" th:field="*{destinationAddress}"
 								placeholder="Enter a destination location" class="ajaxField controls required"
-								aria-required="true">
+								required minlength="10">
 							<div class="validationError" th:if="${#fields.hasErrors('destinationAddress')}"
 								th:errors="*{destinationAddress.address}">Destinatation address error</div>
 						</div>
@@ -66,7 +68,7 @@
 					<div class="col-md-12">
 						<div class="form-group">
 							<input type="datetime-local" min="2023-03-01T08:30" max="2050-06-30T16:30"
-							th:field="*{departureDateTime}" placeholder="Date and Time" class="ajaxField">
+							th:field="*{departureDateTime}" placeholder="Date and Time" class="ajaxField" required>
 						<div class="validationError" th:if="${#fields.hasErrors('departureDateTime')}" th:errors="*{departureDateTime}">Departure Date and Time
 							error</div>
 							<span class="fa fa-calendar"></span>

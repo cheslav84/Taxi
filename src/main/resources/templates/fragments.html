@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org" 
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
 <head th:fragment="head">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,13 +23,7 @@
 	<div th:include="/fragments :: scripts-top"></div>
 </head>
 
-
 <div th:fragment="scripts-top">
-	<!-- <script type="text/javascript" th:src="@{/js/analytics.js}"></script> -->
-	<!-- <script type="text/javascript" th:src="@{/js/modernizr-2.6.2.min.js}"></script> -->
-	<!-- <script type="text/javascript" th:src="@{/js/common.js}"></script> -->
-	<!-- <script type="text/javascript" th:src="@{/js/util.js}"></script> -->
-	<!-- <script type="text/javascript" th:src="@{https://polyfill.io/v3/polyfill.min.js?features=default}"></script> -->
 	<script src="http://localhost:35729/livereload.js"></script>
 </div>
 
@@ -90,50 +90,50 @@
 
 			<li sec:authorize="isAuthenticated()" th:class="${activePage == 'myAccount'} ? 'hasSub menu-item current_page_item' : 'hasSub menu-item'">
 				<a th:href="@{/users/info}">My account</a>
-					<ul class="sub-menu">
-						<li th:class="${subPage == 'info'} ? 'menu-item current_page_item' : 'menu-item'">
-							<a th:href="@{/users/info}">My page</a>						
-						</li>
+				<ul class="sub-menu">
+					<li th:class="${subPage == 'info'} ? 'menu-item current_page_item' : 'menu-item'">
+						<a th:href="@{/users/info}">My page</a>						
+					</li>
 
-						<li sec:authorize="hasAuthority('PASSENGER')" th:class="${subPage == 'balance'} ? 'menu-item current_page_item' : 'menu-item'">
-							<a th:href="@{/balance}">My balance</a>
-						</li>
+					<li sec:authorize="hasAuthority('PASSENGER')" th:class="${subPage == 'balance'} ? 'menu-item current_page_item' : 'menu-item'">
+						<a th:href="@{/balance}">My balance</a>
+					</li>
 						
-						<li sec:authorize="hasAuthority('PASSENGER')" th:class="${subPage == 'All trips'} ? 'menu-item current_page_item' : 'menu-item'">
-							<a th:href="@{/trips/passengers/all}">All my trips</a>
-						</li>
-						<li sec:authorize="hasAuthority('PASSENGER')" th:class="${subPage == 'Active trips'} ? 'menu-item current_page_item' : 'menu-item'">
-							<a th:href="@{/trips/passengers/active}">My active trips</a>
-						</li>
-						<li sec:authorize="hasAuthority('PASSENGER')" th:class="${subPage == 'Past trips'} ? 'menu-item current_page_item' : 'menu-item'">
-							<a th:href="@{/trips/passengers/past}">My past trips</a>
-						</li>
+					<li sec:authorize="hasAuthority('PASSENGER')" th:class="${subPage == 'All trips'} ? 'menu-item current_page_item' : 'menu-item'">
+						<a th:href="@{/trips/passengers/all}">All my trips</a>
+					</li>
+					<li sec:authorize="hasAuthority('PASSENGER')" th:class="${subPage == 'Active trips'} ? 'menu-item current_page_item' : 'menu-item'">
+						<a th:href="@{/trips/passengers/active}">My active trips</a>
+					</li>
+					<li sec:authorize="hasAuthority('PASSENGER')" th:class="${subPage == 'Past trips'} ? 'menu-item current_page_item' : 'menu-item'">
+						<a th:href="@{/trips/passengers/past}">My past trips</a>
+					</li>
 
 
-						<li sec:authorize="hasAuthority('DRIVER')" th:class="${subPage == 'balance'} ? 'menu-item current_page_item' : 'menu-item'">
-							<a th:href="@{/balance}">My balance</a>
-						</li>
-						<li sec:authorize="hasAuthority('DRIVER')" th:class="${subPage == 'All trips'} ? 'menu-item current_page_item' : 'menu-item'">
-							<a th:href="@{/trips/drivers/all}">All my trips</a>
-						</li>
-						<li sec:authorize="hasAuthority('DRIVER')" th:class="${subPage == 'Active trips'} ? 'menu-item current_page_item' : 'menu-item'">
-							<a th:href="@{/trips/drivers/active}">My active trips</a>
-						</li>
-						<li sec:authorize="hasAuthority('DRIVER')" th:class="${subPage == 'Past trips'} ? 'menu-item current_page_item' : 'menu-item'">
-							<a th:href="@{/trips/drivers/past}">My past trips</a>
-						</li>
-					</ul>
+					<li sec:authorize="hasAuthority('DRIVER')" th:class="${subPage == 'balance'} ? 'menu-item current_page_item' : 'menu-item'">
+						<a th:href="@{/balance}">My balance</a>
+					</li>
+					<li sec:authorize="hasAuthority('DRIVER')" th:class="${subPage == 'All trips'} ? 'menu-item current_page_item' : 'menu-item'">
+						<a th:href="@{/trips/drivers/all}">All my trips</a>
+					</li>
+					<li sec:authorize="hasAuthority('DRIVER')" th:class="${subPage == 'Active trips'} ? 'menu-item current_page_item' : 'menu-item'">
+						<a th:href="@{/trips/drivers/active}">My active trips</a>
+					</li>
+					<li sec:authorize="hasAuthority('DRIVER')" th:class="${subPage == 'Past trips'} ? 'menu-item current_page_item' : 'menu-item'">
+						<a th:href="@{/trips/drivers/past}">My past trips</a>
+					</li>
+				</ul>
 			</li>
 			<li sec:authorize="!isAuthenticated()" th:class="${activePage == 'auth'} ? 'hasSub menu-item current_page_item' : 'hasSub menu-item'">
 				<a th:href="@{/auth/login}">Authentication</a>
-					<ul class="sub-menu">
-						<li th:class="${subPage == 'login'} ? 'menu-item current_page_item' : 'menu-item'">
-							<a th:href="@{/auth/login}">Log in</a>
-						</li>
-						<li th:class="${subPage == 'registration'} ? 'menu-item current_page_item' : 'menu-item'">
-							<a th:href="@{/auth/registration}">Create account</a>
-						</li>
-					</ul>
+				<ul class="sub-menu">
+					<li th:class="${subPage == 'login'} ? 'menu-item current_page_item' : 'menu-item'">
+						<a th:href="@{/auth/login}">Log in</a>
+					</li>
+					<li th:class="${subPage == 'registration'} ? 'menu-item current_page_item' : 'menu-item'">
+						<a th:href="@{/auth/registration}">Create account</a>
+					</li>
+				</ul>
 			</li>
 			<li sec:authorize="isAuthenticated()" class="menu-item">
 				<form id="logout-form" th:action="@{/auth/logout}" method="post" class="form form-sm">
@@ -143,8 +143,6 @@
 		</ul>
 	</div>
 </div>
-
-
 
 <aside th:fragment="aside-nav" class="widget">	
 	<h4>My account</h4>
@@ -245,10 +243,10 @@
 				<p>Nullam orci dui, dictum et magna sollicitudin, tempor blandit erat. Maecenas suscipit tellus sit
 					amet augue placerat fringilla a id lacus. Fusce tincidunt in leo lacinia condimentum. </p>
 				<div class="social-small social-yellow">
-					<a href="https://twitter.com" class="fa fa-twitter"></a>
-					<a href="https://www.facebook.com" class="fa fa-facebook"></a>
-					<a href="https://www.instagram.com" class="fa fa-instagram"></a>
-					<a href="https://www.youtube.com/" class="fa fa-youtube"></a>
+					<a th:href="@{https://twitter.com}" class="fa fa-twitter"></a>
+					<a th:href="@{https://www.facebook.com}" class="fa fa-facebook"></a>
+					<a th:href="@{https://www.instagram.com}" class="fa fa-instagram"></a>
+					<a th:href="@{https://www.youtube.com}" class="fa fa-youtube"></a>
 				</div>
 			</div>
 			<div class="col-lg-5 col-md-5 hidden-md hidden-sm hidden-xs hidden-ms">
@@ -256,19 +254,47 @@
 				<div class="row">
 					<div class="col-md-5">
 						<ul class="nav navbar-nav">
-							<li class="active"><a href="http://like-themes.com/taxipark/index.html#">Get Taxi</a></li>
-							<li><a href="http://like-themes.com/taxipark/index.html#">Services</a></li>
-							<li><a href="http://like-themes.com/taxipark/index.html#">Tariffs</a></li>
-							<li><a href="http://like-themes.com/taxipark/index.html#">Application</a></li>
-
+							<li>
+								<a th:href="@{/index}">Home</a>
+							</li>
+							<li sec:authorize="hasAuthority('PASSENGER')">
+								<a th:href="@{/trips/new}">Get Taxi</a>
+							</li>
+							<li sec:authorize="hasAuthority('DRIVER')" >
+								<a th:href="@{/trips/drivers/available}">Find passengers</a>
+							</li>
+							<li>
+								<a th:href="@{/users/info}">My page</a>						
+							</li>
 						</ul>
 					</div>
 					<div class="col-md-5">
 						<ul class="nav navbar-nav">
-							<li><a href="http://like-themes.com/taxipark/index.html#">Become a driver</a></li>
-							<li><a href="http://like-themes.com/taxipark/index.html#">Testimonials</a></li>
-							<li><a href="http://like-themes.com/taxipark/index.html#">Contacts</a></li>
-							<li><a href="http://like-themes.com/taxipark/index.html#">Pages</a></li>
+							<li sec:authorize="hasAuthority('PASSENGER')">
+								<a th:href="@{/balance}">My balance</a>
+							</li>
+							<li sec:authorize="hasAuthority('PASSENGER')">
+								<a th:href="@{/trips/passengers/all}">All my trips</a>
+							</li>
+							<li sec:authorize="hasAuthority('PASSENGER')">
+								<a th:href="@{/trips/passengers/active}">My active trips</a>
+							</li>
+							<li sec:authorize="hasAuthority('PASSENGER')">
+								<a th:href="@{/trips/passengers/past}">My past trips</a>
+							</li>
+	
+							<li sec:authorize="hasAuthority('DRIVER')">
+								<a th:href="@{/balance}">My balance</a>
+							</li>
+							<li sec:authorize="hasAuthority('DRIVER')">
+								<a th:href="@{/trips/drivers/all}">All my trips</a>
+							</li>
+							<li sec:authorize="hasAuthority('DRIVER')">
+								<a th:href="@{/trips/drivers/active}">My active trips</a>
+							</li>
+							<li sec:authorize="hasAuthority('DRIVER')">
+								<a th:href="@{/trips/drivers/past}">My past trips</a>
+							</li>
 						</ul>
 					</div>
 				</div>
@@ -290,6 +316,7 @@
 	</div>
 </section>
 
+
 <footer th:fragment="footer">
 	<div class="container">
 		<a href="http://like-themes.com/">Like-themes</a> 2017 © All Rights Reserved <a
@@ -299,31 +326,16 @@
 </footer>
 
 
-
-
 <div th:fragment="scripts-bottom">
 	<script>var base_href = '/';</script>
 	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/jquery-ui.min.js}"></script>
-	<!-- <script type="text/javascript" th:src="@{/js/custom.js}"></script> -->
 	<script type="text/javascript" th:src="@{/js/plugins.min.js}"></script>
-	<!-- <script type="text/javascript" th:src="@{/js/js}"></script> -->
 	<script type="text/javascript" th:src="@{/js/scripts.js}"></script>
-
-	<!-- <script>
-		(function (i, s, o, g, r, a, m) {
-			i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-				(i[r].q = i[r].q || []).push(arguments)
-			}, i[r].l = 1 * new Date(); a = s.createElement(o),
-				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
-		ga('create', 'UA-91006724-1', 'auto');
-		ga('send', 'pageview');
-	</script> -->
-
 </div>
 
 
 <script th:fragment="map-script" th:src="@{https://maps.googleapis.com/maps/api/js?key=AIzaSyC5gfkKVMI4OYiiSBtfBx35Jc9GffAfALo&&callback=initMap&libraries=places}"
 defer></script>
+
+</html>

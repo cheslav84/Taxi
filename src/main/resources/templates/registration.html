@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<!-- saved from url=(0045)http://like-themes.com/taxipark/contacts.html -->
-<html lang="en" class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org" 
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head th:replace="/fragments :: head"></head>
 
@@ -9,7 +11,6 @@
 	<div th:replace="/fragments :: top-bar"></div>
 	<div th:replace="/fragments :: nav"></div>
 	
-
 	<header class="page-header" style="background-image: url(../images/_homepage-1-bg.jpg);">
 		<div class="container">
 			<ol class="bread">
@@ -34,38 +35,36 @@
 						<div class="form-group">
 							<label>Your name <span class="red">*</span></label>
 							<input type="text" th:field="*{name}" placeholder="Your name" class="ajaxField required"
-								aria-required="true">
+								required minlength="1" maxlength="20">
 							<div class="validationError" th:if="${#fields.hasErrors('name')}"
 								th:errors="*{name}">Name error</div>
 						</div>
 						<div class="form-group">
 							<label>Your surname <span class="red">*</span></label>
 							<input type="text" th:field="*{surname}" placeholder="Your surname"
-								class="ajaxField required" aria-required="true">
+								class="ajaxField required" required minlength="1" maxlength="20">
 							<div class="validationError" th:if="${#fields.hasErrors('surname')}"
 								th:errors="*{surname}">Surname error</div>
 						</div>
 						<div class="form-group">
 							<label>E-mail <span class="red">*</span></label>
 							<input type="email" th:field="*{email}" placeholder="E-mail" class="ajaxField required"
-								aria-required="true">
+							required>
 							<div class="validationError" th:if="${#fields.hasErrors('email')}"
 								th:errors="*{email}">Email error</div>	
 						</div>
 						<div class="form-group">
 							<label>Phone number <span class="red">*</span></label>
 							<input type="tel" th:field="*{phone}" placeholder="Phone number" class="ajaxField required"
-								aria-required="true">
+							required>
 							<div class="validationError" th:if="${#fields.hasErrors('phone')}"
 								th:errors="*{phone}">Phone error</div>								
 						</div>
 						<div class="form-with-labels">
 							<label>Your birth date <span class="red">*</span></label>
 							<div class="form-group">
-								<!-- <input type="number" th:field="*{age}" placeholder="Your age" class="ajaxField required"
-									aria-required="true"> -->
 								<input type="date" th:field="*{birthDate}" placeholder="Your birth date" class="ajaxField required"
-									aria-required="true">
+								required>
 								<div class="validationError" th:if="${#fields.hasErrors('birthDate')}"
 									th:errors="*{birthDate}">Age error</div>
 								<span class="fa fa-calendar"></span>
@@ -75,7 +74,7 @@
 							<label for="reg-password">Password <span class="red">*</span></label>
 							<div class="form-group">
 								<input type="password" th:field="*{password}" placeholder="Password" id="reg-password"
-									class="ajaxField required" aria-required="true">
+									class="ajaxField required" required >
 								<div class="validationError" th:if="${#fields.hasErrors('password')}"
 								th:errors="*{password}">Password error</div>
 								<span id="show-reg-passwd" class="fa fa-eye-slash"> </span>
@@ -86,7 +85,7 @@
 							<div class="col-md-12">
 								<div class="form-group">
 									<input type="password" th:field="*{matchingPassword}" placeholder="Confirm password"
-										id="conf-password" class="ajaxField required" aria-required="true">
+										id="conf-password" class="ajaxField required" required>
 										<div class="validationError" th:if="${#fields.errors('*')}"
 										th:errors="*{matchingPassword}">Password error</div>
 										<span id="show-conf-passwd" class="fa fa-eye-slash"></span>
@@ -98,19 +97,12 @@
 								th:each="role, state : ${roles}"
 								th:classappend="${ __${state.index}__ == 0 ? 'active' : ''}"			
 								th:data-value="${role}"
-								th:text="|I'm a  ${role}|" >
+								th:text="|I'm a ${role}|" >
 							</a>
 							<input type="hidden" name="role" class="type-value ajaxField" th:value="${roles.get(0)}">
 						</div>
 					
-						<!-- <h4 class="toggled-accordion">Driver account?</h4>
-						<div class="panel"></div> -->
-						<!-- <div class="g-recaptcha" data-sitekey="your_site_key"></div> -->
-						<!-- <div class="g-recaptcha col-sm-5" th:attr="data-sitekey=${@captchaSettings.getSite()}"></div>
-					    <span id="captchaError" class="alert alert-danger col-sm-4" style="display:none"></span>
-						<input type="hidden" id="response" name="response" value="" /> -->
 						<div th:if="${warningMessage}" class="alert alert-black" >
-							<!-- <a href="#" class="fa fa-times"></a> -->
 							<div class="header"><span class="fa fa-info-circle"></span>Warning</div>
 							<p class="" th:text="${warningMessage}"></p>
 						</div>

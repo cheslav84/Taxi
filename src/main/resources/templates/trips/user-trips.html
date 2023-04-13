@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" style=""
-	class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths">
-
+<html xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org" 
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	
 <head th:replace="/fragments :: head"></head>
 
 <body>
@@ -31,12 +33,6 @@
 				<div id="table-scroll">
 					<div sec:authorize="hasAuthority('PASSENGER')" th:replace="/tables :: passenger-trips"></div>
 					<div sec:authorize="hasAuthority('DRIVER')" th:replace="/tables :: driver-trips"></div>
-
-					
-
-
-
-
 				</div>
 				<div class="paging-navigation" th:if="${page.pageItem.totalPages > 1}">
 					<hr>

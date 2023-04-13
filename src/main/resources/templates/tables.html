@@ -1,17 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org" 
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
 <!-- PASSANGER TABLE -->
 <div th:fragment="passenger-trips" class="tabs-ui ui-tabs ui-corner-all ui-widget ui-widget-content">
 	<div class="ui-tabs-nav ui-corner-all ui-helper-reset ui-helper-clearfix ui-widget-header">
 		<div th:classappend="${subPage == 'All trips' ? 'ui-tabs-active ui-state-active' : ''}"
 			class="ui-tabs-tab ui-corner-top ui-state-default ui-tab">
-			<a href="/trips/passengers/all" class="ui-tabs-anchor trip-tab">All</a>
+			<a th:href="@{/trips/passengers/all}" class="ui-tabs-anchor trip-tab">All</a>
 		</div>
 		<div th:classappend="${subPage == 'Active trips' ? 'ui-tabs-active ui-state-active' : ''}"
 			class="ui-tabs-tab ui-corner-top ui-state-default ui-tab">
-			<a href="/trips/passengers/active" class="ui-tabs-anchor trip-tab">Active</a>
+			<a th:href="@{/trips/passengers/active}" class="ui-tabs-anchor trip-tab">Active</a>
 		</div>
 		<div th:classappend="${subPage == 'Past trips' ? 'ui-tabs-active ui-state-active' : ''}"
 			class="ui-tabs-tab ui-corner-top ui-state-default ui-tab">
-			<a href="/trips/passengers/past" class="ui-tabs-anchor trip-tab">Past</a>
+			<a th:href="@{/trips/passengers/past}" class="ui-tabs-anchor trip-tab">Past</a>
 		</div>
 	</div>
 	<div class="ui-tabs-panel ui-corner-bottom ui-widget-content">
@@ -33,7 +39,6 @@
 					<tr th:each="trip, state : ${page.pageItem.content}" class="table-row"
 						th:data-name="|/trips/passengers/manage/${trip.id}|"
 						th:onclick="getTripDetailes(this.getAttribute('data-name'))">
-					<!-- <tr th:each="trip, state : ${page.pageItem.content}" class="table-row"> -->
 
 						<td th:text="${#temporals.format(trip.departureDateTime, 'dd&#x2011MM&#x2011yyyy HH:mm')}"
 							class="center"></td>
@@ -56,15 +61,15 @@
 	<div class="ui-tabs-nav ui-corner-all ui-helper-reset ui-helper-clearfix ui-widget-header">
 		<div th:classappend="${subPage == 'All trips' ? 'ui-tabs-active ui-state-active' : ''}"
 			class="ui-tabs-tab ui-corner-top ui-state-default ui-tab">
-			<a href="/trips/drivers/all" class="ui-tabs-anchor trip-tab">All</a>
+			<a th:href="@{/trips/drivers/all}" class="ui-tabs-anchor trip-tab">All</a>
 		</div>
 		<div th:classappend="${subPage == 'Active trips' ? 'ui-tabs-active ui-state-active' : ''}"
 			class="ui-tabs-tab ui-corner-top ui-state-default ui-tab">
-			<a href="/trips/drivers/active" class="ui-tabs-anchor trip-tab">Active</a>
+			<a th:href="@{/trips/drivers/active}" class="ui-tabs-anchor trip-tab">Active</a>
 		</div>
 		<div th:classappend="${subPage == 'Past trips' ? 'ui-tabs-active ui-state-active' : ''}"
 			class="ui-tabs-tab ui-corner-top ui-state-default ui-tab">
-			<a href="/trips/drivers/past" class="ui-tabs-anchor trip-tab">Past</a>
+			<a th:href="@{/trips/drivers/past}" class="ui-tabs-anchor trip-tab">Past</a>
 		</div>
 	</div>
 	<div class="ui-tabs-panel ui-corner-bottom ui-widget-content">
@@ -131,3 +136,5 @@
 		<h3 th:if="${page.pageItem.content.size == 0}" class="center">There are not any passengers available</h3>
 	</div>
 </div>
+
+</html>

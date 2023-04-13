@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html  xmlns="http://www.w3.org/1999/xhtml" 
-xmlns:th="http://www.thymeleaf.org" 
-xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org" 
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head th:replace="/fragments :: head"></head>
 
@@ -47,48 +46,6 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
                 <input type="hidden" id="type-value" name="type-value" class="type-value" value="1">
             </div>
             
-
-            <!-- <form class="form-validate" novalidate="novalidate">
-                <div class="menu-types">
-                    <a href="#" data-value="Standart" class="type-1 active">Standart</a>
-                    <a href="#" data-value="Business" class="type-2">Business</a>
-                    <a href="#" data-value="VIP" class="type-3 red">Vip</a>
-                    <a href="#" data-value="Bus" class="type-4">Bus-Minivan</a>
-                    <input type="hidden" id="type-value" name="type-value" class="type-value" value="1">
-                </div>
-                <div class="row forms">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <input type="text" id="from" name="from" value="" placeholder="From Address..."
-                                class="ajaxField">
-                            <span class="fa fa-map-marker"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <input type="text" id="to" name="to" value="" placeholder="To..." class="ajaxField">
-                            <span class="fa fa-map-marker"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <input type="text" id="phone" name="phone" value="" placeholder="Phone Number"
-                                class="ajaxField required error" aria-required="true" aria-invalid="true">
-                            <span class="fa fa-phone"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <input type="text" id="text" name="text" value="" placeholder="Date and Time"
-                                class="ajaxField">
-                            <span class="fa fa-calendar"></span>
-                        </div>
-                    </div>
-                </div>
-                <input type="submit" value="Get Taxi" class="btn btn-lg btn-red aligncenter">
-                <input type="hidden" id="type" name="type" value="2" class="ajaxField">
-            </form> -->
-
             <a sec:authorize="hasAuthority('PASSENGER')"  th:href="@{/trips/new}" class="btn btn-lg btn-red aligncenter width-300">Get Taxi</a>
             <a sec:authorize="hasAuthority('DRIVER')"  th:href="@{/trips/drivers/available}" class="btn btn-lg btn-red aligncenter width-300">Find passengers</a>
 

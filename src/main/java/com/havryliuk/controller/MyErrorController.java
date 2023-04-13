@@ -10,7 +10,8 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
-@Controller@RequestMapping("/error")
+@Controller
+@RequestMapping("/error")
 public class MyErrorController implements ErrorController {
 
     @RequestMapping("/error")

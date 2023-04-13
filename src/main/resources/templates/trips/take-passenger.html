@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html xmlns="http:/ /www.w3.org/1999/xhtml" xmlns:th="http:/ /www.thymeleaf.org"
-	class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org" 
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head th:replace="/fragments :: head"></head>
 
@@ -24,9 +26,6 @@
 
 	<section class="form-taxi-short">
 		<div class="container">
-			<!-- <h4 class="yellow aligncenter">Our operators are waiting for your call:</h4>
-			<h3 class="aligncenter">800-5-800</h3>
-			<p class="form-label">Also you can order a taxi online</p> -->
 			
 			<form th:action="@{/trips/drivers/take/__${trip.id}__}" th:method="put"  th:object="${trip}">
 				<div class="col-lg-12 text-page">
@@ -85,18 +84,11 @@
 				</div>
 
 				<div class="hidden">
-					<!-- <input th:field="*{id}"  type="text" th:value="${id}"/> -->
 					<input type="text" id="taxiAddr" th:field="*{taxiLocationAddress.address}" th:value="*{taxiLocationAddress.address}">
 				</div>
 			
 				<input type="submit" value="Take passenger" class="btn btn-lg btn-black btn-white aligncenter width-300">
 				<a th:href="@{/trips/drivers/available}" class="btn btn-lg btn-black btn-white aligncenter width-300">Search another</a>
-					<!-- <input type="hidden" id="orgAddrLat" value="originAddress.latitude" >
-					<input type="hidden" id="orgAddrLng" value="originAddress.longitude" >
-					<input type="hidden" id="destAddrLat" value="destinationAddress.latitude" >
-					<input type="hidden" id="destAddrLng" value="destinationAddress.longitude" > -->
-				
-						<!-- <input th:field="*{destinationAddr}" type="hidden" th:value="${destinationAddr}"/> -->
 
 			</form>
 

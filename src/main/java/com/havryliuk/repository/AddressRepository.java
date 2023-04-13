@@ -8,7 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface AddressRepository extends CrudRepository<Address, String> {
-
     Optional<Address> findByAddress(String address);
 
 }
