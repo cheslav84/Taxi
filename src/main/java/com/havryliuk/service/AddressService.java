@@ -20,11 +20,11 @@ public class AddressService {
         this.repository = repository;
     }
 
-    public Address arrangeAddress(Address originAddress) {
-        return repository.findByAddress(originAddress.getAddress())
+    public Address arrangeAddress(Address address) {
+        return repository.findByAddress(address.getAddress())
                 .orElseGet(() -> {
-                    googleService.setAddressLocation(originAddress);
-                    return originAddress;
+                    googleService.setAddressLocation(address);
+                    return address;
                 });
     }
 }

@@ -4,11 +4,11 @@
     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<head th:replace="/fragments :: head"></head>
+<head th:replace="fragments :: head"></head>
 
 <body>
-	<div th:replace="/fragments :: top-bar"></div>
-	<div th:replace="/fragments :: nav"></div>
+	<div th:replace="fragments :: top-bar"></div>
+	<div th:replace="fragments :: nav"></div>
 	<header class="page-header" style="background-image: url(../images/_homepage-1-bg.jpg);">
 		<div class="container">
 			<ol class="bread">
@@ -98,18 +98,13 @@
 		</div>
 	</section>
 	
-	<section th:replace="/fragments :: tariffs"></section>
-
-	
-	<section th:replace="/fragments :: block-footer"></section>
-
-    <footer th:replace="/fragments :: footer"></footer>
-
-
-	<div th:include="/fragments :: scripts-bottom"></div>
+	<section th:replace="fragments :: tariffs"></section>
+	<section th:replace="fragments :: block-footer"></section>
+    <footer th:replace="fragments :: footer"></footer>
+	<div th:include="fragments :: scripts-bottom"></div>
 
 	<script type="text/javascript" th:src="@{/js/map.js}"></script>
-	<script th:replace="/fragments :: map-script"></script>
+	<script th:replace="fragments :: map-script"></script>
 
 </body>
 

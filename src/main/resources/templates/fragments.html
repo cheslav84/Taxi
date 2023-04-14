@@ -20,7 +20,7 @@
 	<link rel="stylesheet" th:href="@{/styles/jquery-ui.css}" />
     <link rel="stylesheet" th:href="@{/styles/style.css}" />
 
-	<div th:include="/fragments :: scripts-top"></div>
+	<div th:include="fragments :: scripts-top"></div>
 </head>
 
 <div th:fragment="scripts-top">
@@ -55,7 +55,7 @@
 		<a class="logo" href="#">
 			<img th:fragment="logo" th:src="@{/images/common/logo-inner.png}" alt="Drive IN">
 		</a>
-		<div th:include="/fragments :: nav-inner"></div>
+		<div th:include="fragments :: nav-inner"></div>
 	</nav>
 </div>
 
@@ -216,7 +216,7 @@
 				<li><span class="fa fa-skype"></span>gettaxipark </li>
 				<li><span class="fa fa-map-marker"></span>43 2-nd Avenue, New York, 29004-7153</li>
 			</ul>
-			<p>QWQWqwqw!1</p>
+			<!-- <p>QWQWqwqw!1</p> -->
 		</div>
 		<div class="col-lg-12 col-sm-12">
 			<strong>Social:</strong>

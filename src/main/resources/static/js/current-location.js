@@ -79,6 +79,7 @@ function handleLocationError(browserHasGeolocation, locationInfowindow, pos) {
       ? "Error: The Geolocation service failed."
       : "Error: Your browser doesn't support geolocation."
   );
+
   locationInfowindow.open(map);
 }
 
@@ -87,7 +88,6 @@ window.initMap = initMap;
 
 
 function calculateAndDisplayRoute(directionsService, directionsRenderer, originAddr, destinationAddr) {
-  alert("calculateAndDisplayRoute");
   directionsService
     .route({
       origin: {
@@ -140,3 +140,5 @@ function setDistanceFromTaxiToPassenger(response) {
 
 
 window.initMap = initMap;
+
+

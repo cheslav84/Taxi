@@ -39,9 +39,7 @@ public class DriverTripController {
 
     @PreAuthorize("hasAuthority('DRIVER')")
     @GetMapping("/drivers/details/{id}")
-    public ModelAndView getTrip(
-            @PathVariable String id,
-            ModelAndView modelAndView) {
+    public ModelAndView getTrip(@PathVariable String id, ModelAndView modelAndView) {
         log.trace("/drivers/details/{}", id);
         TripDtoForDriverDetailed trip = driverTripService.getDtoById(id);
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

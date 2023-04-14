@@ -99,14 +99,18 @@ public class DriverTripService {
     public void saveDriverAndTaxiLocation(Trip trip, User user, Address taxiLocationAddress) {
         trip.setDriver(user);
         try {
-            trip.setTaxiLocationAddress(addressService.arrangeAddress(taxiLocationAddress));
+            if (isAddressAssigned(taxiLocationAddress)) {
+                trip.setTaxiLocationAddress(addressService.arrangeAddress(taxiLocationAddress));
+                googleService.setTaxiArrivalTime(trip);
+            }
             trip.setTripStatus(TripStatus.OFFERED);
-            googleService.setTaxiArrivalTime(trip);
         } catch (Exception e) {
             log.warn("Something wrong in setting taxi location address.");
         }
         repository.save(trip);
     }
+
+
 
     public Page<TripDtoForDriverPage> getAllByDriver(User user, Pageable pageable) {
         Page<TripDtoForDriverPage> trips = repository.findAllByDriver(user, pageable);
@@ -201,4 +205,7 @@ public class DriverTripService {
         }
     }
 
+    private boolean isAddressAssigned(Address taxiLocationAddress) {
+        return taxiLocationAddress != null && !taxiLocationAddress.getAddress().isBlank();
+    }
 }

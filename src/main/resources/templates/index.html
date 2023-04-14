@@ -4,7 +4,7 @@
     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<head th:replace="/fragments :: head"></head>
+<head th:replace="fragments :: head"></head>
 
 <body>
 
@@ -16,7 +16,7 @@
                 <a class="logo" href="#">
                     <img th:fragment="logo" th:src="@{/images/index/logo.png}" alt="Drive IN">
                 </a>
-                <div th:include="/fragments :: nav-inner"></div>
+                <div th:include="fragments :: nav-inner"></div>
             </div>
             </nav>
         </div>
@@ -92,7 +92,7 @@
         </div>
     </section>
 
-    <section th:replace="/fragments :: tariffs"></section>
+    <section th:replace="fragments :: tariffs"></section>
 
 
     <section id="car-block">
@@ -123,11 +123,9 @@
         </div>
     </section>
 
-    <section th:replace="/fragments :: block-footer"></section>
-
-    <footer th:replace="/fragments :: footer"></footer>
-
-    <div th:include="/fragments :: scripts-bottom"></div>
+    <section th:replace="fragments :: block-footer"></section>
+    <footer th:replace="fragments :: footer"></footer>
+    <div th:include="fragments :: scripts-bottom"></div>
 
 </body>
 

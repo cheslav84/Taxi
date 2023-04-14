@@ -1,5 +1,6 @@
 package com.havryliuk.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -8,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -30,6 +32,7 @@ public class SecurityConfiguration {
                 .deleteCookies("JSESSIONID")
                 .logoutSuccessUrl("/index")
                 .and().csrf().disable();
+        log.trace("SecurityFilterChain.");
         return http.build();
     }
 }

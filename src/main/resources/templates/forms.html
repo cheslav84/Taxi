@@ -10,16 +10,15 @@
 			<h4 class="margin-top-0 ">Trip details</h4>
 			<hr class="lg">
 
-			<div th:replace="/forms :: date-time-item"></div>
-			<div th:replace="/forms :: origin-address-item"></div>
-			<div th:replace="/forms :: destination-address-item"></div>
-			<div th:replace="/forms :: driver-item"></div>
-			<div th:replace="/forms :: car-item"></div>
-			<div th:replace="/forms :: wait-time-item"></div>
-			<div th:replace="/forms :: fare-item"></div>
-
-			<div th:replace="/forms :: payment-status-item"></div>
-			<div th:replace="/forms :: error-message-item"></div>
+			<div th:replace="forms :: date-time-item"></div>
+			<div th:replace="forms :: origin-address-item"></div>
+			<div th:replace="forms :: destination-address-item"></div>
+			<div th:replace="forms :: driver-item"></div>
+			<div th:replace="forms :: car-item"></div>
+			<div th:replace="forms :: wait-time-item"></div>
+			<div th:replace="forms :: fare-item"></div>
+			<div th:replace="forms :: payment-status-item"></div>
+			<div th:replace="forms :: error-message-item"></div>
 
 		</div>
 
@@ -48,15 +47,15 @@
 	<div class="col-lg-12 text-page">
 		<h4 class="margin-top-0 ">Trip details</h4>
 		<hr class="lg">
-		<div th:replace="/forms :: date-time-item"></div>
-		<div th:replace="/forms :: origin-address-item"></div>
-		<div th:replace="/forms :: destination-address-item"></div>
-		<div th:replace="/forms :: passenger-item"></div>
-		<div th:replace="/forms :: distance-item"></div>
-		<div th:replace="/forms :: fare-item"></div>
-		<div th:replace="/forms :: driver-part-fare-item"></div>
-		<div th:replace="/forms :: payment-status-item"></div>
-		<div th:replace="/forms :: error-message-item"></div>
+		<div th:replace="forms :: date-time-item"></div>
+		<div th:replace="forms :: origin-address-item"></div>
+		<div th:replace="forms :: destination-address-item"></div>
+		<div th:replace="forms :: passenger-item"></div>
+		<div th:replace="forms :: distance-item"></div>
+		<div th:replace="forms :: fare-item"></div>
+		<div th:replace="forms :: driver-part-fare-item"></div>
+		<div th:replace="forms :: payment-status-item"></div>
+		<div th:replace="forms :: error-message-item"></div>
 	</div>
 	<input type="submit" class="btn btn-lg btn-black btn-white aligncenter width-300" 
 						th:disabled="${trip.tripStatus == T(com.havryliuk.model.TripStatus).COMPLETED  

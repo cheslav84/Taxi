@@ -4,11 +4,11 @@
     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<head th:replace="/fragments :: head"></head>
+<head th:replace="fragments :: head"></head>
 
 <body>
-	<div th:replace="/fragments :: top-bar"></div>
-	<div th:replace="/fragments :: nav"></div>
+	<div th:replace="fragments :: top-bar"></div>
+	<div th:replace="fragments :: nav"></div>
 	<header class="page-header" style="background-image: url(assets/images/_inner-bg.jpg);">
 		<div class="container">
 			<ol class="bread">
@@ -28,17 +28,17 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<div id="table-scroll">
-					<div sec:authorize="hasAuthority('DRIVER')" th:replace="/tables :: driver-available-trips"></div>
+					<div sec:authorize="hasAuthority('DRIVER')" th:replace="tables :: driver-available-trips"></div>
 				</div>
-				<div th:replace="/tables :: paging"></div>
+				<div th:replace="tables :: paging"></div>
 			</div>
 		</div>
 	</div>
 
 
-	<section th:replace="/fragments :: block-footer"></section>
-	<footer th:replace="/fragments :: footer"></footer>
-	<div th:include="/fragments :: scripts-bottom"></div>
+	<section th:replace="fragments :: block-footer"></section>
+	<footer th:replace="fragments :: footer"></footer>
+	<div th:include="fragments :: scripts-bottom"></div>
 </body>
 
 </html>

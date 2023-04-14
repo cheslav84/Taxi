@@ -4,11 +4,11 @@
     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<head th:replace="/fragments :: head"></head>
+<head th:replace="fragments :: head"></head>
 
 <body>
-	<div th:replace="/fragments :: top-bar"></div>
-	<div th:replace="/fragments :: nav"></div>
+	<div th:replace="fragments :: top-bar"></div>
+	<div th:replace="fragments :: nav"></div>
 	<header class="page-header" style="background-image: url(../images/_homepage-1-bg.jpg);">
 		<div class="container">
 			<ol class="bread">
@@ -29,15 +29,15 @@
 			<div class="col-lg-8 text-page">
 				<section class="form-taxi-short">
 
-					<div sec:authorize="hasAuthority('PASSENGER')" th:replace="/forms :: trip-passenger-managing"></div>
-					<form sec:authorize="hasAuthority('DRIVER')" th:replace="/forms :: trip-driver-managing"></form>
+					<div sec:authorize="hasAuthority('PASSENGER')" th:replace="forms :: trip-passenger-managing"></div>
+					<form sec:authorize="hasAuthority('DRIVER')" th:replace="forms :: trip-driver-managing"></form>
 
 				</section>
 			</div>
 			<div class="col-lg-4">
 				<div class="widget-area" role="complementary">
-					<aside th:replace="/fragments :: aside-nav"></aside>
-					<aside th:replace="/fragments :: aside-social"></aside>
+					<aside th:replace="fragments :: aside-nav"></aside>
+					<aside th:replace="fragments :: aside-social"></aside>
 				</div>
 			</div>
 		</div>
@@ -61,14 +61,14 @@
 	</section> -->
 
 
-	<section th:replace="/fragments :: block-footer"></section>
-	<footer th:replace="/fragments :: footer"></footer>
-	<div th:include="/fragments :: scripts-bottom"></div>
+	<section th:replace="fragments :: block-footer"></section>
+	<footer th:replace="fragments :: footer"></footer>
+	<div th:include="fragments :: scripts-bottom"></div>
 
 
 	<!-- <script type="text/javascript" th:src="@{/js/current-location.js}"></script> -->
 
-	<!-- <script th:replace="/fragments :: map-script"></script> -->
+	<!-- <script th:replace="fragments :: map-script"></script> -->
 
 
 </body>
