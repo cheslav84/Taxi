@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" 
-    xmlns:th="http://www.thymeleaf.org" 
-    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <!-- PASSANGER TABLE -->
 <div th:fragment="passenger-trips" class="tabs-ui ui-tabs ui-corner-all ui-widget ui-widget-content">
@@ -25,13 +24,13 @@
 			<table>
 				<thead class="table-head">
 					<tr>
-						<th>Date and time</th>
-						<th>Origin</th>
-						<th>Destination</th>
-						<th>Fare</th>
-						<th>Driver</th>
-						<th>Car</th>
-						<th>Wait time</th>
+						<th th:replace="tables :: sorting('departureDateTime','Date and time')"></th>
+						<th th:replace="tables :: sorting('originAddress','Origin')"></th>
+						<th th:replace="tables :: sorting('destinationAddress','Destination')"></th>
+						<th th:replace="tables :: sorting('price','Fare')"></th>
+						<th th:replace="tables :: sorting('driver','Driver')">Driver</th>
+						<th th:replace="tables :: sorting('driver.car','Car')">Car</th>
+						<th th:replace="tables :: sorting('timeToTaxiArrivalInSeconds','Wait time')"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -77,24 +76,25 @@
 			<table>
 				<thead class="table-head">
 					<tr>
-						<th>Date and time</th>
-						<th>Origin</th>
-						<th>Destination</th>
-						<th>Passenger</th>
-						<th>Distance</th>
-						<th>Fare</th>
-						<th>Payment status</th>
+						<th th:replace="tables :: sorting('departureDateTime','Date and time')"></th>
+						<th th:replace="tables :: sorting('originAddress','Origin')"></th>
+						<th th:replace="tables :: sorting('destinationAddress','Destination')"></th>
+						<th th:replace="tables :: sorting('passenger','Passenger')"></th>
+						<th th:replace="tables :: sorting('distanceInMeters','Distance')"></th>
+						<th th:replace="tables :: sorting('price','Fare')"></th>
+						<th th:replace="tables :: sorting('paymentStatus','Payment status')"></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="trip, state : ${page.pageItem.content}" class="table-row"
-												th:data-name="|/trips/drivers/manage/${trip.id}|"
-												th:onclick="getTripDetailes(this.getAttribute('data-name'))">
+						th:data-name="|/trips/drivers/manage/${trip.id}|"
+						th:onclick="getTripDetailes(this.getAttribute('data-name'))">
 						<td th:text="${#temporals.format(trip.departureDateTime, 'dd&#x2011MM&#x2011yyyy HH:mm')}"
 							class="center"></td>
 						<td th:text="${trip.originAddress}"></td>
 						<td th:text="${trip.destinationAddress}"></td>
-						<td th:text="|${trip?.passengerNameAndPhone}, ${trip.passengerAge}&nbspy.o.|" class="center"></td>
+						<td th:text="|${trip?.passengerNameAndPhone}, ${trip.passengerAge}&nbspy.o.|" class="center">
+						</td>
 						<td th:text="|${trip.distance}&nbspkm|"></td>
 						<td th:text="|${trip.price}&nbsp&#8372;|" class="center"></td>
 						<td th:text="${trip.paymentStatus.name}"></td>
@@ -113,10 +113,10 @@
 			<table>
 				<thead class="table-head">
 					<tr>
-						<th>Date and time</th>
-						<th>Origin</th>
-						<th>Destination</th>
-						<th>Fare</th>
+						<th th:replace="tables :: sorting('departureDateTime','Date and time')"></th>
+						<th th:replace="tables :: sorting('originAddress','Origin')"></th>
+						<th th:replace="tables :: sorting('destinationAddress','Destination')"></th>
+						<th th:replace="tables :: sorting('price','Fare')"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -134,6 +134,36 @@
 			</table>
 		</div>
 		<h3 th:if="${page.pageItem.content.size == 0}" class="center">There are not any passengers available</h3>
+	</div>
+</div>
+
+<th scope="col" th:fragment="sorting(field, label)">
+	<a th:href="@{${page.requestURI} +'?'+ 'currentPageNo=' + ${page.currentPage} + '&size=' + ${page.size}
+	+ ${sort.sortField!=null ? '&sorting=' + field + ',' + (sort.sortField == field ? sort.reverseSortDirection : sortDirection) : ''}}" class="black">
+	  [[${label}]] </a>
+	<span th:if="${sort.sortField == field}"
+	  th:class="${sort.sortDirection == 'asc' ? 'fa fa-arrow-up' : 'fa fa-arrow-down'}"></span>
+  </th>
+
+  <div th:fragment="paging" class="paging-navigation" th:if="${page.pageItem.totalPages > 1}">
+	<hr>
+	<div class="pagination">
+		<span th:if="${!page.isFirstPage}">
+			<a th:href="@{${page.requestURI} +'?' + 'currentPageNo=' + ${page.currentPage - 1} + '&size=' + ${page.size}
+			+ ${sort.sortField!=null ? '&sorting=' + sort.sortField + ',' + sort.sortDirection : ''}}"		
+			class="prev"><span class="fa fa-caret-left"></span> prev</a>
+		</span>
+		<a th:each="pageNumber : ${page.pageNumbers}"
+			th:href="@{${page.requestURI} +'?' + 'currentPageNo=' + ${pageNumber} + '&size=' + ${page.size}
+			+ ${sort.sortField!=null ? '&sorting=' + sort.sortField + ',' + sort.sortDirection : ''}}"
+			th:class="${pageNumber==page.pageItem.number + 1} ? 'page-numbers current' : 'page-numbers'"
+			th:text=${pageNumber}></a>
+		<span th:if="${!page.isLastPage}">
+			<a th:href="@{${page.requestURI} +'?' + 'currentPageNo=' + ${page.currentPage + 1} + '&size=' + ${page.size}
+			+ ${sort.sortField!=null ? '&sorting=' + sort.sortField + ',' + sort.sortDirection : ''}}"	
+				class="next">next <span class="fa fa-caret-right"></span>
+			</a>
+		</span>
 	</div>
 </div>
 

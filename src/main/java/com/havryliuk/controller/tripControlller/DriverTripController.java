@@ -1,6 +1,7 @@
 package com.havryliuk.controller.tripControlller;
 
 import com.havryliuk.dto.PageWrapper;
+import com.havryliuk.dto.SortWrapper;
 import com.havryliuk.dto.trips.*;
 import com.havryliuk.exceptions.PaymentException;
 import com.havryliuk.model.*;
@@ -17,14 +18,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 @Slf4j
 @Controller
 @RequestMapping("/trips")
 public class DriverTripController {
 
-    private static final int INITIAL_PAGE_NUMBER = 1;//todo set size in user page and cookies
-    private static final int NUMBER_OF_ITEMS_PER_PAGE = 4;
+    private static final String INITIAL_PAGE_NUMBER = "1";
+    private static final String NUMBER_OF_ITEMS_PER_PAGE = "4";
     private final DriverTripService driverTripService;
 
 
@@ -32,31 +35,6 @@ public class DriverTripController {
     public DriverTripController(DriverTripService driverTripService) {
         this.driverTripService = driverTripService;
     }
-
-    @PreAuthorize("hasAuthority('DRIVER')")
-    @GetMapping("/drivers/available")
-    public ModelAndView allActiveTrips(ModelAndView modelAndView) {
-        return allActiveTripsPaginated(INITIAL_PAGE_NUMBER, NUMBER_OF_ITEMS_PER_PAGE, modelAndView);
-    }
-
-    @PreAuthorize("hasAuthority('DRIVER')")
-    @GetMapping("/drivers/available/{currentPageNo}/{size}")
-    public ModelAndView allActiveTripsPaginated(
-            @PathVariable int currentPageNo,
-            @PathVariable int size,
-            ModelAndView modelAndView) {
-        log.trace("/drivers/available/{}/{}", currentPageNo, size);
-        String requestURI = "/trips/drivers/available";
-        final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        CarClass carClass = ((Driver) user).getCar().getCarClass();
-        Pageable pageable = PageRequest.of(currentPageNo - 1, size);
-        Page<TripDtoShortInfo> tripsPage = driverTripService.getAllNew(carClass, pageable);
-        PageWrapper<TripDtoShortInfo> page = new PageWrapper<>(tripsPage, currentPageNo, size, requestURI);
-        setModelAttributesForGetPassengerPages(modelAndView, page);
-        modelAndView.addObject("subPage", "Past trips");
-        return modelAndView;
-    }
-
 
 
     @PreAuthorize("hasAuthority('DRIVER')")
@@ -89,75 +67,90 @@ public class DriverTripController {
 
 
     @PreAuthorize("hasAuthority('DRIVER')")
-    @GetMapping("/drivers/all")
-    public ModelAndView allDriverTrips(ModelAndView modelAndView) {
-        return allDriverTripsPaginated(INITIAL_PAGE_NUMBER, NUMBER_OF_ITEMS_PER_PAGE, modelAndView);
+    @GetMapping("/drivers/available")
+    public ModelAndView allActiveTripsPaginated(
+            ModelAndView modelAndView,
+            HttpServletRequest request,
+            @RequestParam(defaultValue = INITIAL_PAGE_NUMBER) int currentPageNo,
+            @RequestParam(defaultValue = NUMBER_OF_ITEMS_PER_PAGE) int size,
+            @RequestParam(defaultValue = "departureDateTime,asc") String[] sorting) {
+
+        String requestURI = request.getRequestURI();
+        log.trace(requestURI);
+        final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        SortWrapper sort = new SortWrapper(sorting);
+        Pageable pageable = PageRequest.of(currentPageNo - 1, size, sort.getSortOrders());
+        CarClass carClass = ((Driver) user).getCar().getCarClass();
+        Page<TripDtoShortInfo> tripsPage = driverTripService.getAllNew(carClass, pageable);
+        PageWrapper<TripDtoShortInfo> page = new PageWrapper<>(tripsPage, currentPageNo, size, requestURI);
+        setModelAttributesForGetPassengerPages(modelAndView, page, sort);
+        return modelAndView;
     }
 
 
     @PreAuthorize("hasAuthority('DRIVER')")
-    @GetMapping("/drivers/all/{currentPageNo}/{size}")
+    @GetMapping("/drivers/all")
     public ModelAndView allDriverTripsPaginated(
-            @PathVariable int currentPageNo,
-            @PathVariable int size,
-            ModelAndView modelAndView) {
-        log.trace("/drivers/all/{}/{}", currentPageNo, size);
-        String requestURI = "/trips/drivers/all";
+            ModelAndView modelAndView,
+            HttpServletRequest request,
+            @RequestParam(defaultValue = INITIAL_PAGE_NUMBER) int currentPageNo,
+            @RequestParam(defaultValue = NUMBER_OF_ITEMS_PER_PAGE) int size,
+            @RequestParam(defaultValue = "departureDateTime,asc") String[] sorting) {
+
+        String requestURI = request.getRequestURI();
+        log.trace(requestURI);
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Pageable pageable = PageRequest.of(currentPageNo - 1, size);
+        SortWrapper sort = new SortWrapper(sorting);
+        Pageable pageable = PageRequest.of(currentPageNo - 1, size, sort.getSortOrders());
         Page<TripDtoForDriverPage> tripsPage = driverTripService.getAllByDriver(user, pageable);
         PageWrapper<TripDtoForDriverPage> page = new PageWrapper<>(tripsPage, currentPageNo, size, requestURI);
-        setModelAttributesForAccountTripPages(modelAndView, page);
-        modelAndView.addObject("subPage", "All trips");
+        String subPage = "All trips";
+        setModelAttributesForAccountTripPages(modelAndView, page, subPage, sort);
         return modelAndView;
     }
+
 
 
     @PreAuthorize("hasAuthority('DRIVER')")
     @GetMapping("/drivers/active")
-    public ModelAndView activeDriverTrips(ModelAndView modelAndView) {
-        return activeDriverTripsPaginated(INITIAL_PAGE_NUMBER, NUMBER_OF_ITEMS_PER_PAGE, modelAndView);
-    }
-
-
-    @PreAuthorize("hasAuthority('DRIVER')")
-    @GetMapping("/drivers/active/{currentPageNo}/{size}")
     public ModelAndView activeDriverTripsPaginated(
-            @PathVariable int currentPageNo,
-            @PathVariable int size,
-            ModelAndView modelAndView) {
-        log.trace("/drivers/active/{}/{}", currentPageNo, size);
-        String requestURI = "/trips/drivers/active";
+            ModelAndView modelAndView,
+            HttpServletRequest request,
+            @RequestParam(defaultValue = INITIAL_PAGE_NUMBER) int currentPageNo,
+            @RequestParam(defaultValue = NUMBER_OF_ITEMS_PER_PAGE) int size,
+            @RequestParam(defaultValue = "departureDateTime,asc") String[] sorting) {
+
+        String requestURI = request.getRequestURI();
+        log.trace(requestURI);
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Pageable pageable = PageRequest.of(currentPageNo - 1, size);
+        SortWrapper sort = new SortWrapper(sorting);
+        Pageable pageable = PageRequest.of(currentPageNo - 1, size, sort.getSortOrders());
         Page<TripDtoForDriverPage> tripsPage = driverTripService.getActiveByDriver(user, pageable);
         PageWrapper<TripDtoForDriverPage> page = new PageWrapper<>(tripsPage, currentPageNo, size, requestURI);
-        setModelAttributesForAccountTripPages(modelAndView, page);
-        modelAndView.addObject("subPage", "Active trips");
+        String subPage = "Active trips";
+        setModelAttributesForAccountTripPages(modelAndView, page, subPage, sort);
         return modelAndView;
     }
 
+
     @PreAuthorize("hasAuthority('DRIVER')")
     @GetMapping("/drivers/past")
-    public ModelAndView pastDriverTrips(ModelAndView modelAndView) {
-        return pastDriverTripsPaginated(INITIAL_PAGE_NUMBER, NUMBER_OF_ITEMS_PER_PAGE, modelAndView);
-    }
-
-
-    @PreAuthorize("hasAuthority('DRIVER')")
-    @GetMapping("/drivers/past/{currentPageNo}/{size}")
     public ModelAndView pastDriverTripsPaginated(
-            @PathVariable int currentPageNo,
-            @PathVariable int size,
-            ModelAndView modelAndView) {
-        log.trace("/drivers/past/{}/{}", currentPageNo, size);
-        String requestURI = "/trips/drivers/past";
+            ModelAndView modelAndView,
+            HttpServletRequest request,
+            @RequestParam(defaultValue = INITIAL_PAGE_NUMBER) int currentPageNo,
+            @RequestParam(defaultValue = NUMBER_OF_ITEMS_PER_PAGE) int size,
+            @RequestParam(defaultValue = "departureDateTime,asc") String[] sorting) {
+
+        String requestURI = request.getRequestURI();
+        log.trace(requestURI);
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Pageable pageable = PageRequest.of(currentPageNo - 1, size);
+        SortWrapper sort = new SortWrapper(sorting);
+        Pageable pageable = PageRequest.of(currentPageNo - 1, size, sort.getSortOrders());
         Page<TripDtoForDriverPage> tripsPage = driverTripService.getPastByDriver(user, pageable);
         PageWrapper<TripDtoForDriverPage> page = new PageWrapper<>(tripsPage, currentPageNo, size, requestURI);
-        setModelAttributesForAccountTripPages(modelAndView, page);
-        modelAndView.addObject("subPage", "Past trips");
+        String subPage = "Past trips";
+        setModelAttributesForAccountTripPages(modelAndView, page, subPage, sort);
         return modelAndView;
     }
 
@@ -205,14 +198,17 @@ public class DriverTripController {
     }
 
     private void setModelAttributesForAccountTripPages(
-            ModelAndView modelAndView, PageWrapper<? extends TripDtoShortInfo> page) {
+            ModelAndView modelAndView, PageWrapper<? extends TripDtoShortInfo> page, String subPage, SortWrapper sort) {
+        modelAndView.addObject("sort", sort);
         modelAndView.addObject("page", page);
         modelAndView.addObject("activePage", "myAccount");
+        modelAndView.addObject("subPage", subPage);
         modelAndView.setViewName("trips/user-trips");
     }
 
     private void setModelAttributesForGetPassengerPages(
-            ModelAndView modelAndView, PageWrapper<? extends TripDtoShortInfo> page) {
+            ModelAndView modelAndView, PageWrapper<? extends TripDtoShortInfo> page, SortWrapper sort) {
+        modelAndView.addObject("sort", sort);
         modelAndView.addObject("page", page);
         modelAndView.addObject("activePage", "Find passengers");
         modelAndView.setViewName("trips/find-passengers");

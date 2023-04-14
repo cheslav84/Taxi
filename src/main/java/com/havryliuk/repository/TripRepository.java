@@ -15,10 +15,7 @@ import java.util.Optional;
 
 
 @Repository
-//public interface TripRepository extends PagingAndSortingRepository<Trip, String>, TripRepositoryCustom {
 public interface TripRepository extends PagingAndSortingRepository<Trip, String> {
-
-//    Page<TripDtoForPassenger> findAllByPassenger(@Param("user") User user, Pageable pageable);
 
     @Query(value = """
             select new com.havryliuk.dto.trips.TripDtoForPassengerPage
@@ -31,11 +28,9 @@ public interface TripRepository extends PagingAndSortingRepository<Trip, String>
             left join t.driver d
             left join d.car
             where t.passenger = :user
-            order by t.departureDateTime desc
             """
     )
     Page<TripDtoForPassengerPage> findAllByPassenger(@Param("user") User user, Pageable pageable);
-
 
     @Query(value = """
             select new com.havryliuk.dto.trips.TripDtoForPassengerPage
@@ -49,7 +44,6 @@ public interface TripRepository extends PagingAndSortingRepository<Trip, String>
             left join d.car
             where t.passenger = :user
             and (t.tripStatus != 'COMPLETED' and t.tripStatus != 'CANCELED')
-            order by t.departureDateTime desc
             """
     )
     Page<TripDtoForPassengerPage> findActiveByPassenger(@Param("user") User user, Pageable pageable);//todo виключити з пошуку поїздки дата яких минула
@@ -66,7 +60,6 @@ public interface TripRepository extends PagingAndSortingRepository<Trip, String>
             left join d.car
             where t.passenger = :user
             and t.tripStatus = 'COMPLETED'
-            order by t.departureDateTime desc
             """
     )
     Page<TripDtoForPassengerPage> findPastByPassenger(@Param("user") User user, Pageable pageable);
@@ -96,7 +89,6 @@ public interface TripRepository extends PagingAndSortingRepository<Trip, String>
             where t.tripStatus = 'NEW'
             and
             t.carClass = :carClass
-            order by t.departureDateTime desc
             """
     )
     Page<TripDtoShortInfo> findAllNewByCarClass(@Param("carClass") CarClass carClass, Pageable pageable);//todo виключити з пошуку поїздки дата яких минула
@@ -133,7 +125,6 @@ public interface TripRepository extends PagingAndSortingRepository<Trip, String>
             from Trip t
             join t.passenger p
             where t.driver = :user
-            order by t.departureDateTime desc
             """
     )
     Page<TripDtoForDriverPage> findAllByDriver(@Param("user") User user, Pageable pageable);
@@ -150,7 +141,6 @@ public interface TripRepository extends PagingAndSortingRepository<Trip, String>
             join t.passenger p
             where t.driver = :user
             and (t.tripStatus = 'OFFERED' or t.tripStatus = 'DRIVING')
-            order by t.departureDateTime desc
             """
     )
     Page<TripDtoForDriverPage> findActiveByDriver(@Param("user") User user, Pageable pageable);
@@ -166,7 +156,6 @@ public interface TripRepository extends PagingAndSortingRepository<Trip, String>
             join t.passenger p
             where t.driver = :user
             and t.tripStatus = 'COMPLETED'
-            order by t.departureDateTime desc
             """
     )
     Page<TripDtoForDriverPage> findPastByDriver(@Param("user") User user, Pageable pageable);

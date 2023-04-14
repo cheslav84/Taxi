@@ -37,7 +37,6 @@ public class Trip {
     @JoinColumn(name = "destination_address")
     private Address destinationAddress;
 
-//    @NotNull
     @Valid
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "taxi_location_address")

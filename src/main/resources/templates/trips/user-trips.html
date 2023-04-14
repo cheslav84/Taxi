@@ -34,24 +34,7 @@
 					<div sec:authorize="hasAuthority('PASSENGER')" th:replace="/tables :: passenger-trips"></div>
 					<div sec:authorize="hasAuthority('DRIVER')" th:replace="/tables :: driver-trips"></div>
 				</div>
-				<div class="paging-navigation" th:if="${page.pageItem.totalPages > 1}">
-					<hr>
-					<div class="pagination">
-						<span th:if="${!page.isFirstPage}">
-							<a th:href="@{|${page.requestURI}/${page.currentPage - 1}/${page.size}|}"
-							class="prev"><span class="fa fa-caret-left"></span> prev</a>
-						</span>
-						<a th:each="pageNumber : ${page.pageNumbers}"
-							th:href="@{|${page.requestURI}/${pageNumber}/${page.size}|}"
-							th:class="${pageNumber==page.pageItem.number + 1} ? 'page-numbers current' : 'page-numbers'"
-							th:text=${pageNumber}></a>
-						<span th:if="${!page.isLastPage}">
-							<a th:href="@{|${page.requestURI}/${page.currentPage + 1}/${page.size}||}"
-								class="next">next <span class="fa fa-caret-right"></span>
-							</a>
-						</span>
-					</div>
-				</div>
+				<div th:replace="/tables :: paging"></div>
 			</div>
 		</div>
 	</div>

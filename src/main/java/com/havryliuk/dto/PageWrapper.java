@@ -30,6 +30,9 @@ public class PageWrapper<T> {
     private boolean isLastPage;
 
 
+    public PageWrapper(){
+     }
+
     public PageWrapper(Page<T> page, int currentPageNo, int size, String requestURI){
         this.pageItem = page;
         this.currentPage = currentPageNo;

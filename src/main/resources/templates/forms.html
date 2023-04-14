@@ -48,7 +48,6 @@
 	<div class="col-lg-12 text-page">
 		<h4 class="margin-top-0 ">Trip details</h4>
 		<hr class="lg">
-
 		<div th:replace="/forms :: date-time-item"></div>
 		<div th:replace="/forms :: origin-address-item"></div>
 		<div th:replace="/forms :: destination-address-item"></div>
@@ -58,7 +57,6 @@
 		<div th:replace="/forms :: driver-part-fare-item"></div>
 		<div th:replace="/forms :: payment-status-item"></div>
 		<div th:replace="/forms :: error-message-item"></div>
-
 	</div>
 	<input type="submit" class="btn btn-lg btn-black btn-white aligncenter width-300" 
 						th:disabled="${trip.tripStatus == T(com.havryliuk.model.TripStatus).COMPLETED  
@@ -82,9 +80,6 @@
 		<div class="trip-data-container">
 			<div class="large"
 				th:text="${#temporals.format(trip.departureDateTime, 'dd&#x2011MM&#x2011yyyy HH:mm')}">
-
-
-				
 			</div>
 		</div>
 	</div>

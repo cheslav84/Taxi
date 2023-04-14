@@ -258,28 +258,6 @@ function initContactForm() {
 	});
 }
 
-// /* Google maps init */
-// function initMap() {
-
-// 	var mapEl = $('#map');
-// 	if (mapEl.length) {
-
-// 		var uluru = {lat: mapEl.data('lat'), lng: mapEl.data('lng')};
-// 		var map = new google.maps.Map(document.getElementById('map'), {
-// 		  zoom: mapEl.data('zoom'),
-// 		  center: uluru,
-// 		  scrollwheel: false,
-// 		  styles: mapStyles
-// 		});
-
-// 		var marker = new google.maps.Marker({
-// 		  position: uluru,
-// 		  icon: base_href + 'assets/images/location-black.png',
-// 		  map: map
-// 		});
-// 	}
-// }
-
 
 function toggleAccordeon() { 
 
@@ -329,16 +307,3 @@ function getTripDetailes(value) {
 }
 
 
-// const show_log_pw_btn = document.querySelector('#show-log-passwd')
-// const show_log_pw_icon = show_log_pw_btn.querySelector('img')
-// const pw_log_input = document.querySelector('#log-password')
-
-// show_log_pw_btn.addEventListener('click', () => {
-// 	pw_log_input.type = pw_log_input.type === 'password' 
-// 		? 'text' 
-// 		: 'password'
-
-//         show_log_pw_icon.src = show_log_pw_icon.src.includes('off') 
-// 		? 'view/pictures/icons/visibility.png' 
-// 		: 'view/pictures/icons/visibility_off.png'
-// })

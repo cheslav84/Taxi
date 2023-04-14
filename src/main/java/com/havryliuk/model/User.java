@@ -21,7 +21,7 @@ import java.util.Collections;
 @ToString
 @Entity(name = "person")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User implements UserDetails {//todo make abstract if manager is separate
+public class User implements UserDetails, Comparable {//todo make abstract if manager is separate
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -85,4 +85,23 @@ public class User implements UserDetails {//todo make abstract if manager is sep
     public boolean isEnabled() {
         return enabled;
     }
+
+    @Override
+    public int compareTo(Object o) {
+        if (o == null) {
+            throw new IllegalArgumentException("User is null.");
+        }
+        if (getClass() != o.getClass()) {
+            throw new IllegalArgumentException(o.getClass() + " can't be casted to User.");
+        }
+        User user = (User) o;
+        if (this.name.compareTo(user.name) != 0) {
+            return this.name.compareTo(user.name);
+        }
+        else {
+            return this.phone.compareTo(user.phone);
+        }
+    }
+
+
 }
