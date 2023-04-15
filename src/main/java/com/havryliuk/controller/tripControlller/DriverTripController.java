@@ -40,7 +40,7 @@ public class DriverTripController {
     @PreAuthorize("hasAuthority('DRIVER')")
     @GetMapping("/drivers/details/{id}")
     public ModelAndView getTrip(@PathVariable String id, ModelAndView modelAndView) {
-        log.trace("/drivers/details/{}", id);
+        log.trace("get:/trips/drivers/details/{}", id);
         TripDtoForDriverDetailed trip = driverTripService.getDtoById(id);
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         modelAndView.addObject("trip", trip);
@@ -55,11 +55,12 @@ public class DriverTripController {
     @PutMapping ("/drivers/take/{id}")
     public ModelAndView setDriver(@PathVariable String id, TripDtoForDriverDetailed tripDto,
                                   ModelAndView modelAndView) {
-        log.trace("setDriver");
+        log.trace("put:/trips/drivers/take/{}", id);
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Trip trip = driverTripService.getById(id);
         driverTripService.saveDriverAndTaxiLocation(trip, user, tripDto.getTaxiLocationAddress());
         modelAndView.setViewName("redirect:/trips/drivers/active");
+        log.trace("driver {} was set to trip {}", user.getEmail(), id);
         return modelAndView;
     }
 
@@ -74,7 +75,7 @@ public class DriverTripController {
             @RequestParam(defaultValue = "departureDateTime,asc") String[] sorting) {
 
         String requestURI = request.getRequestURI();
-        log.trace(requestURI);
+        log.trace("get:{}",requestURI);
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         SortWrapper sort = new SortWrapper(sorting);
         Pageable pageable = PageRequest.of(currentPageNo - 1, size, sort.getSortOrders());
@@ -96,7 +97,7 @@ public class DriverTripController {
             @RequestParam(defaultValue = "departureDateTime,asc") String[] sorting) {
 
         String requestURI = request.getRequestURI();
-        log.trace(requestURI);
+        log.trace("get:{}",requestURI);
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         SortWrapper sort = new SortWrapper(sorting);
         Pageable pageable = PageRequest.of(currentPageNo - 1, size, sort.getSortOrders());
@@ -106,7 +107,6 @@ public class DriverTripController {
         setModelAttributesForAccountTripPages(modelAndView, page, subPage, sort);
         return modelAndView;
     }
-
 
 
     @PreAuthorize("hasAuthority('DRIVER')")
@@ -119,7 +119,7 @@ public class DriverTripController {
             @RequestParam(defaultValue = "departureDateTime,asc") String[] sorting) {
 
         String requestURI = request.getRequestURI();
-        log.trace(requestURI);
+        log.trace("get:{}",requestURI);
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         SortWrapper sort = new SortWrapper(sorting);
         Pageable pageable = PageRequest.of(currentPageNo - 1, size, sort.getSortOrders());
@@ -141,7 +141,7 @@ public class DriverTripController {
             @RequestParam(defaultValue = "departureDateTime,asc") String[] sorting) {
 
         String requestURI = request.getRequestURI();
-        log.trace(requestURI);
+        log.trace("get:{}",requestURI);
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         SortWrapper sort = new SortWrapper(sorting);
         Pageable pageable = PageRequest.of(currentPageNo - 1, size, sort.getSortOrders());
@@ -155,8 +155,8 @@ public class DriverTripController {
 
     @PreAuthorize("hasAuthority('DRIVER')")
     @GetMapping("/drivers/manage/{id}")
-    public ModelAndView tripDriverDetailsPage(@PathVariable String id, ModelAndView modelAndView) {
-        log.trace("/drivers/manage/{}", id);
+    public ModelAndView driversTripDetailsPage(@PathVariable String id, ModelAndView modelAndView) {
+        log.trace("get:/trips/drivers/manage/{}", id);
         setModelAttributesForDriverTripDetailsPage(id, modelAndView);
         return modelAndView;
     }
@@ -164,7 +164,7 @@ public class DriverTripController {
     @PreAuthorize("hasAuthority('DRIVER')")
     @PutMapping ("/drivers/start/{id}")
     public ModelAndView startTrip(@PathVariable String id, ModelAndView modelAndView) {
-        log.trace("/drivers/start/{}", id);
+        log.trace("put:/trips/drivers/start/{}", id);
         driverTripService.setStatusDrivingById(id);
         setModelAttributesForDriverTripDetailsPage(id, modelAndView);
         return modelAndView;
@@ -173,15 +173,17 @@ public class DriverTripController {
     @PreAuthorize("hasAuthority('DRIVER')")
     @PutMapping ("/drivers/complete/{id}")
     public ModelAndView completeTrip(@PathVariable String id, ModelAndView modelAndView) {
-        log.trace("/drivers/complete/{}", id);
+        log.trace("put:/trips/drivers/complete/{}", id);
         try {
             driverTripService.setStatusCompletedById(id);
         } catch (PaymentException e) {
             modelAndView.addObject("errorMessage", e.getMessage());
             setModelAttributesForDriverTripDetailsPage(id, modelAndView);
+            log.info("trip {} wasn't completed. Cause: {}", id, e.getMessage());
             return modelAndView;
         }
         modelAndView.setViewName("redirect:/trips/drivers/all");
+        log.info("trip {} was completed.", id);
         return modelAndView;
     }
 

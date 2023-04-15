@@ -36,63 +36,70 @@ public class PaymentController {
 
     @GetMapping("/balance")
     public ModelAndView userBalance(ModelAndView modelAndView) {
-        log.trace("user balance page");
+        log.trace("get:/balance");
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         setModelAttributes(modelAndView, user);
         return modelAndView;
     }
 
     @PreAuthorize("hasAuthority('PASSENGER')")
-    @PutMapping("/trips/pay/{tripId}")
-    public ModelAndView payForTrip(@PathVariable String tripId, ModelAndView modelAndView) {
-        log.trace("recharging user balance");
+    @PutMapping("/trips/pay/{id}")
+    public ModelAndView payForTrip(@PathVariable String id, ModelAndView modelAndView) {
+        log.trace("put:/trips/pay/{}", id);
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         try {
-            passengerTripService.payForTrip(user, tripId);
+            passengerTripService.payForTrip(user, id);
         } catch (PaymentException e) {
-            TripDtoForPassengerPage trip = passengerTripService.getDtoFoPassengerById(tripId);// todo think if would be better receive that DTO from front-end
-            modelAndView.addObject("errorMessage", e.getMessage());// todo code repeats in another controller think of refactoring
+            TripDtoForPassengerPage trip = passengerTripService.getDtoFoPassengerById(id);
+            modelAndView.addObject("errorMessage", e.getMessage());
             modelAndView.addObject("trip", trip);
             modelAndView.setViewName("trips/trip-details");
+            log.info("payment for trip {} wasn't successful. Cause: {}", id, e.getMessage());
             return modelAndView;
         }
-        modelAndView.setViewName("redirect:/trips/passengers/manage/" + tripId);
+        modelAndView.setViewName("redirect:/trips/passengers/manage/" + id);
+        log.info("payment for trip {} was successful.", id);
         return modelAndView;
     }
 
 
     @PreAuthorize("hasAuthority('PASSENGER')")
     @PutMapping("/balance/recharge")
-    public ModelAndView rechargeBalance(@Valid NewBalanceDto value, Errors errors, ModelAndView modelAndView) {
+    public ModelAndView rechargeBalance(@Valid NewBalanceDto newBalanceVal, Errors errors, ModelAndView modelAndView) {
         log.trace("recharging user balance");
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (errors.hasErrors()) {
             setModelAttributes(modelAndView, user);
+            log.info("balance data is invalid: {}", errors.getAllErrors());
             return modelAndView;
         }
-        paymentService.recharge(user, value.getValue());
+        paymentService.recharge(user, newBalanceVal.getValue());
         modelAndView.setViewName("redirect:/balance");
+        log.info("{} with id={} recharged with {} amount.", user.getRole(), user.getId(), newBalanceVal.getValue());
         return modelAndView;
     }
 
     @PreAuthorize("hasAuthority('DRIVER')")
     @PutMapping("/balance/withdraw")
-    public ModelAndView withdrawFunds(@Valid NewBalanceDto newBalance, Errors errors, ModelAndView modelAndView) {
+    public ModelAndView withdrawFunds(@Valid NewBalanceDto newBalanceVal, Errors errors, ModelAndView modelAndView) {
         log.trace("recharging user balance");
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (errors.hasErrors()) {
             setModelAttributes(modelAndView, user);
+            log.info("balance data is invalid: {}", errors.getAllErrors());
             return modelAndView;
         }
         try {
-            paymentService.withdraw(user, newBalance.getValue());
+            paymentService.withdraw(user, newBalanceVal.getValue());
         } catch (PaymentException e) {
             modelAndView.addObject("errorMessage", e.getMessage());
             setModelAttributes(modelAndView, user);
+            log.info("{} with id={} failed withdrew {} amount.",
+                    user.getRole(), user.getId(), newBalanceVal.getValue());
             return modelAndView;
         }
         modelAndView.setViewName("redirect:/balance");
+        log.info("{} with id={} withdrew {} amount.", user.getRole(), user.getId(), newBalanceVal.getValue());
         return modelAndView;
     }
 

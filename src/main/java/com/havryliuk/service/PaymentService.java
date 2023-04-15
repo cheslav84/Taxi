@@ -29,29 +29,36 @@ public class PaymentService {
     }
 
     public void recharge(User user, BigDecimal rechargeValue) {
+        log.trace("recharging '{}' balance", user.getEmail());
         BigDecimal balance = getUserBalance(user);
         balance = balance.add(rechargeValue);
         setUserBalance(user, balance);
         userRepository.save(user);
+        log.debug("User '{}' balance has been recharged with {}", user.getEmail(), rechargeValue);
     }
 
 
     public void withdraw(User user, BigDecimal withdrawValue) throws PaymentException {
+        log.trace("withdrawing '{}' balance", user.getEmail());
         BigDecimal balance = getUserBalance(user);
         checkIfWithdrawValueNotExceedBalance(balance, withdrawValue);
         balance = balance.subtract(withdrawValue);
         setUserBalance(user, balance);
         userRepository.save(user);
-    }
+        log.debug("User '{}' withdraw the {} amount.", user.getEmail(), withdrawValue);
 
+    }
 
     public void saveCompanyBalance(CompanyBalance companyBalance) {
         companyBalanceRepository.save(companyBalance);
+        log.debug("Company balance was saved. New balance: {}.", companyBalance.getBalance());
     }
 
 
+    public void setPaymentPrices(User passenger, Trip trip, CompanyBalance companyBalanceEntity)
+            throws PaymentException {
+        log.trace("setting payment prices");
 
-    public void setPaymentPrices(User passenger, Trip trip, CompanyBalance companyBalanceEntity) throws PaymentException {
         BigDecimal tripPrice = trip.getPrice();
         BigDecimal passengerBalance = getUserBalance(passenger);
         User driver = trip.getDriver();

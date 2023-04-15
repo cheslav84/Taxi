@@ -28,8 +28,9 @@ public class UserService implements UserDetailsService, UserResource {
         this.encoder = encoder;
     }
 
-    public Optional<User> getById(String id) {
-        return repository.findById(id);
+    public User getById(String id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     @Override
@@ -40,7 +41,7 @@ public class UserService implements UserDetailsService, UserResource {
 
 
     @Override
-    public void save(User user) {
+    public User save(User user) {
         if (user.getPassword() == null) {
             throw new IllegalArgumentException("Password is incorrect");
         }
@@ -51,7 +52,7 @@ public class UserService implements UserDetailsService, UserResource {
         user.setEnabled(true);
         user.setRegistrationDate(LocalDateTime.now());
         setInitialBalanceIfNotManager(user);
-        repository.save(user);
+        return repository.save(user);
     }
 
     private void setInitialBalanceIfNotManager(User user) {

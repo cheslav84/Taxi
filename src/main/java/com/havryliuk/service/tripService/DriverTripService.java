@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Optional;
@@ -38,60 +37,51 @@ public class DriverTripService {
         this.paymentService = paymentService;
     }
 
-    public Trip getById (String id) {
-        return repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Such trip hasn't been found"));
+    public Trip getById(String id) {
+        log.trace("getById, id={}", id);
+        return repository.findById(id).orElseThrow(() -> {
+            log.info("trip with id={} hasn't been found.", id);
+            return new IllegalArgumentException("Such trip hasn't been found");
+        });
     }
 
 
-    public TripDtoForDriverDetailed getDtoById (String id) {
+    public TripDtoForDriverDetailed getDtoById(String id) {
+        log.trace("getDtoById, id={}", id);
         TripDtoForDriverDetailed trip = repository.findDetailedDtoById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Such trip hasn't been found"));
+                .orElseThrow(() -> {
+                    log.info("trip with id={} hasn't been found.", id);
+                    return new IllegalArgumentException("Such trip hasn't been found");
+                });
         int passengerAge = getAgeFromBirthData(trip.getPassengerBirthDate());
         trip.setPassengerAge(passengerAge);
         return trip;
     }
 
-
-    public String save(Trip trip, User user) {
-        trip.setOriginAddress(addressService.arrangeAddress(trip.getOriginAddress()));
-        trip.setDestinationAddress(addressService.arrangeAddress(trip.getDestinationAddress()));
-        googleService.setDistanceAndDuration(trip);
-        trip.setTripStatus(TripStatus.NEW);
-        trip.setPaymentStatus(PaymentStatus.NOT_PAID);
-        setPrice(trip);
-        trip.setPassenger(user);
-        return repository.save(trip).getId();
-    }
-
     public void setStatusDrivingById(String id) {
+        log.trace("setStatusDrivingById, id={}", id);
         Trip trip = getById(id);
         trip.setTripStatus(TripStatus.DRIVING);
         repository.save(trip);
+        log.debug("Trip status {} has been set to trip {}", TripStatus.DRIVING, id);
     }
 
     public void setStatusCompletedById(String id) throws PaymentException {
+        log.trace("setStatusCompletedById, id={}", id);
         Trip trip = getById(id);
         if (trip.getPaymentStatus().equals(PaymentStatus.PAID)) {
-            trip.setTripStatus(TripStatus.DRIVING);
+            trip.setTripStatus(TripStatus.COMPLETED);
             repository.save(trip);
+            log.debug("Trip status {} has been set to trip {}", TripStatus.COMPLETED, id);
         } else {
-            throw new PaymentException("Passenger hasn't paid for trip yet. Ask for payment!");
+            String message = "Passenger hasn't paid for trip yet. Ask for payment!";
+            log.debug("Trip status {} hasn't been set to trip {}. Cause: {}", TripStatus.COMPLETED, id, message);
+            throw new PaymentException(message);
         }
     }
 
-
-    private void setPrice(Trip trip) {//todo think of move to separate class ()
-        Tariffs tariff = paymentService.getTariffByCarClass(trip.getCarClass());
-        BigDecimal pricePerKilometer = tariff.getPricePerKilometer();
-        long distanceInMeters = trip.getDistanceInMeters();
-        BigDecimal distance = BigDecimal.valueOf(distanceInMeters);
-        BigDecimal distanceInKilometers = distance.divide(BigDecimal.valueOf(1000), 2, RoundingMode.HALF_UP);
-        BigDecimal price = pricePerKilometer.multiply(distanceInKilometers);
-        trip.setPrice(price);
-    }
-
-
     public Page<TripDtoShortInfo> getAllNew(CarClass carClass, Pageable pageable) {
+        log.trace("getAllNew: Page<TripDtoShortInfo>");
         return repository.findAllNewByCarClass(carClass, pageable);
     }
 
@@ -111,8 +101,8 @@ public class DriverTripService {
     }
 
 
-
     public Page<TripDtoForDriverPage> getAllByDriver(User user, Pageable pageable) {
+        log.trace("getAllByDriver: Page<TripDtoForDriverPage>");
         Page<TripDtoForDriverPage> trips = repository.findAllByDriver(user, pageable);
         setPassengersAge(trips);
         replaceMetersToKilometers(trips);
@@ -120,8 +110,8 @@ public class DriverTripService {
     }
 
 
-
     public Page<TripDtoForDriverPage> getActiveByDriver(User user, Pageable pageable) {
+        log.trace("getActiveByDriver: Page<TripDtoForDriverPage>");
         Page<TripDtoForDriverPage> trips = repository.findActiveByDriver(user, pageable);
         setPassengersAge(trips);
         replaceMetersToKilometers(trips);
@@ -129,6 +119,7 @@ public class DriverTripService {
     }
 
     public Page<TripDtoForDriverPage> getPastByDriver(User user, Pageable pageable) {
+        log.trace("getPastByDriver: Page<TripDtoForDriverPage>");
         Page<TripDtoForDriverPage> trips = repository.findPastByDriver(user, pageable);
         setPassengersAge(trips);
         replaceMetersToKilometers(trips);
@@ -136,14 +127,13 @@ public class DriverTripService {
     }
 
     public TripDtoForDriverPage getDtoForDriverById(String id) {
+        log.trace("getDtoForDriverById: {}", id);
         Optional<TripDtoForDriverPage> tripOptional = repository.findDtoForDriverById(id);
-        TripDtoForDriverPage trip = tripOptional.orElseThrow(
-                () -> {
-                    String message = "Such trip has not been found. Trip id =" + id;
-                    log.warn(message);
-                    return new IllegalArgumentException(message);
-                }
-        );
+        TripDtoForDriverPage trip = tripOptional.orElseThrow(() -> {
+            String message = "Such trip has not been found. Trip id =" + id;
+            log.debug(message);
+            return new IllegalArgumentException(message);
+        });
         int passengerAge = getAgeFromBirthData(trip.getPassengerBirthDate());
         trip.setPassengerAge(passengerAge);
         replaceMetersToKilometers(trip);
@@ -160,7 +150,7 @@ public class DriverTripService {
     }
 
     private void setPassengersAge(Page<TripDtoForDriverPage> trips) {
-        for (TripDtoForDriverPage trip: trips) {
+        for (TripDtoForDriverPage trip : trips) {
             int passengerAge = getAgeFromBirthData(trip.getPassengerBirthDate());
             trip.setPassengerAge(passengerAge);
         }
@@ -173,7 +163,7 @@ public class DriverTripService {
 
 
     private void replaceMetersToKilometers(Page<TripDtoForDriverPage> trips) {
-        for (TripDtoForDriverPage trip: trips) {
+        for (TripDtoForDriverPage trip : trips) {
             replaceMetersToKilometers(trip);
         }
     }
@@ -199,9 +189,15 @@ public class DriverTripService {
 
     public String getNextActionDependingOnStatus(TripStatus status) {
         switch (status) {
-            case OFFERED -> { return "start"; }
-            case DRIVING -> { return "complete"; }
-            default -> { return null; }
+            case OFFERED -> {
+                return "start";
+            }
+            case DRIVING -> {
+                return "complete";
+            }
+            default -> {
+                return null;
+            }
         }
     }
 

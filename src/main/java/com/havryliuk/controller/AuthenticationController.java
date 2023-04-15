@@ -34,7 +34,7 @@ public class AuthenticationController {
 
     @GetMapping("/registration")
     public ModelAndView registrationPage(ModelAndView modelAndView) {
-        log.trace("registrationPage");
+        log.trace("get:/auth/registration");
         modelAndView.addObject("userDto", new UserDto());
         setModelAttributes(modelAndView);
         return modelAndView;
@@ -43,16 +43,17 @@ public class AuthenticationController {
     @PostMapping("/registration")
     public ModelAndView createNewUser(@Valid UserDto userDto, Errors errors,
                                       ModelAndView modelAndView, RedirectAttributes redirectAttributes) {
-        log.trace("createNewUser");
+        log.trace("post:/auth/registration");
         if (errors.hasErrors()) {
-            log.debug("validation error");
             modelAndView.addObject("userDto", userDto);
             setModelAttributes(modelAndView);
+            log.info("registration failed. Cause: {}", errors.getAllErrors());
             return modelAndView;
         }
+        User user;
         try {
-            User user = mapper.map(userDto);
-            userService.save(user);
+            user = mapper.map(userDto);
+            user = userService.save(user);
         } catch (UserAlreadyExistException e) {
             String warningMessage = "An account for '"+ userDto.getEmail() + "' already exists.";
             modelAndView.addObject("warningMessage", warningMessage);
@@ -63,6 +64,24 @@ public class AuthenticationController {
             return modelAndView;
         }
         modelAndView.setViewName("redirect:/auth/login");
+        log.info("new {} with id={} was created.", user.getRole(), user.getId());
+        return modelAndView;
+    }
+
+
+    @GetMapping("/login")
+    public ModelAndView loginPage(ModelAndView modelAndView) {
+        log.trace("get:/auth/login");
+        modelAndView.addObject("activePage", "auth");
+        modelAndView.addObject("subPage", "login");
+        modelAndView.setViewName("login");
+        return modelAndView;
+    }
+
+    @GetMapping("/logout")
+    public ModelAndView logoutPage(ModelAndView modelAndView) {
+        log.trace("get:/auth/logout");
+        modelAndView.setViewName("logout");
         return modelAndView;
     }
 
@@ -73,20 +92,5 @@ public class AuthenticationController {
         modelAndView.setViewName("registration");
     }
 
-    @GetMapping(("/login"))
-    public ModelAndView loginPage(ModelAndView modelAndView) {
-        log.trace("loginPage");
-        modelAndView.addObject("activePage", "auth");
-        modelAndView.addObject("subPage", "login");
-        modelAndView.setViewName("login");
-        return modelAndView;
-    }
-
-    @GetMapping(("/logout"))
-    public ModelAndView logoutPage(ModelAndView modelAndView) {
-        log.trace("logoutPage");
-        modelAndView.setViewName("logout");
-        return modelAndView;
-    }
 
 }

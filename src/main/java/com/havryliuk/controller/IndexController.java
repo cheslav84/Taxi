@@ -21,7 +21,7 @@ public class IndexController {
 
     @GetMapping({"/", "/index"})
     public ModelAndView index(ModelAndView modelAndView) {
-        log.trace("indexPage");
+        log.trace("get:/, get:/index");
         Iterable<Tariffs> tariffs = paymentService.findAll();
         modelAndView.addObject("tariffs", tariffs);
         modelAndView.addObject("activePage", "index");

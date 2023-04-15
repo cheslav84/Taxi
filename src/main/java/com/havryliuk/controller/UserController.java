@@ -22,24 +22,20 @@ public class UserController {
         this.service = service;
     }
 
-
-    @GetMapping("/info")//todo rename to userPage or so
+    @GetMapping("/info")
     public ModelAndView userInfo(ModelAndView modelAndView) {
-        log.trace("user details page");
+        log.trace("get:/users/info");
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        modelAndView.addObject("user", user);//todo try to get user from thymeleaf
+        modelAndView.addObject("user", user);
         modelAndView.addObject("activePage", "myAccount");
         modelAndView.addObject("subPage", "info");
         modelAndView.setViewName("users/info");
         return modelAndView;
     }
 
-
     @GetMapping("/{id}")
     public User getById(@PathVariable String id) {
-        return service.getById(id).orElseThrow(() -> new IllegalArgumentException("User is not found"));
+        log.trace("get:/users/{}}", id);
+        return service.getById(id);
     }
-
-
-
 }

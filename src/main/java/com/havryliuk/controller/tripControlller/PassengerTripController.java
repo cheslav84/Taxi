@@ -8,12 +8,10 @@ import com.havryliuk.model.*;
 import com.havryliuk.service.PaymentService;
 import com.havryliuk.service.tripService.PassengerTripService;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -31,7 +29,7 @@ import java.util.List;
 @RequestMapping("/trips")
 public class PassengerTripController {
 
-    private static final String INITIAL_PAGE_NUMBER = "1";//todo set size in user page and cookies
+    private static final String INITIAL_PAGE_NUMBER = "1";
     private static final String NUMBER_OF_ITEMS_PER_PAGE = "4";
     private final PassengerTripService passengerTripService;
     private final PaymentService paymentService;
@@ -46,7 +44,7 @@ public class PassengerTripController {
     @PreAuthorize("hasAuthority('PASSENGER')")
     @GetMapping("/new")
     public ModelAndView newTripPage(ModelAndView modelAndView) {
-        log.trace("newTrip page");
+        log.trace("get:/trips/new");
         modelAndView.addObject("trip", new Trip());
         setModelAttributesForCreatePage(modelAndView);
         return modelAndView;
@@ -55,24 +53,19 @@ public class PassengerTripController {
     @PreAuthorize("hasAuthority('PASSENGER')")
     @PostMapping("/new")
     public ModelAndView createTrip(@Valid Trip trip, Errors errors, ModelAndView modelAndView) {
-        log.trace("createTrip");
+        log.trace("post:/trips/new");
         if (errors.hasErrors()) {
             setModelAttributesForCreatePage(modelAndView);
+            log.info("Trip data is invalid: {}", errors.getAllErrors());
             return modelAndView;
         }
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         passengerTripService.save(trip, user);
         modelAndView.setViewName("redirect:/trips/passengers/all");
+        log.info("Trip {} was successfully updated.", trip.getId());
         return modelAndView;
     }
 
-    private void setModelAttributesForCreatePage(ModelAndView modelAndView) {
-        Iterable<Tariffs> tariffs = paymentService.findAll();
-        modelAndView.addObject("tariffs", tariffs);
-        modelAndView.addObject("carClasses", List.of(CarClass.values()));
-        modelAndView.addObject("activePage", "Get taxi");
-        modelAndView.setViewName("get-taxi");
-    }
 
 
     @PreAuthorize("hasAuthority('PASSENGER')")
@@ -85,7 +78,7 @@ public class PassengerTripController {
             @RequestParam(defaultValue = "departureDateTime,asc") String[] sorting) {
 
         String requestURI = request.getRequestURI();
-        log.trace(requestURI);
+        log.trace("get:{}", requestURI);
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         SortWrapper sort = new SortWrapper(sorting);
         Pageable pageable = PageRequest.of(currentPageNo - 1, size, sort.getSortOrders());
@@ -107,7 +100,7 @@ public class PassengerTripController {
             @RequestParam(defaultValue = "departureDateTime,asc") String[] sorting) {
 
         String requestURI = request.getRequestURI();
-        log.trace(requestURI);
+        log.trace("get:{}", requestURI);
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         SortWrapper sort = new SortWrapper(sorting);
         Pageable pageable = PageRequest.of(currentPageNo - 1, size, sort.getSortOrders());
@@ -128,7 +121,7 @@ public class PassengerTripController {
             @RequestParam(defaultValue = "departureDateTime,asc") String[] sorting) {
 
         String requestURI = request.getRequestURI();
-        log.trace(requestURI);
+        log.trace("get:{}", requestURI);
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         SortWrapper sort = new SortWrapper(sorting);
         Pageable pageable = PageRequest.of(currentPageNo - 1, size, sort.getSortOrders());
@@ -142,8 +135,8 @@ public class PassengerTripController {
 
     @PreAuthorize("hasAuthority('PASSENGER')")
     @GetMapping("/passengers/manage/{id}")
-    public ModelAndView tripPassengerDetailsPage(@PathVariable String id, ModelAndView modelAndView) {
-        log.trace("/passengers/manage/{}", id);
+    public ModelAndView passengersTripDetailsPage(@PathVariable String id, ModelAndView modelAndView) {
+        log.trace("get:/trips/passengers/manage/{}", id);
         setModelAttributesForPassengerTripDetailsPage(id, modelAndView);
         return modelAndView;
     }
@@ -151,22 +144,24 @@ public class PassengerTripController {
     @PreAuthorize("hasAuthority('PASSENGER')")
     @DeleteMapping ("/{id}")
     public ModelAndView deleteTrip(@PathVariable String id, ModelAndView modelAndView) {
-        log.trace("(delete)/{}", id);
+        log.trace("delete:/trips/{}", id);
         try {
             passengerTripService.deleteTrip(id);
         } catch (UnsupportedOperationException e) {
             modelAndView.addObject("errorMessage", e.getMessage());
             setModelAttributesForPassengerTripDetailsPage(id, modelAndView);
+            log.info("Trip {} wasn't deleted. Cause: {}", id, e.getMessage());
             return modelAndView;
         }
         modelAndView.setViewName("redirect:/trips/passengers/all");
+        log.info("trip {} was successfully deleted.", id);
         return modelAndView;
     }
 
     @PreAuthorize("hasAuthority('PASSENGER')")
     @GetMapping ("/passengers/update-page/{id}")
     public ModelAndView updatePageTrip(@PathVariable String id, ModelAndView modelAndView) {
-        log.trace("/passengers/update-page/{}", id);
+        log.trace("get:/trips/passengers/update-page/{}", id);
         setAttributesForUpdatePage(id, modelAndView);
         return modelAndView;
     }
@@ -174,27 +169,34 @@ public class PassengerTripController {
 
     @PreAuthorize("hasAuthority('PASSENGER')")
     @PutMapping ("/update")
-    public ModelAndView updateTrip(@Valid TripDtoForPassengerUpdate trip, Errors errors, ModelAndView modelAndView) {
-        log.trace("update/");
-        System.err.println(trip);
+    public ModelAndView updateTrip(@Valid TripDtoForPassengerUpdate trip,
+                                   Errors errors, ModelAndView modelAndView) {
+        log.trace("put:/trips/update");
         if (errors.hasErrors()) {
             setAttributesForUpdatePage(trip.getId(), modelAndView);
-            log.trace("Trip data is invalid.");
+            log.info("Trip data is invalid: {}", errors.getAllErrors());
             return modelAndView;
         }
         try {
             passengerTripService.updateTrip(trip);
-            log.trace("Trip was successfully updated.");
         } catch (UnsupportedOperationException e) {
             setAttributesForUpdatePage(trip.getId(), modelAndView);
             modelAndView.addObject("errorMessage", e.getMessage());
-            log.trace("Trip wasn't updated. {}", e.getMessage());
+            log.info("Trip wasn't updated. {}", e.getMessage());
             return modelAndView;
         }
         modelAndView.setViewName("redirect:/trips/passengers/update-page/" + trip.getId());
+        log.info("Trip {} was successfully updated.", trip.getId());
         return modelAndView;
     }
 
+    private void setModelAttributesForCreatePage(ModelAndView modelAndView) {
+        Iterable<Tariffs> tariffs = paymentService.findAll();
+        modelAndView.addObject("tariffs", tariffs);
+        modelAndView.addObject("carClasses", List.of(CarClass.values()));
+        modelAndView.addObject("activePage", "Get taxi");
+        modelAndView.setViewName("get-taxi");
+    }
 
     private void setAttributesForUpdatePage(String id, ModelAndView modelAndView) {
         TripDtoForPassengerUpdate trip = passengerTripService.getTripDtoForUserUpdateById(id);
@@ -216,7 +218,8 @@ public class PassengerTripController {
 
 
     private void setModelAttributesForAccountTripPages(
-            ModelAndView modelAndView, PageWrapper<? extends TripDtoShortInfo> page, String subPage, SortWrapper sort) {
+            ModelAndView modelAndView, PageWrapper<? extends TripDtoShortInfo> page,
+            String subPage, SortWrapper sort) {
 
         modelAndView.addObject("sort", sort);
         modelAndView.addObject("page", page);
