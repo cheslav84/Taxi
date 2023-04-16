@@ -6,6 +6,7 @@ import com.google.maps.errors.ApiException;
 import com.google.maps.model.*;
 import com.havryliuk.model.Address;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -18,30 +19,19 @@ import java.time.ZoneOffset;
 @Component
 public class DistanceAndDurationResolver {
 
-    @Value( "${google.api.key}" )
-    private String apiKey;
-    private GeoApiContext context;
+    private final GeoApiContext context;
+
+    @Autowired
+    public DistanceAndDurationResolver(GeoApiContext context) {
+        this.context = context;
+    }
 
     public DistanceAndDuration getDistanceAndDuration(
             LocalDateTime departureTime, Address originAddress, Address destinationAddress)  {
-        context = getInstance();
         DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context);
         request.departureTime(departureTime.toInstant(ZoneOffset.UTC));
         DistanceMatrix distanceMatrix = getDistanceMatrix(originAddress, destinationAddress, request);
         return mapDistanceAndDuration(distanceMatrix);
-    }
-
-    private GeoApiContext getInstance() {
-        GeoApiContext result = context;
-        if (result != null) {
-            return result;
-        }
-        synchronized (GeoApiContext.class) {
-            if (context == null) {
-                context = new GeoApiContext.Builder().apiKey(apiKey).build();
-            }
-            return context;
-        }
     }
 
     private DistanceMatrix getDistanceMatrix(

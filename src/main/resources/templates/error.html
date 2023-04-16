@@ -4,5 +4,8 @@
         <h1>Something went wrong! </h1>
         <h2>Our Engineers are on it</h2>
         <a href="/">Go Home</a>
+        <div th:text="|Request from ${url} is failed|"></div>
+        <br />
+        <div th:text="|Status code: ${statusCode}|"></div>
     </body>
 </html>
