@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Optional;
+
 
 @Slf4j
 @Service
@@ -30,23 +30,23 @@ public class UserService implements UserDetailsService, UserResource {
 
     public User getById(String id) {
         return repository.findById(id)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
     }
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return repository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
     }
 
 
     @Override
     public User save(User user) {
         if (user.getPassword() == null) {
-            throw new IllegalArgumentException("Password is incorrect");
+            throw new IllegalArgumentException("Password is incorrect.");
         }
         if (repository.findByEmail(user.getEmail()).isPresent()) {
-            throw new UserAlreadyExistException("User already exists");
+            throw new UserAlreadyExistException("User already exists.");
         }
         user.setPassword(encoder.encode(user.getPassword()));
         user.setEnabled(true);
