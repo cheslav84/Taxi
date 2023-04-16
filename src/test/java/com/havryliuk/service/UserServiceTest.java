@@ -37,15 +37,13 @@ class UserServiceTest {
     private UserService userService;
 
     private User user;
+    private final TestingInstances testingInstances = new TestingInstances();
+
 
 
     @BeforeEach
     public void setupUser() {
-        user =  new Passenger();
-        user.setId("id");
-        user.setEmail("email@com");
-        user.setPassword("QWQWqwqw!1");
-        user.setName("userName");
+        user = testingInstances.getTestingPassenger();
     }
 
     @Test
@@ -136,13 +134,10 @@ class UserServiceTest {
 
     @Test
     void saveUserAssertDriverBalanceSet() {
-        User driver = new Driver();
-        driver.setEmail("email@com");
-        driver.setPassword("QWQWqwqw!1");
-        driver.setRole(Role.DRIVER);
+        Driver driver = testingInstances.getTestingDriver();
         when(repository.findByEmail(driver.getEmail())).thenReturn(Optional.empty());
         userService.save(driver);
-        BigDecimal balance = ((Driver) driver).getBalance();
+        BigDecimal balance = driver.getBalance();
         assertEquals(balance, BigDecimal.ZERO);
     }
 

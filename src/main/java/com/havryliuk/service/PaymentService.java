@@ -81,9 +81,7 @@ public class PaymentService {
         setUserBalance(passenger, passengerBalance);
         setUserBalance(driver, driverBalance);
         companyBalanceEntity.setBalance(companyBalance);
-
     }
-
 
 
     public CompanyBalance getCompanyBalance() {
@@ -93,6 +91,21 @@ public class PaymentService {
                 .next();
     }
 
+    public Iterable<Tariffs> findAll () {
+        return tariffsRepository.findAll();
+    }
+
+    public Tariffs getTariffByCarClass(CarClass carClass) {
+        return tariffsRepository.getTariffByCarClass(carClass);
+    }
+
+
+    public BigDecimal getDriverPart(BigDecimal tripPrice, Tariffs tariffs) {
+        BigDecimal driverPartInPercent = BigDecimal.valueOf(tariffs.getDriverPartInPercent());
+        return tripPrice
+                .multiply(driverPartInPercent)
+                .divide(BigDecimal.valueOf(100),2, RoundingMode.HALF_UP);
+    }
 
     private void checkIfNotPaid(Trip trip) throws PaymentException {
         if(trip.getPaymentStatus().equals(PaymentStatus.PAID)) {
@@ -141,21 +154,7 @@ public class PaymentService {
         }
     }
 
-    public Iterable<Tariffs> findAll () {
-        return tariffsRepository.findAll();
-    }
 
-    public Tariffs getTariffByCarClass(CarClass carClass) {
-        return tariffsRepository.getTariffByCarClass(carClass);
-    }
-
-
-    public BigDecimal getDriverPart(BigDecimal tripPrice, Tariffs tariffs) {
-        BigDecimal driverPartInPercent = BigDecimal.valueOf(tariffs.getDriverPartInPercent());
-        return tripPrice
-                .multiply(driverPartInPercent)
-                .divide(BigDecimal.valueOf(100),2, RoundingMode.HALF_UP);
-    }
 
 
 }
