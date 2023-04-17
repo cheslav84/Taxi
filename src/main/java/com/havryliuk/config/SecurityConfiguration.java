@@ -20,7 +20,8 @@ public class SecurityConfiguration {
         http
                 .authorizeRequests()
                 .antMatchers("/login", "/index").permitAll()
-                .antMatchers("/trips/**").authenticated()//todo change to passengers
+                .antMatchers("/trips/**").authenticated()
+                .antMatchers("/balance/**").authenticated()
                 .and()
                 .formLogin().loginPage("/auth/login").permitAll()
                 .defaultSuccessUrl("/index")

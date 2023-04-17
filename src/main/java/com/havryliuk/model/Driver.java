@@ -17,11 +17,11 @@ public class Driver extends User {
     private BigDecimal balance;
 
     @OneToMany(mappedBy = "driver", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    List<Trip> trips;
+    private List<Trip> trips;
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "car_id")
-    Car car;
+    private Car car;
 
 
 }

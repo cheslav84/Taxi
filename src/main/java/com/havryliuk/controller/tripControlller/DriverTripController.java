@@ -72,7 +72,7 @@ public class DriverTripController {
             HttpServletRequest request,
             @RequestParam(defaultValue = INITIAL_PAGE_NUMBER) int currentPageNo,
             @RequestParam(defaultValue = NUMBER_OF_ITEMS_PER_PAGE) int size,
-            @RequestParam(defaultValue = "departureDateTime,asc") String[] sorting) {
+            @RequestParam(defaultValue = "departureDateTime,desc") String[] sorting) {
 
         String requestURI = request.getRequestURI();
         log.trace("get:{}",requestURI);
@@ -94,7 +94,7 @@ public class DriverTripController {
             HttpServletRequest request,
             @RequestParam(defaultValue = INITIAL_PAGE_NUMBER) int currentPageNo,
             @RequestParam(defaultValue = NUMBER_OF_ITEMS_PER_PAGE) int size,
-            @RequestParam(defaultValue = "departureDateTime,asc") String[] sorting) {
+            @RequestParam(defaultValue = "departureDateTime,desc") String[] sorting) {
 
         String requestURI = request.getRequestURI();
         log.trace("get:{}",requestURI);
@@ -116,7 +116,7 @@ public class DriverTripController {
             HttpServletRequest request,
             @RequestParam(defaultValue = INITIAL_PAGE_NUMBER) int currentPageNo,
             @RequestParam(defaultValue = NUMBER_OF_ITEMS_PER_PAGE) int size,
-            @RequestParam(defaultValue = "departureDateTime,asc") String[] sorting) {
+            @RequestParam(defaultValue = "departureDateTime,desc") String[] sorting) {
 
         String requestURI = request.getRequestURI();
         log.trace("get:{}",requestURI);
@@ -138,7 +138,7 @@ public class DriverTripController {
             HttpServletRequest request,
             @RequestParam(defaultValue = INITIAL_PAGE_NUMBER) int currentPageNo,
             @RequestParam(defaultValue = NUMBER_OF_ITEMS_PER_PAGE) int size,
-            @RequestParam(defaultValue = "departureDateTime,asc") String[] sorting) {
+            @RequestParam(defaultValue = "departureDateTime,desc") String[] sorting) {
 
         String requestURI = request.getRequestURI();
         log.trace("get:{}",requestURI);
@@ -182,7 +182,7 @@ public class DriverTripController {
             log.info("trip {} wasn't completed. Cause: {}", id, e.getMessage());
             return modelAndView;
         }
-        modelAndView.setViewName("redirect:/trips/drivers/all");
+        modelAndView.setViewName("redirect:/trips/drivers/manage/" + id);
         log.info("trip {} was completed.", id);
         return modelAndView;
     }

@@ -5,6 +5,7 @@ import com.havryliuk.dto.trips.TripDtoForPassengerPage;
 import com.havryliuk.exceptions.PaymentException;
 import com.havryliuk.model.*;
 import com.havryliuk.service.PaymentService;
+import com.havryliuk.service.UserService;
 import com.havryliuk.service.tripService.PassengerTripService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Slf4j
 @Controller
@@ -27,17 +29,20 @@ public class PaymentController {
 
     private final PaymentService paymentService;
     private final PassengerTripService passengerTripService;
+    private final UserService userService;
 
     @Autowired
-    public PaymentController(PaymentService paymentService, PassengerTripService passengerTripService) {
+    public PaymentController(PaymentService paymentService,
+                             PassengerTripService passengerTripService, UserService userService) {
         this.paymentService = paymentService;
         this.passengerTripService = passengerTripService;
+        this.userService = userService;
     }
 
     @GetMapping("/balance")
-    public ModelAndView userBalance(ModelAndView modelAndView) {
+    public ModelAndView userBalance(ModelAndView modelAndView, Principal principal) {
         log.trace("get:/balance");
-        final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final User user = userService.loadUserByUsername(principal.getName());//todo invalidate cache
         setModelAttributes(modelAndView, user);
         return modelAndView;
     }

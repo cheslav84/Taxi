@@ -102,11 +102,11 @@ public class PassengerTripService {
 
 
     @Transactional
-    public void payForTrip(User user, String tripId) throws PaymentException {
+    public void payForTrip(User passenger, String tripId) throws PaymentException {
         log.trace("payForTrip, id={}", tripId);
         Trip trip = getById(tripId);
         CompanyBalance companyBalance = paymentService.getCompanyBalance();
-        paymentService.setPaymentPrices(user, trip, companyBalance);
+        paymentService.setPaymentPrices(passenger, trip, companyBalance);
         trip.setPaymentStatus(PaymentStatus.PAID);
         paymentService.saveCompanyBalance(companyBalance);
         repository.save(trip);
@@ -118,6 +118,7 @@ public class PassengerTripService {
         Trip trip = getById(tripDto.getId());
         if (tripStatusAllowsUpdateTrip(trip.getTripStatus())) {
             tripUpdateMapper.setUpdatedValues(trip, tripDto);
+            setPrice(trip);
             repository.save(trip);
             log.debug("trip {} was successfully updated", trip.getId());
         } else {

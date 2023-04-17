@@ -75,7 +75,7 @@ public class PassengerTripController {
             HttpServletRequest request,
             @RequestParam(defaultValue = INITIAL_PAGE_NUMBER) int currentPageNo,
             @RequestParam(defaultValue = NUMBER_OF_ITEMS_PER_PAGE) int size,
-            @RequestParam(defaultValue = "departureDateTime,asc") String[] sorting) {
+            @RequestParam(defaultValue = "departureDateTime,desc") String[] sorting) {
 
         String requestURI = request.getRequestURI();
         log.trace("get:{}", requestURI);
@@ -97,7 +97,7 @@ public class PassengerTripController {
             HttpServletRequest request,
             @RequestParam(defaultValue = INITIAL_PAGE_NUMBER) int currentPageNo,
             @RequestParam(defaultValue = NUMBER_OF_ITEMS_PER_PAGE) int size,
-            @RequestParam(defaultValue = "departureDateTime,asc") String[] sorting) {
+            @RequestParam(defaultValue = "departureDateTime,desc") String[] sorting) {
 
         String requestURI = request.getRequestURI();
         log.trace("get:{}", requestURI);
@@ -118,7 +118,7 @@ public class PassengerTripController {
             HttpServletRequest request,
             @RequestParam(defaultValue = INITIAL_PAGE_NUMBER) int currentPageNo,
             @RequestParam(defaultValue = NUMBER_OF_ITEMS_PER_PAGE) int size,
-            @RequestParam(defaultValue = "departureDateTime,asc") String[] sorting) {
+            @RequestParam(defaultValue = "departureDateTime,desc") String[] sorting) {
 
         String requestURI = request.getRequestURI();
         log.trace("get:{}", requestURI);
@@ -185,7 +185,7 @@ public class PassengerTripController {
             log.info("Trip wasn't updated. {}", e.getMessage());
             return modelAndView;
         }
-        modelAndView.setViewName("redirect:/trips/passengers/update-page/" + trip.getId());
+        modelAndView.setViewName("redirect:/trips/passengers/manage/" + trip.getId());
         log.info("Trip {} was successfully updated.", trip.getId());
         return modelAndView;
     }
